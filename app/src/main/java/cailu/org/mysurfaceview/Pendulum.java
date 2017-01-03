@@ -24,9 +24,9 @@ public class Pendulum extends View {
 
     private int stroke = 5; //线段的宽度
     private int r = 20;    //圆圈的半径
-    private int length = 400; //线的长度
+    private int length = 500; //线的长度
     private int number = 5; //球的个数（奇数，偶数感觉丑就没实现）
-    private static int angle = 50;//最大旋转角度
+    private static int angle = 45;//最大旋转角度
 
     // 第一个参数表示角度；负数表示左边球旋转的角度，正数表示右边球旋转的角度
     // +angle表示右侧球偏离最大的角度为30度
