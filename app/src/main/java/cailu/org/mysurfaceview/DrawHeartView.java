@@ -13,13 +13,13 @@ import android.view.SurfaceView;
  * Created by adm on 2016/12/26.
  */
 
-public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback {
+public class DrawHeartView extends SurfaceView implements SurfaceHolder.Callback {
 
     SurfaceHolder mHolder;
     MyThread myThread;
     int mWidth, mHeight;
 
-    public MySurfaceView(Context context) {
+    public DrawHeartView(Context context) {
         super(context);
         mHolder = getHolder();
         mHolder.addCallback(this);
