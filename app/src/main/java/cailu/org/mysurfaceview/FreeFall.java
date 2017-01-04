@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
@@ -38,7 +39,7 @@ public class FreeFall extends SurfaceView implements SurfaceHolder.Callback {
         DisplayMetrics metric = new DisplayMetrics();
         context.getWindowManager().getDefaultDisplay().getMetrics(metric);
         density = metric.densityDpi;// 屏幕密度（0.75 / 1.0 / 1.5） 一英寸上有几个像素
-        g= (float) (density/2540);
+        g= (density/2540);
 
         new DrawThread().start();
     }
@@ -68,7 +69,7 @@ public class FreeFall extends SurfaceView implements SurfaceHolder.Callback {
 
             Paint linePaint = new Paint();
             linePaint.setStyle(Paint.Style.STROKE);
-            linePaint.setStrokeWidth(8);
+            linePaint.setStrokeWidth(2);
             linePaint.setColor(Color.GREEN);
 
             Canvas canvas = null;
@@ -76,21 +77,31 @@ public class FreeFall extends SurfaceView implements SurfaceHolder.Callback {
 //            canvas.translate(mWidth/2,mHeight/2);
 //            canvas.drawCircle(0, 0, radius, paint);
 //            canvas.drawCircle(0, (float) (density/2.54), radius, paint);
+//            holder.unlockCanvasAndPost(canvas);
 
             float x = mWidth / 2;
             float y = 0;
             for (int i = 0; i < 180; i++) {
                 try {
-                    Thread.sleep(1);
+//                    Thread.sleep(1);
+                    long t1=System.currentTimeMillis();
                     canvas = holder.lockCanvas();
 
-                    y= (float) (g*Math.pow(i,2)/2);
+                    y= (float) (g*Math.pow(i*4,2)/2);
 
                     canvas.drawColor(Color.BLACK);
 
                     canvas.drawCircle(x, y, radius, paint);
 
                     holder.unlockCanvasAndPost(canvas);
+
+                    long t2=System.currentTimeMillis();
+                    long t=t2-t1;
+                    Log.e("DrawThread", "t:" + t);
+                    while(t<10){
+                        Thread.yield();
+                        t=System.currentTimeMillis()-t1;
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
