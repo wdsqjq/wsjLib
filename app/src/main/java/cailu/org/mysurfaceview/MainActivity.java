@@ -8,6 +8,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(new FreeFall(this));
+//        setContentView(new FreeFall(this));
+        RadarView radarView=new RadarView(this);
+//        radarView.setMainPaintColor(Color.BLUE);
+        setContentView(radarView);
     }
 }
