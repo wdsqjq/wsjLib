@@ -16,6 +16,9 @@ public class MainActivity extends Activity {
 //        setContentView(radarView);
 
         //微信雷达搜索
-        setContentView(R.layout.activity_main2);
+//        setContentView(R.layout.activity_main2);
+
+        //测试
+        setContentView(new TestView(this));
     }
 }
