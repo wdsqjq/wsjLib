@@ -7,3 +7,8 @@
 /build
 /captures
 .externalNativeBuild
+/app/src/androidTest
+/app/src/test
+/wsjlib/src/androidTest
+/wsjlib/src/test
+.gitignore

@@ -36,8 +36,8 @@ public class Love extends SurfaceView implements SurfaceHolder.Callback {
 
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
-        new DrawThread("梦", 0).start();
-        new DrawThread("雅", 1).start();
+        new DrawThread("芹", 0).start();
+        new DrawThread("芹", 1).start();
     }
 
     @Override
