@@ -7,6 +7,7 @@ import android.widget.Toast;
 import cailu.org.myview.circleloading.CircleLoadingView;
 import cailu.org.myview.circleloading.PostManLoadingView;
 import cailu.org.myview.circleloading.RefreshTicketView;
+import cailu.org.myview.spidernet.RadarView;
 
 public class MainActivity extends Activity {
 
@@ -14,7 +15,7 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
 //        requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
-        int flag=5;
+        int flag=6;
         switch (flag){
             case 0:
                 setContentView(new FreeFall(this));
@@ -69,6 +70,10 @@ public class MainActivity extends Activity {
                         }
                     }
                 }).start();
+                break;
+            case 6:
+                setContentView(new DrawFont(this));
+//                setContentView(new RadarView(this));
                 break;
 
         }
