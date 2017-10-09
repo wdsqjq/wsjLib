@@ -3,7 +3,7 @@
     android:layout_height="fill_parent"
     android:background="@mipmap/a44">
 
-    <cailu.org.mysurfaceview.weixinradar.MyRadarView
+    <cailu.org.myview.weixinradar.MyRadarView
         android:layout_width="fill_parent"
         android:layout_height="fill_parent" />
 
