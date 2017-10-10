@@ -37,6 +37,7 @@ public class MainActivity extends AppCompatActivity
     private String[] viewGroupArray = {"Titanic", "饼状图"};
     private String[] ActivityArray = {"Titanic", "蜘蛛网图"};
     private String[] otherArray = {"Titanic", "圆形加载", "仿postman加载"};
+    private String[][] arrays={viewArray,viewGroupArray,ActivityArray,otherArray};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,23 +78,7 @@ public class MainActivity extends AppCompatActivity
 
     private void initData(int index) {
         datas.clear();
-        switch (index){
-            case 0:
-                datas.addAll(Arrays.asList(viewArray));
-                break;
-            case 1:
-                datas.addAll(Arrays.asList(viewGroupArray));
-                break;
-            case 2:
-                datas.addAll(Arrays.asList(ActivityArray));
-                break;
-            case 3:
-                datas.addAll(Arrays.asList(otherArray));
-                break;
-            default:
-                datas.addAll(Arrays.asList(viewArray));
-                break;
-        }
+        datas.addAll(Arrays.asList(arrays[index]));
         if (mAdapter == null) {
             mAdapter = new CommonAdapter<String>(this, item, datas) {
                 @Override
