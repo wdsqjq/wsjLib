@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <cailu.org.myview.piechart.PieView
+    <per.wangsj.myview.piechart.PieView
         android:id="@+id/pie"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
