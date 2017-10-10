@@ -16,6 +16,7 @@ import android.support.v7.widget.AppCompatImageView;
 import android.util.AttributeSet;
 
 /**
+ * 圆形ImageView
  * Created by huanglongfei on 2017/7/22.
  */
 
