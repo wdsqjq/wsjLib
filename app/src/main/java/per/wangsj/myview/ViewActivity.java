@@ -7,8 +7,8 @@ import android.widget.Toast;
 import per.wangsj.myview.circleloading.CircleLoadingView;
 import per.wangsj.myview.circleloading.PostManLoadingView;
 import per.wangsj.myview.circleloading.RefreshTicketView;
+import per.wangsj.myview.love.DrawHeartView;
 import per.wangsj.myview.spidernet.RadarView;
-import per.wangsj.myview.swingball.FreeFall;
 import per.wangsj.myview.swingball.SwingBall;
 
 public class ViewActivity extends Activity {
@@ -17,10 +17,10 @@ public class ViewActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
 //        requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
-        int flag=6;
+        int flag=getIntent().getIntExtra("index",0);
         switch (flag){
             case 0:
-                setContentView(new FreeFall(this));
+                setContentView(new DrawHeartView(this));
                 break;
             case 1:
                 // 蜘蛛网图
@@ -28,22 +28,6 @@ public class ViewActivity extends Activity {
                 setContentView(radarView);
                 break;
             case 2:
-                //微信雷达搜索
-                setContentView(R.layout.radar_activity);
-                break;
-            case 3:
-                //去哪网刷票
-                RefreshTicketView refreshTicketView=new RefreshTicketView(this);
-                setContentView(refreshTicketView);
-                refreshTicketView.start();
-                break;
-            case 4:
-                //postman加载效果
-                PostManLoadingView view=new PostManLoadingView(this);
-                setContentView(view);
-                view.start();
-                break;
-            case 5:
                 // 圆形加载进度
                 final CircleLoadingView loadingView= new CircleLoadingView(this);
                 setContentView(loadingView);
@@ -73,9 +57,24 @@ public class ViewActivity extends Activity {
                     }
                 }).start();
                 break;
-            case 6:
+            case 3:
+                //postman加载效果
+                PostManLoadingView view=new PostManLoadingView(this);
+                setContentView(view);
+                view.start();
+                break;
+            case 4:
+                //去哪网刷票
+                RefreshTicketView refreshTicketView=new RefreshTicketView(this);
+                setContentView(refreshTicketView);
+                refreshTicketView.start();
+                break;
+            case 5:
                 setContentView(new SwingBall(this));
-//                setContentView(new RadarView(this));
+                break;
+            case 6:
+                //微信雷达搜索
+                setContentView(R.layout.radar_activity);
                 break;
 
         }
