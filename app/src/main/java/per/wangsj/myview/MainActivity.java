@@ -1,6 +1,5 @@
 package per.wangsj.myview;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -39,16 +38,21 @@ public class MainActivity extends AppCompatActivity
     private String[] otherArray = {"Titanic", "圆形加载", "仿postman加载"};
     private String[][] arrays={viewArray,viewGroupArray,ActivityArray,otherArray};
 
+    BasePresenter presenter;
+    private int index=0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         initView();
-        initData(0);
+        initData();
     }
 
     private void initView() {
+        presenter=new MainPresenter(MainActivity.this);
+
         rvDetail = (RecyclerView) findViewById(R.id.rv_detail);
         rvDetail.setLayoutManager(new LinearLayoutManager(this));
         rvDetail.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
@@ -76,7 +80,7 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
     }
 
-    private void initData(int index) {
+    private void initData() {
         datas.clear();
         datas.addAll(Arrays.asList(arrays[index]));
         if (mAdapter == null) {
@@ -87,10 +91,7 @@ public class MainActivity extends AppCompatActivity
                     viewHolder.setOnClickListener(R.id.tv_item, new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Intent intent = new Intent(MainActivity.this, ViewActivity.class);
-                            intent.putExtra("index", i);
-                            intent.putExtra("item", i);
-                            startActivity(intent);
+                            presenter.jump(index,i);
                         }
                     });
                 }
@@ -106,17 +107,23 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_view) {
-            initData(0);
+            index=0;
+            initData();
         } else if (id == R.id.nav_viewgroup) {
-            initData(1);
+            index=1;
+            initData();
         } else if (id == R.id.nav_in_activity) {
-            initData(2);
+            index=2;
+            initData();
         } else if (id == R.id.nav_other) {
-            initData(3);
+            index=3;
+            initData();
         } else if (id == R.id.nav_share) {
-            initData(0);
+            index=4;
+            initData();
         } else if (id == R.id.nav_send) {
-            initData(0);
+            index=5;
+            initData();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

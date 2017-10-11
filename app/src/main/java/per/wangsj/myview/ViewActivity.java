@@ -17,10 +17,14 @@ public class ViewActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
 //        requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
-        int flag=getIntent().getIntExtra("index",0);
+        int flag=getIntent().getIntExtra("item",0);
         switch (flag){
             case 0:
                 setContentView(new DrawHeartView(this));
+                /*TitanicTextView textView=new TitanicTextView(this);
+                textView.setText("Fuck U!");
+                setContentView(textView);
+                new Titanic().start(textView);*/
                 break;
             case 1:
                 // 蜘蛛网图
