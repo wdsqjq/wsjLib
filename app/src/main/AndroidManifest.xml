@@ -18,9 +18,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ViewActivity"></activity>
-        <activity android:name=".piechart.PieActivity"></activity>
-        <activity android:name=".titanic.TitanticActivity"></activity>
+        <activity android:name=".ViewActivity" />
+        <activity android:name=".piechart.PieActivity" />
+        <activity android:name=".titanic.TitanticActivity" />
+        <activity android:name=".imageview.ZoomRotateActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar">
+        </activity>
     </application>
 
 </manifest>

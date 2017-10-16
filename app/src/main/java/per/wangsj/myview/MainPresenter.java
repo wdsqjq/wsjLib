@@ -2,6 +2,7 @@ package per.wangsj.myview;
 
 import android.content.Intent;
 
+import per.wangsj.myview.imageview.ZoomRotateActivity;
 import per.wangsj.myview.titanic.TitanticActivity;
 
 /**
@@ -35,7 +36,7 @@ public class MainPresenter implements BasePresenter{
                 if(i==0){
                     intent = new Intent(mContext, TitanticActivity.class);
                 }else{
-                    intent = new Intent(mContext, ViewActivity.class);
+                    intent = new Intent(mContext, ZoomRotateActivity.class);
                 }
 
                 break;

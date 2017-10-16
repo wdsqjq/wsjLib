@@ -1,0 +1,266 @@
+本文是在别人做的ImageView实现缩放,平移功能的基础上做了优化并加上了旋转功能.
+
+一,缩放
+	缩放通过双击屏幕和双指移动实现.
+	1,双击缩放
+		通过GestureDetector获取双击事件
+		mGestureDetector = new GestureDetector(context,new GestureDetector.SimpleOnGestureListener(){
+				
+				@Override
+				public boolean onDoubleTap(MotionEvent e) {
+					//如果此刻正在进行自动的缓慢缩放,则禁止用户双击缩放
+					if (isAutoScale){
+						return true;
+					}
+					float x = e.getX();
+					float y = e.getY();
+					if (getScale() < mMidScale) {
+						postDelayed(new AutoScaleRunnable(mMidScale,x,y),16);
+					}
+					else {
+						postDelayed(new AutoScaleRunnable(mInitScale,getWidth()/2,getHeight()/2),16);
+					}
+					isAutoScale = true;
+					return true;
+				}
+			});
+		双击后我们可以直接把图片缩放到指定的大小,但是为了提高用户体验,我们通过postDelayed(Runnable action, long delayMillis)
+		发放实现过程缩放,我们看AutoScaleRunnable
+		//实现缓慢缩放
+		private class AutoScaleRunnable implements Runnable{
+			//缩放的目标比例
+			private float mTargetScale;
+			//缩放的中心点
+			private float x;
+			private float y;
+
+			private final float BIGGER = 1.07f;
+			private final float SMALLER = 0.93f;
+
+			//临时缩放比例
+			private float tempScale;
+			public AutoScaleRunnable(float mTargetScale,float x,float y) {
+				this.mTargetScale = mTargetScale;
+				this.x = x;
+				this.y = y;
+				if (getScale() < mTargetScale) {
+					tempScale = BIGGER;
+				}
+				if (getScale() > mTargetScale) {
+					tempScale = SMALLER;
+				}
+			}
+			@Override
+			public void run() {
+				//进行缩放
+				mMatrix.postScale(tempScale,tempScale,x,y);
+				checkBorderAndCenterWhenScale();
+				setImageMatrix(mMatrix);
+
+				float currentScale = getScale();
+				//如果可以放大或者缩小
+				if ((tempScale > 1.0f && currentScale < mTargetScale) || (tempScale < 1.0f && currentScale > mTargetScale) ){
+					postDelayed(this,16);
+				}
+				//设置为目标缩放比例
+				else {
+					float scale = mTargetScale / currentScale;
+					mMatrix.postScale(scale,scale,x,y);
+					checkBorderAndCenterWhenScale();
+					setImageMatrix(mMatrix);
+					isAutoScale = false;
+				}
+			}
+		}
+		1,先根据getScale()和mTargetScale判断是缩小还是放大并得到tempScale.其中BIGGER和SMALLER是指每次缩放倍数.
+		2,然后每次缩放tempScale倍,判断currentScale和mTargetScale,如果还可以放大或缩小,则继续postDelayed(this,16);
+		3,直到放大中currentScale > mTargetScale或缩小中currentScale < mTargetScale
+		4,则设置为目标缩放比例.
+		每次缩放都要进行边界以及位置的控制,参看checkBorderAndCenterWhenScale()
+		//在缩放的时候进行边界以及位置的控制
+		private void checkBorderAndCenterWhenScale() {
+			RectF rectf = getMatrixRectF();
+			float deltaX = 0;
+			float deltaY = 0;
+			int width = getWidth();
+			int height = getHeight();
+
+			//缩放时进行边界检测,防止出现留白
+			if (rectf.width() >= width) {
+				if (rectf.left > 0) {
+					deltaX = -rectf.left;
+				}
+				if (rectf.right < width) {
+					deltaX = width - rectf.right;
+				}
+			}
+			if (rectf.height() >= height) {
+				if (rectf.top > 0) {
+					deltaY = -rectf.top;
+				}
+				if (rectf.bottom < height) {
+					deltaY = height - rectf.bottom;
+				}
+			}
+			//如果宽度或者高度小于控件的宽度或高度,则让其居中
+			if (rectf.width() < width) {
+				deltaX = width / 2f - rectf.right + rectf.width() / 2f;
+			}
+			if (rectf.height() < height) {
+				deltaY = height / 2f - rectf.bottom + rectf.height() / 2f;
+			}
+			mMatrix.postTranslate(deltaX,deltaY);
+		}
+	2,手指多点触控缩放
+		通过ScaleGestureDetector实现
+		mScaleGestureDetector = new ScaleGestureDetector(context, new ScaleGestureDetector.OnScaleGestureListener() {
+            @Override
+            public boolean onScale(ScaleGestureDetector detector) {
+                //获取当前图片的缩放比例
+                float scale = getScale();
+                //多点触控缩放比例
+                float scaleFactor = detector.getScaleFactor();
+                if (getDrawable() == null){
+                    return true;
+                }
+                //进行缩放范围的控制
+                if ((scale < mMaxScale && scaleFactor > 1.0f) || (scale > mInitScale && scaleFactor < 1.0f)) {
+                    if (scale * scaleFactor < mInitScale) {
+                        scaleFactor = mInitScale / scale;
+                    }
+					if (scale * scaleFactor > mMaxScale) {
+                        scaleFactor = mMaxScale / scale;
+                    }
+                    //缩放
+                    mMatrix.postScale(scaleFactor,scaleFactor,detector.getFocusX(),detector.getFocusY());
+                    //在缩放的时候进行边界以及位置的控制
+                    checkBorderAndCenterWhenScale();
+                    setImageMatrix(mMatrix);
+                }
+                return true;
+            }
+
+            @Override
+            public boolean onScaleBegin(ScaleGestureDetector detector) {
+                return true;
+            }
+
+            @Override
+            public void onScaleEnd(ScaleGestureDetector detector) {
+
+            }
+        });
+		onScale中获取当前图片的缩放比例scale和多点触控缩放比例scaleFactor,进行缩放范围的控制后做缩放处理.
+	3,平移
+		平移要在onTouchEvent中,由于手势的优先级高,所以把mGestureDetector.onTouchEvent(event)和mScaleGestureDetector.onTouchEvent(event);
+		放在前面,注释比较清楚,不做详解
+		@Override
+		public boolean onTouchEvent(MotionEvent event) {
+			if (mGestureDetector.onTouchEvent(event)) {
+				return true;
+			}
+			mScaleGestureDetector.onTouchEvent(event);
+
+			float x = 0;
+			float y = 0;
+			int pointerCount = event.getPointerCount();
+
+			//累加x和y方向的距离
+			for (int i = 0; i < pointerCount; i++){
+				x += event.getX(i);
+				y += event.getY(i);
+			}
+
+			//获得中心点位置
+			x /= pointerCount;
+			y /= pointerCount;
+			if (mLastPointerCount != pointerCount) {
+				isCanDrag = false;
+				mLastX = x;
+				mLastY = y;
+			}
+			mLastPointerCount = pointerCount;
+			RectF rectF = getMatrixRectF();
+			switch (event.getAction()){
+				case MotionEvent.ACTION_DOWN:
+					/**
+					 * 此View在ViewPager中使用时,图片放大后自由移动的事件会与
+					 * ViewPager的左右切换的事件发生冲突,导致图片放大后如果左右
+					 * 移动时不能自由移动图片,而是使ViewPager切换图片.这是由于事
+					 * 件分发时外层的优先级比内层的高,使用下列判断可以解决
+					 */
+					if (rectF.width() > getWidth() || rectF.height() > getHeight()) {
+						getParent().requestDisallowInterceptTouchEvent(true);
+					}
+					break;
+				case MotionEvent.ACTION_MOVE:
+					if (rectF.width() > getWidth() || rectF.height() > getHeight()) {
+						getParent().requestDisallowInterceptTouchEvent(true);
+					}
+
+					//偏移量
+					float dx = x - mLastX;
+					float dy = y - mLastY;
+
+					if (!isCanDrag){
+						isCanDrag = isMoveAction(dx,dy);
+					}
+					if (isCanDrag) {
+						if (getDrawable() != null) {
+							isCheckLeftAndRight = true;
+							isCheckTopAndBottom = true;
+
+							//如果宽度小于控件的宽度,不允许横向移动
+							if (rectF.width() < getWidth()) {
+								isCheckLeftAndRight = false;
+								dx = 0;
+							}
+
+							//如果高度小于控件的高度,不允许纵向移动
+							if (rectF.height() < getHeight()) {
+								isCheckTopAndBottom = false;
+								dy = 0;
+							}
+
+							mMatrix.postTranslate(dx,dy);
+							//当自由移动时进行边界检查,防止留白
+							checkBorderWhenTranslate();
+							setImageMatrix(mMatrix);
+						}
+					}
+					mLastX = x;
+					mLastY = y;
+					break;
+				case MotionEvent.ACTION_CANCEL:
+				case MotionEvent.ACTION_UP:
+					mLastPointerCount = 0;
+					break;
+			}
+			return true;
+		}
+	4,旋转
+		对mMatrix做postRotate操作即可.
+		public void rotate(int i) {
+			mMatrix.postRotate(i,getWidth()/2,getHeight()/2);
+			checkBorderAndCenterWhenScale();
+			setImageMatrix(mMatrix);
+		}
+	5,getScale()方法
+		这个方法在多个地方调用,就是获取当前的scale
+		这里需要注意的是获取scale时,我们是从矩阵中获取MSCALE_X或MSCALE_Y
+		但旋转了以后就不能获取MSCALE_X了,如下矩阵:		
+		0.72	0.0		-3.0517578E-5
+		0.0		0.72	-36.48004
+		0.0		0.0		1.0
+		旋转90°后变成这样
+		0.0		-0.72	1500.48
+		0.72	0.0		383.99997
+		0.0		0.0		1.0
+		此时我们就需要获取MSKEW_X或MSKEW_Y并取其绝对值
+		
+		//获取当前图片的缩放比例
+		public float getScale(){
+			float[] values = new float[9];
+			mMatrix.getValues(values);
+			return values[Matrix.MSCALE_X]==0?Math.abs(values[Matrix.MSKEW_X]):Math.abs(values[Matrix.MSCALE_X]);
+		}

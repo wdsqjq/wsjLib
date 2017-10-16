@@ -34,12 +34,13 @@ public class MainActivity extends AppCompatActivity
 
     private String[] viewArray = {"画心", "蜘蛛网图", "圆形加载", "仿postman加载", "仿去哪网刷票效果", "摆动的小球"};
     private String[] viewGroupArray = {"Titanic", "饼状图"};
-    private String[] ActivityArray = {"Titanic", "蜘蛛网图"};
+    private String[] ActivityArray = {"Titanic", "缩放旋转ImageView"};
     private String[] otherArray = {"Titanic", "圆形加载", "仿postman加载"};
     private String[][] arrays={viewArray,viewGroupArray,ActivityArray,otherArray};
 
     BasePresenter presenter;
     private int index=0;
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +48,7 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
 
         initView();
-        initData();
+        initData(0);
     }
 
     private void initView() {
@@ -57,7 +58,7 @@ public class MainActivity extends AppCompatActivity
         rvDetail.setLayoutManager(new LinearLayoutManager(this));
         rvDetail.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 //        toolbar.inflateMenu(R.menu.main);
 
@@ -80,7 +81,8 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
     }
 
-    private void initData() {
+    private void initData(int i) {
+        index=i;
         datas.clear();
         datas.addAll(Arrays.asList(arrays[index]));
         if (mAdapter == null) {
@@ -105,25 +107,22 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         int id = item.getItemId();
-
         if (id == R.id.nav_view) {
-            index=0;
-            initData();
+            toolbar.setTitle("View");
+            initData(0);
         } else if (id == R.id.nav_viewgroup) {
-            index=1;
-            initData();
+            toolbar.setTitle("ViewGroup");
+            initData(1);
         } else if (id == R.id.nav_in_activity) {
-            index=2;
-            initData();
+            toolbar.setTitle("InActivity");
+            initData(2);
         } else if (id == R.id.nav_other) {
-            index=3;
-            initData();
+            toolbar.setTitle("Other");
+            initData(3);
         } else if (id == R.id.nav_share) {
-            index=4;
-            initData();
+            initData(4);
         } else if (id == R.id.nav_send) {
-            index=5;
-            initData();
+            initData(5);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
