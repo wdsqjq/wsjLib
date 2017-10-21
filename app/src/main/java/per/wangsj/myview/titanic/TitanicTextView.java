@@ -10,7 +10,6 @@ import android.graphics.Matrix;
 import android.graphics.Shader;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
-import android.widget.TextView;
 
 import per.wangsj.myview.R;
 
@@ -19,7 +18,7 @@ import per.wangsj.myview.R;
  * romainpiel
  * 13/03/2014
  */
-public class TitanicTextView extends TextView {
+public class TitanicTextView extends android.support.v7.widget.AppCompatTextView {
 
     public interface AnimationSetupCallback {
         public void onSetupAnimation(TitanicTextView titanicTextView);
@@ -148,6 +147,7 @@ public class TitanicTextView extends TextView {
         wave.setBounds(0, 0, waveW, waveH);
         wave.draw(c);
 
+        // Shader.TileMode.CLAMP: 当所画图形的尺寸大于Bitmap的尺寸的时候，会用Bitmap四边的颜色填充剩余空间。
         shader = new BitmapShader(b, Shader.TileMode.REPEAT, Shader.TileMode.CLAMP);
         getPaint().setShader(shader);
 

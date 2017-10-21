@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/DrawHeart.iml" filepath="$PROJECT_DIR$/DrawHeart.iml" />
+      <module fileurl="file://$PROJECT_DIR$/aliload/aliload.iml" filepath="$PROJECT_DIR$/aliload/aliload.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/commonlib/commonlib.iml" filepath="$PROJECT_DIR$/commonlib/commonlib.iml" />
     </modules>

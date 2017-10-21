@@ -468,8 +468,36 @@ public class ZoomRotateImageView extends android.support.v7.widget.AppCompatImag
         printMatrix();
         mMatrix.postRotate(i,getWidth()/2,getHeight()/2);
         printMatrix();
+        checkBorderAndCenterWhenRotate();
         checkBorderAndCenterWhenScale();
         printMatrix();
         setImageMatrix(mMatrix);
+    }
+
+    //在旋转的时候进行边界以及位置的控制
+    private void checkBorderAndCenterWhenRotate() {
+        RectF rectf = getMatrixRectF();
+        float scalex=1;
+        float scaley=1;
+        float scale=1;
+
+        int width = getWidth();
+        int height = getHeight();
+
+        if(rectf.width()>width){
+            scalex=width/rectf.width();
+        }
+        if(rectf.height()>height){
+            scaley=width/rectf.width();
+        }
+        if(rectf.width()<width&&rectf.height()<height){
+            scalex=width/rectf.width();
+            scaley=width/rectf.width();
+            scale=Math.min(scalex,scaley);
+        }else{
+            scale=Math.min(scalex,scaley);
+        }
+
+        mMatrix.postScale(scale,scale);
     }
 }

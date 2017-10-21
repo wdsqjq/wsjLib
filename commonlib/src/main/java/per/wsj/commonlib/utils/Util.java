@@ -31,7 +31,7 @@ import java.util.Date;
 public class Util {
 	private static Util util;
 
-	public static Util init() { // 单例，个人习惯用Init,标准是getInstance
+	public static Util getInstance() { // 单例，个人习惯用Init,标准是getInstance
 		if (util == null)
 			util = new Util();
 		return util;
