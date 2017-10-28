@@ -488,11 +488,11 @@ public class ZoomRotateImageView extends android.support.v7.widget.AppCompatImag
             scalex=width/rectf.width();
         }
         if(rectf.height()>height){
-            scaley=width/rectf.width();
+            scaley=height/rectf.height();
         }
         if(rectf.width()<width&&rectf.height()<height){
             scalex=width/rectf.width();
-            scaley=width/rectf.width();
+            scaley=height/rectf.height();
             scale=Math.min(scalex,scaley);
         }else{
             scale=Math.min(scalex,scaley);

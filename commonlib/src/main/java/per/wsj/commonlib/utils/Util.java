@@ -31,7 +31,7 @@ import java.util.Date;
 public class Util {
 	private static Util util;
 
-	public static Util getInstance() { // 单例，个人习惯用Init,标准是getInstance
+	public static Util getInstance() { // 单例
 		if (util == null)
 			util = new Util();
 		return util;
@@ -340,7 +340,6 @@ public class Util {
 	 * 把输入流中的数据输入到Path里的文件里
 	 *
 	 * @param path
-	 * @param fileName
 	 * @param inputStream
 	 * @return
 	 */
@@ -372,8 +371,6 @@ public class Util {
 	 * 把数据输入到Path里的文件里
 	 *
 	 * @param path
-	 * @param fileName
-	 * @param inputStream
 	 * @return
 	 */
 	public File writeFromInputToSD(String path, byte[] b) {
