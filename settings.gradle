@@ -1,1 +1,1 @@
-include ':app', ':commonlib', ':aliload'
+include ':app', ':commonlib'

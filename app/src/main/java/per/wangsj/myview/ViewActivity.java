@@ -4,12 +4,13 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.widget.Toast;
 
-import per.wangsj.myview.circleloading.CircleLoadingView;
-import per.wangsj.myview.circleloading.PostManLoadingView;
-import per.wangsj.myview.circleloading.RefreshTicketView;
+import per.wangsj.myview.loadingview.AliLoadingView;
+import per.wangsj.myview.loadingview.CircleLoadingView;
+import per.wangsj.myview.loadingview.PostManLoadingView;
+import per.wangsj.myview.loadingview.RefreshTicketView;
 import per.wangsj.myview.love.DrawHeartView;
 import per.wangsj.myview.spidernet.RadarView;
-import per.wangsj.myview.swingball.SwingBall;
+import per.wangsj.myview.swingball.Pendulum;
 
 public class ViewActivity extends Activity {
 
@@ -73,12 +74,16 @@ public class ViewActivity extends Activity {
                 setContentView(refreshTicketView);
                 refreshTicketView.start();
                 break;
-            case 5:
-                setContentView(new SwingBall(this));
+            case 5://阿里加载效果
+                setContentView(new AliLoadingView(this));
                 break;
             case 6:
                 //微信雷达搜索
                 setContentView(R.layout.radar_activity);
+                break;
+            case 7:
+                //微信雷达搜索
+                setContentView(new Pendulum(this));
                 break;
 
         }

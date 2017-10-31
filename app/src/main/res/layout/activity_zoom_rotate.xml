@@ -12,7 +12,7 @@
         android:id="@+id/zoomIv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@mipmap/beauty"/>
+        android:src="@mipmap/beauty2"/>
 
     <ImageButton
         android:id="@+id/btnRotate"
