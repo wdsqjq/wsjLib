@@ -16,24 +16,24 @@
         "source": "D:\\work\\wsjLib\\commonlib\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\26.0.0-alpha1\\res\\layout\\abc_alert_dialog_material.xml"
     },
     {
-        "merged": "D:\\work\\wsjLib\\commonlib\\build\\intermediates\\res\\merged\\release\\layout\\design_layout_tab_text.xml",
-        "source": "D:\\work\\wsjLib\\commonlib\\build\\intermediates\\exploded-aar\\com.android.support\\design\\26.0.0-alpha1\\res\\layout\\design_layout_tab_text.xml"
+        "merged": "D:\\work\\wsjLib\\commonlib\\build\\intermediates\\res\\merged\\release\\layout\\abc_list_menu_item_checkbox.xml",
+        "source": "D:\\work\\wsjLib\\commonlib\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\26.0.0-alpha1\\res\\layout\\abc_list_menu_item_checkbox.xml"
     },
     {
         "merged": "D:\\work\\wsjLib\\commonlib\\build\\intermediates\\res\\merged\\release\\layout\\abc_popup_menu_item_layout.xml",
         "source": "D:\\work\\wsjLib\\commonlib\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\26.0.0-alpha1\\res\\layout\\abc_popup_menu_item_layout.xml"
     },
     {
-        "merged": "D:\\work\\wsjLib\\commonlib\\build\\intermediates\\res\\merged\\release\\layout\\abc_list_menu_item_checkbox.xml",
-        "source": "D:\\work\\wsjLib\\commonlib\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\26.0.0-alpha1\\res\\layout\\abc_list_menu_item_checkbox.xml"
-    },
-    {
-        "merged": "D:\\work\\wsjLib\\commonlib\\build\\intermediates\\res\\merged\\release\\layout\\abc_action_mode_bar.xml",
-        "source": "D:\\work\\wsjLib\\commonlib\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\26.0.0-alpha1\\res\\layout\\abc_action_mode_bar.xml"
+        "merged": "D:\\work\\wsjLib\\commonlib\\build\\intermediates\\res\\merged\\release\\layout\\design_layout_tab_text.xml",
+        "source": "D:\\work\\wsjLib\\commonlib\\build\\intermediates\\exploded-aar\\com.android.support\\design\\26.0.0-alpha1\\res\\layout\\design_layout_tab_text.xml"
     },
     {
         "merged": "D:\\work\\wsjLib\\commonlib\\build\\intermediates\\res\\merged\\release\\layout\\abc_dialog_title_material.xml",
         "source": "D:\\work\\wsjLib\\commonlib\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\26.0.0-alpha1\\res\\layout\\abc_dialog_title_material.xml"
+    },
+    {
+        "merged": "D:\\work\\wsjLib\\commonlib\\build\\intermediates\\res\\merged\\release\\layout\\abc_action_mode_bar.xml",
+        "source": "D:\\work\\wsjLib\\commonlib\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\26.0.0-alpha1\\res\\layout\\abc_action_mode_bar.xml"
     },
     {
         "merged": "D:\\work\\wsjLib\\commonlib\\build\\intermediates\\res\\merged\\release\\layout\\design_navigation_item_separator.xml",
