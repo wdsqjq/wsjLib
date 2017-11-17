@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity
     private CommonAdapter<String> mAdapter;
     List<String> datas=new ArrayList<>();
 
-    private String[] viewArray = {"画心", "蜘蛛网图", "圆形加载", "仿postman加载", "仿去哪网刷票效果", "阿里加载效果","微信雷达搜索","摆动的小球"};
+    private String[] viewArray = {"画心", "蜘蛛网图", "圆形加载", "仿postman加载", "仿去哪网刷票效果", "阿里加载效果","微信雷达搜索","摆动的小球","hot男人加载"};
     private String[] viewGroupArray = {"Titanic", "饼状图"};
     private String[] ActivityArray = {"Titanic", "缩放旋转ImageView","饼状图"};
     private String[] otherArray = {"Titanic", "圆形加载", "仿postman加载"};

@@ -5,7 +5,6 @@
       <module fileurl="file://D:\work\wsjLib\DrawHeart.iml" filepath="D:\work\wsjLib\DrawHeart.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/commonlib/commonlib.iml" filepath="$PROJECT_DIR$/commonlib/commonlib.iml" />
-      <module fileurl="file://$PROJECT_DIR$/hotmanloading/hotmanloading.iml" filepath="$PROJECT_DIR$/hotmanloading/hotmanloading.iml" />
       <module fileurl="file://$PROJECT_DIR$/wsjLib.iml" filepath="$PROJECT_DIR$/wsjLib.iml" />
     </modules>
   </component>

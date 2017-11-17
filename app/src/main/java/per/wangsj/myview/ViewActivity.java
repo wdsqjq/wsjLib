@@ -6,6 +6,7 @@ import android.widget.Toast;
 
 import per.wangsj.myview.loadingview.AliLoadingView;
 import per.wangsj.myview.loadingview.CircleLoadingView;
+import per.wangsj.myview.loadingview.HotManLoading;
 import per.wangsj.myview.loadingview.PostManLoadingView;
 import per.wangsj.myview.loadingview.RefreshTicketView;
 import per.wangsj.myview.love.DrawHeartView;
@@ -82,8 +83,12 @@ public class ViewActivity extends Activity {
                 setContentView(R.layout.radar_activity);
                 break;
             case 7:
-                //微信雷达搜索
+                //摆动的小球
                 setContentView(new Pendulum(this));
+                break;
+            case 8:
+                //hot男人加载
+                setContentView(new HotManLoading(this));
                 break;
 
         }
