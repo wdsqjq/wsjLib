@@ -1,13 +1,19 @@
 package com.example.wsj.parent;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebResourceError;
+import android.webkit.WebResourceRequest;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
 
 
@@ -63,6 +69,8 @@ public class BlankFragment extends Fragment {
         }
     }
 
+    private WebView webview;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -76,7 +84,38 @@ public class BlankFragment extends Fragment {
         }else{
             fl.setBackgroundColor(Color.YELLOW);
         }
+        webview=v.findViewById(R.id.webview);
+        showData();
         return v;
+    }
+
+    private void showData() {
+        webview.getSettings().setJavaScriptEnabled(true);
+        webview.loadUrl("http://192.168.86.31:8080/tests/5.html");
+        webview.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                return true;
+            }
+        });
+
+        webview.setWebViewClient(new WebViewClient(){
+            @Override
+            public void onPageStarted(WebView view, String url, Bitmap favicon) {
+                super.onPageStarted(view, url, favicon);
+                Log.d("BlankFragment", url);
+            }
+
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                super.onPageFinished(view, url);
+            }
+
+            @Override
+            public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
+                super.onReceivedError(view, request, error);
+            }
+        });
     }
 
     // TODO: Rename method, update argument and hook method into UI event
