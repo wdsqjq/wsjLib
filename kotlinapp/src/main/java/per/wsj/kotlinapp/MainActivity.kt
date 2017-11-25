@@ -1,5 +1,6 @@
 package per.wsj.kotlinapp
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.DividerItemDecoration
@@ -18,6 +19,10 @@ class MainActivity : AppCompatActivity() {
 
         initView()
         initData()
+
+        var intent:Intent= Intent(this,Main2Activity::class.java)
+        startActivity(intent)
+
 
         var mAdapter:ArticleAdapter= ArticleAdapter(this,mData)
         rvArticle?.setLayoutManager(LinearLayoutManager(this))
