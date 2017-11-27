@@ -1,4 +1,4 @@
-package per.wsj.kotlinapp
+package per.wsj.kotlinapp.adapter
 
 import android.content.Context
 import android.content.Intent
@@ -8,6 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
+import per.wsj.kotlinapp.ArticleActivity
+import per.wsj.kotlinapp.R
 
 /**
  * Created by shiju.wang on 2017/11/24.
@@ -19,20 +21,20 @@ class ArticleAdapter(var mContext: Context, var mData:List<String>): RecyclerVie
         return mData.size
     }
 
-    override fun onBindViewHolder(holder: ArticleAdapter.MyViewHolder?, position: Int) {
+    override fun onBindViewHolder(holder: MyViewHolder?, position: Int) {
         holder?.title?.setText(mData.get(position))
 
         holder?.itemLayout?.setOnClickListener {
-            var intent: Intent =Intent(mContext,ArticleActivity::class.java)
+            var intent: Intent =Intent(mContext, ArticleActivity::class.java)
             intent.putExtra("position",position)
             intent.putExtra("title",mData.get(position))
             mContext.startActivity(intent)
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ArticleAdapter.MyViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): MyViewHolder {
         var view:View=LayoutInflater.from(mContext).inflate(R.layout.layout_item_article,null)
-        var myViewHolder:MyViewHolder= MyViewHolder(view)
+        var myViewHolder: MyViewHolder = MyViewHolder(view)
         return myViewHolder
     }
 
@@ -52,7 +54,7 @@ class ArticleAdapter(var mContext: Context, var mData:List<String>): RecyclerVie
 //        private val title: TextView? = null
 //
 //        init {
-//            title!!.setOnClickListener { Toast.makeText(this@Main3Activity, "aa", Toast.LENGTH_SHORT).show() }
+//            title!!.setOnClickListener { Toast.makeText(this@MainActivity, "aa", Toast.LENGTH_SHORT).show() }
 //        }
 //    }
 }

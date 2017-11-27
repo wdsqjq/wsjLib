@@ -6,10 +6,10 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <per.wsj.commonlib.pulltorefreshlib.PullToRefreshLayout
+<!--    <per.wsj.commonlib.pulltorefreshlib.PullToRefreshLayout
         android:id="@+id/refresh_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent">-->
 
         <per.wsj.commonlib.pulltorefreshlib.PullableViewPager
             android:id="@+id/vp"
@@ -21,6 +21,6 @@
             android:id="@+id/vp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>-->
-    </per.wsj.commonlib.pulltorefreshlib.PullToRefreshLayout>
+    <!--</per.wsj.commonlib.pulltorefreshlib.PullToRefreshLayout>-->
 
 </LinearLayout>

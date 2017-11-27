@@ -1,19 +1,14 @@
 package com.example.wsj.parent;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebResourceError;
-import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
-import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
 
 
@@ -91,7 +86,7 @@ public class BlankFragment extends Fragment {
 
     private void showData() {
         webview.getSettings().setJavaScriptEnabled(true);
-        webview.loadUrl("http://192.168.86.31:8080/tests/5.html");
+        webview.loadUrl("http://wangsj.cn:8080/kotlinapp/5.html");
         webview.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
@@ -99,7 +94,7 @@ public class BlankFragment extends Fragment {
             }
         });
 
-        webview.setWebViewClient(new WebViewClient(){
+       /* webview.setWebViewClient(new WebViewClient(){
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 super.onPageStarted(view, url, favicon);
@@ -115,7 +110,7 @@ public class BlankFragment extends Fragment {
             public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
                 super.onReceivedError(view, request, error);
             }
-        });
+        });*/
     }
 
     // TODO: Rename method, update argument and hook method into UI event

@@ -45,8 +45,8 @@ public class Main3Activity extends AppCompatActivity implements BlankFragment.On
 
         vp.setAdapter(adapter);
 
-        refreshLayout= (PullToRefreshLayout) findViewById(R.id.refresh_layout);
-        refreshLayout.setOnPullListener(this);
+        /*refreshLayout= (PullToRefreshLayout) findViewById(R.id.refresh_layout);
+        refreshLayout.setOnPullListener(this);*/
 
     }
 
