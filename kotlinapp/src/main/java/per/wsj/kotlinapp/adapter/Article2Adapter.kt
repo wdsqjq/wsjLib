@@ -9,8 +9,8 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
-import per.wsj.kotlinapp.Main2Activity
 import per.wsj.kotlinapp.R
+import per.wsj.kotlinapp.Video0Activity
 
 /**
  * Created by shiju.wang on 2017/11/24.
@@ -26,7 +26,7 @@ class Article2Adapter(var mContext: Context, var mData:List<String>): RecyclerVi
         holder?.title?.setText(mData.get(position))
 
         holder?.itemLayout?.setOnClickListener {
-            var intent: Intent =Intent(mContext, Main2Activity::class.java)
+            var intent: Intent =Intent(mContext, Video0Activity::class.java)
             intent.putExtra("position",position)
             intent.putExtra("title",mData.get(position))
             mContext.startActivity(intent)

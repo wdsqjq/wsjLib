@@ -21,7 +21,7 @@ class ArticleListActivity : AppCompatActivity() {
         initView()
         initData()
 
-        var intent:Intent= Intent(this,Main2Activity::class.java)
+        var intent:Intent= Intent(this, VideoActivity::class.java)
         startActivity(intent)
 
 
