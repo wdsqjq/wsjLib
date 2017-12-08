@@ -9,7 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.fragment_video.*
 import per.wsj.kotlinapp.R
-import per.wsj.kotlinapp.adapter.Article2Adapter
+import per.wsj.kotlinapp.adapter.VideoAdapter
 import java.util.*
 
 
@@ -41,7 +41,8 @@ class BlankFragment : Fragment() {
     }
 
     private fun initView() {
-        var mAdapter: Article2Adapter = Article2Adapter(context, mData)
+//        var mAdapter = Article2Adapter(context, mData)
+        var mAdapter = VideoAdapter(context, mData)
         rvVideo?.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
         rvVideo.adapter=mAdapter
     }

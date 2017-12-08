@@ -12,7 +12,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ArticleListActivity" />
         <activity android:name=".ArticleActivity" />
         <activity
             android:name=".MainActivity"
@@ -24,7 +23,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Video0Activity"
+            android:name=".VideoActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait" />
     </application>

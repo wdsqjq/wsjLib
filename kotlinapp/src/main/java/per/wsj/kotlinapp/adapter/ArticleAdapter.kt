@@ -33,7 +33,7 @@ class ArticleAdapter(var mContext: Context, var mData:List<String>): RecyclerVie
     }
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): MyViewHolder {
-        var view:View=LayoutInflater.from(mContext).inflate(R.layout.layout_item_article,null)
+        var view:View=LayoutInflater.from(mContext).inflate(R.layout.layout_item_article,parent,false)
         var myViewHolder: MyViewHolder = MyViewHolder(view)
         return myViewHolder
     }

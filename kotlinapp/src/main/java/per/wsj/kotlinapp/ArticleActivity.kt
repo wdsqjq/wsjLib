@@ -8,6 +8,9 @@ class ArticleActivity : AppCompatActivity() {
 
     private var webView: WebView?=null
     private var position:Int=0
+//    private var url="file:///android_asset/"
+    private var url="www.wangsj.cn:8080/kotlinapp/"
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -20,7 +23,8 @@ class ArticleActivity : AppCompatActivity() {
 
     private fun initView() {
         webView= findViewById(R.id.webView) as WebView?
-        webView?.loadUrl("file:///android_asset/${position}.html")
+
+        webView?.loadUrl("${url}${position}.html")
 
         /*webView?.setWebViewClient(object : WebViewClient() {
             override fun onPageStarted(view: WebView, url: String, favicon: Bitmap) {
