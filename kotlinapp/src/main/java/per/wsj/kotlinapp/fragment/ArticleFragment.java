@@ -1,41 +1,35 @@
-package per.wsj.kotlinapp.myfragment;
+package per.wsj.kotlinapp.fragment;
 
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import okhttp3.Call;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
-import okhttp3.Response;
 import per.wsj.kotlinapp.R;
 import per.wsj.kotlinapp.adapter.BasisAdapter;
 
-/**
- *
- */
-public class BasisFragment extends Fragment {
+public class ArticleFragment extends Fragment {
 
     private static final String FRAGMENT_POSITION = "fragment_position";
 
     private List<String> mData=new ArrayList<>();
     private Context mContext;
 
-    public BasisFragment() {
+    public ArticleFragment() {
     }
 
-    public static BasisFragment newInstance(int columnCount) {
-        BasisFragment fragment = new BasisFragment();
+    public static ArticleFragment newInstance(int columnCount) {
+        ArticleFragment fragment = new ArticleFragment();
         Bundle args = new Bundle();
         args.putInt(FRAGMENT_POSITION, columnCount);
         fragment.setArguments(args);
@@ -75,17 +69,21 @@ public class BasisFragment extends Fragment {
                 .url(url)
                 .build();
         final Call call = okHttpClient.newCall(request);
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    Response response = call.execute();
-                    Log.d("BasisFragment", response.body().string());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
+
+        /*Observable.create(new ObservableOnSubscribe<String>() {
+                    @Override
+                    public void subscribe(ObservableEmitter<String> observableEmitter) throws Exception {
+                        Response response = call.execute();
+                        observableEmitter.onNext(response.body().string());
+                    }
+                }).subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Consumer<String>() {
+                            @Override
+                            public void accept(String s) throws Exception {
+                                Log.d("ArticleFragment", s);
+                            }
+                        });*/
     }
 
     @Override

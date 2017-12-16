@@ -4,18 +4,16 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import cn.jzvd.JZVideoPlayer
 import cn.jzvd.JZVideoPlayerStandard
+import kotlinx.android.synthetic.main.activity_video.*
 
 class VideoActivity : AppCompatActivity() {
-
-    private var videoplayer:JZVideoPlayerStandard?=null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_video)
-        var url="http://jzvd.nathen.cn/c6e3dc12a1154626b3476d9bf3bd7266/6b56c5f0dc31428083757a45764763b0-5287d2089db37e62345123a1be272f8b.mp4"
-//        var url="http://wangsj.cn:8080/kotlinapp/video/09.avi"
+//        var url="http://jzvd.nathen.cn/c6e3dc12a1154626b3476d9bf3bd7266/6b56c5f0dc31428083757a45764763b0-5287d2089db37e62345123a1be272f8b.mp4"
+        var url="http://wangsj.cn:8080/kotlinapp/video/09.avi"
 //
-        videoplayer=findViewById(R.id.videoplayer) as JZVideoPlayerStandard?
         videoplayer?.setUp(url,JZVideoPlayerStandard.SCREEN_WINDOW_NORMAL,"左手右手")
         videoplayer?.startVideo()
 

@@ -8,8 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import per.wsj.kotlinapp.ArticleActivity
 import per.wsj.kotlinapp.R
+import per.wsj.kotlinapp.VideoActivity
 
 /**
  * Created by shiju.wang on 2017/11/24.
@@ -24,7 +24,7 @@ class VideoAdapter(var mContext: Context, var mData:List<String>): RecyclerView.
     override fun onBindViewHolder(holder: MyViewHolder?, position: Int) {
         holder?.title?.setText(mData.get(position))
         holder?.itemLayout?.setOnClickListener {
-            var intent: Intent =Intent(mContext, ArticleActivity::class.java)
+            var intent: Intent =Intent(mContext, VideoActivity::class.java)
             intent.putExtra("position",position)
             intent.putExtra("title",mData.get(position))
             mContext.startActivity(intent)

@@ -12,7 +12,6 @@
 /app/src/test
 /wsjlib/src/androidTest
 /wsjlib/src/test
-.gitignore
 /commonlib/src/test
 /commonlib/src/androidTest
 
