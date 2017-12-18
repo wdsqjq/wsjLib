@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,9 +13,16 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 import okhttp3.Call;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.Response;
 import per.wsj.kotlinapp.R;
 import per.wsj.kotlinapp.adapter.BasisAdapter;
 
@@ -63,14 +71,14 @@ public class ArticleFragment extends Fragment {
         mData.add("对象表达式与声明");
         mData.add("委托");
 
-        String url = "http://192.168.86.31:8080/tests/GetArticleInfo";
+        String url = "http://wangsj.cn:8080/kotlinapp/GetArticleInfo";
         OkHttpClient okHttpClient = new OkHttpClient();
         Request request = new Request.Builder()
                 .url(url)
                 .build();
         final Call call = okHttpClient.newCall(request);
 
-        /*Observable.create(new ObservableOnSubscribe<String>() {
+        Observable.create(new ObservableOnSubscribe<String>() {
                     @Override
                     public void subscribe(ObservableEmitter<String> observableEmitter) throws Exception {
                         Response response = call.execute();
@@ -83,7 +91,7 @@ public class ArticleFragment extends Fragment {
                             public void accept(String s) throws Exception {
                                 Log.d("ArticleFragment", s);
                             }
-                        });*/
+                        });
     }
 
     @Override

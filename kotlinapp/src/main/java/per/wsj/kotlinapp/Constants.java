@@ -6,5 +6,5 @@ package per.wsj.kotlinapp;
 
 public class Constants {
 
-    public static String baseUrl="http://wangsj.cn:8080/kotlinapp/";
+    public static String baseUrl="http://wangsj.cn:8080/kotlinapp/article";
 }
