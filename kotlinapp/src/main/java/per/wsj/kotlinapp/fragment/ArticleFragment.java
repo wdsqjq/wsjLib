@@ -13,25 +13,23 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.reactivex.Observable;
-import io.reactivex.ObservableEmitter;
-import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Consumer;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
-import okhttp3.Call;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
 import per.wsj.kotlinapp.Constants;
 import per.wsj.kotlinapp.R;
 import per.wsj.kotlinapp.adapter.ArticleAdapter;
+import per.wsj.kotlinapp.net.ApiService;
+import per.wsj.kotlinapp.net.ArticleRequest;
+import per.wsj.kotlinapp.net.ArticleResponse;
+import retrofit2.Retrofit;
 
 public class ArticleFragment extends Fragment {
 
     private static final String FRAGMENT_POSITION = "fragment_position";
 
-    private List<String> mData=new ArrayList<>();
+    private List<String> mData = new ArrayList<>();
     private Context mContext;
 
     public ArticleFragment() {
@@ -48,7 +46,7 @@ public class ArticleFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mContext=getActivity();
+        mContext = getActivity();
         initData();
     }
 
@@ -72,7 +70,7 @@ public class ArticleFragment extends Fragment {
         mData.add("对象表达式与声明");
         mData.add("委托");
 
-        String url = Constants.baseUrl+"GetArticleInfo";
+        /*String url = Constants.baseUrl+"GetArticleInfo";
         OkHttpClient okHttpClient = new OkHttpClient();
         Request request = new Request.Builder()
                 .url(url)
@@ -92,7 +90,37 @@ public class ArticleFragment extends Fragment {
                             public void accept(String s) throws Exception {
                                 Log.d("ArticleFragment", s);
                             }
-                        });
+                        });*/
+
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(Constants.baseUrl)
+//                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        ApiService apiService = retrofit.create(ApiService.class);
+
+        apiService.getArticle(new ArticleRequest("aa"))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<ArticleResponse>() {
+                    @Override
+                    public void onSubscribe(Disposable disposable) {
+
+                    }
+
+                    @Override
+                    public void onNext(ArticleResponse s) {
+                        Log.d("ArticleFragment", s.toString());
+                    }
+
+                    @Override
+                    public void onError(Throwable throwable) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
     }
 
     @Override
@@ -104,8 +132,8 @@ public class ArticleFragment extends Fragment {
         if (view instanceof RecyclerView) {
             Context context = view.getContext();
             RecyclerView recyclerView = (RecyclerView) view;
-            recyclerView.addItemDecoration(new DividerItemDecoration(mContext,DividerItemDecoration.VERTICAL));
-            recyclerView.setAdapter(new ArticleAdapter(mContext,mData));
+            recyclerView.addItemDecoration(new DividerItemDecoration(mContext, DividerItemDecoration.VERTICAL));
+            recyclerView.setAdapter(new ArticleAdapter(mContext, mData));
         }
         return view;
     }

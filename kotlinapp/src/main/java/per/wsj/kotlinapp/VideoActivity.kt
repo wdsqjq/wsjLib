@@ -17,7 +17,6 @@ class VideoActivity : AppCompatActivity() {
         videoplayer?.setUp(url,JZVideoPlayerStandard.SCREEN_WINDOW_NORMAL,"左手右手")
         videoplayer?.startVideo()
 
-
 //        val jzVideoPlayerStandard = findViewById(R.id.videoplayer) as JZVideoPlayerStandard
 //        jzVideoPlayerStandard.setUp(url, JZVideoPlayerStandard.SCREEN_WINDOW_NORMAL, intent.getStringExtra("title"))
 
