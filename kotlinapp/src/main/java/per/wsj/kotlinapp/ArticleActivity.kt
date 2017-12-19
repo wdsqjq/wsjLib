@@ -20,7 +20,7 @@ class ArticleActivity : AppCompatActivity() {
 
     private fun initView() {
 
-        webView.loadUrl("${Constants.baseUrl}${position}.html")
+        webView.loadUrl("${Constants.baseUrl}article/${position}.html")
 
         /*webView?.setWebViewClient(object : WebViewClient() {
             override fun onPageStarted(view: WebView, url: String, favicon: Bitmap) {

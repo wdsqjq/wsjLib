@@ -23,8 +23,9 @@ import okhttp3.Call;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import per.wsj.kotlinapp.Constants;
 import per.wsj.kotlinapp.R;
-import per.wsj.kotlinapp.adapter.BasisAdapter;
+import per.wsj.kotlinapp.adapter.ArticleAdapter;
 
 public class ArticleFragment extends Fragment {
 
@@ -71,7 +72,7 @@ public class ArticleFragment extends Fragment {
         mData.add("对象表达式与声明");
         mData.add("委托");
 
-        String url = "http://wangsj.cn:8080/kotlinapp/GetArticleInfo";
+        String url = Constants.baseUrl+"GetArticleInfo";
         OkHttpClient okHttpClient = new OkHttpClient();
         Request request = new Request.Builder()
                 .url(url)
@@ -104,7 +105,7 @@ public class ArticleFragment extends Fragment {
             Context context = view.getContext();
             RecyclerView recyclerView = (RecyclerView) view;
             recyclerView.addItemDecoration(new DividerItemDecoration(mContext,DividerItemDecoration.VERTICAL));
-            recyclerView.setAdapter(new BasisAdapter(mContext,mData));
+            recyclerView.setAdapter(new ArticleAdapter(mContext,mData));
         }
         return view;
     }

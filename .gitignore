@@ -10,8 +10,5 @@
 .externalNativeBuild
 /app/src/androidTest
 /app/src/test
-/wsjlib/src/androidTest
-/wsjlib/src/test
 /commonlib/src/test
 /commonlib/src/androidTest
-
