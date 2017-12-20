@@ -6,21 +6,21 @@ import kotlinx.android.synthetic.main.activity_article.*
 
 class ArticleActivity : AppCompatActivity() {
 
-    private var position:Int=0
+    private var url:String=""
 //    private var url="file:///android_asset/"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_article)
         setTitle(intent.getStringExtra("title"))
-        position=intent.getIntExtra("position",0)
+        url=intent.getStringExtra("url")
 
         initView()
     }
 
     private fun initView() {
 
-        webView.loadUrl("${Constants.baseUrl}article/${position}.html")
+        webView.loadUrl("${Constants.baseUrl}article/${url}")
 
         /*webView?.setWebViewClient(object : WebViewClient() {
             override fun onPageStarted(view: WebView, url: String, favicon: Bitmap) {

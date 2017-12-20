@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,20 +16,20 @@ import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
-import per.wsj.kotlinapp.Constants;
 import per.wsj.kotlinapp.R;
 import per.wsj.kotlinapp.adapter.ArticleAdapter;
 import per.wsj.kotlinapp.net.ApiService;
 import per.wsj.kotlinapp.net.ArticleRequest;
 import per.wsj.kotlinapp.net.ArticleResponse;
-import retrofit2.Retrofit;
+import per.wsj.kotlinapp.net.NetManager;
 
 public class ArticleFragment extends Fragment {
 
     private static final String FRAGMENT_POSITION = "fragment_position";
 
-    private List<String> mData = new ArrayList<>();
+    private List<ArticleResponse.DetailBean> mData = new ArrayList<>();
     private Context mContext;
+    private ArticleAdapter mAdapter;
 
     public ArticleFragment() {
     }
@@ -51,53 +50,7 @@ public class ArticleFragment extends Fragment {
     }
 
     private void initData() {
-        mData.add("Kotlin_简介");
-        mData.add("IntelliJ IDEA环境搭建");
-        mData.add("Eclipse环境搭建");
-        mData.add("使用命令行编译");
-        mData.add("Android环境搭建");
-        mData.add("基础语法");
-        mData.add("基本数据类型");
-        mData.add("条件控制");
-        mData.add("循环控制");
-        mData.add("类和对象");
-        mData.add("继承");
-        mData.add("接口");
-        mData.add("扩展");
-        mData.add("数据类与密封类");
-        mData.add("泛型");
-        mData.add("枚举类");
-        mData.add("对象表达式与声明");
-        mData.add("委托");
-
-        /*String url = Constants.baseUrl+"GetArticleInfo";
-        OkHttpClient okHttpClient = new OkHttpClient();
-        Request request = new Request.Builder()
-                .url(url)
-                .build();
-        final Call call = okHttpClient.newCall(request);
-
-        Observable.create(new ObservableOnSubscribe<String>() {
-                    @Override
-                    public void subscribe(ObservableEmitter<String> observableEmitter) throws Exception {
-                        Response response = call.execute();
-                        observableEmitter.onNext(response.body().string());
-                    }
-                }).subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(new Consumer<String>() {
-                            @Override
-                            public void accept(String s) throws Exception {
-                                Log.d("ArticleFragment", s);
-                            }
-                        });*/
-
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(Constants.baseUrl)
-//                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        ApiService apiService = retrofit.create(ApiService.class);
-
-        apiService.getArticle(new ArticleRequest("aa"))
+        new NetManager(mContext).create(ApiService.class).getArticle(new ArticleRequest("a"))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<ArticleResponse>() {
@@ -107,8 +60,13 @@ public class ArticleFragment extends Fragment {
                     }
 
                     @Override
-                    public void onNext(ArticleResponse s) {
-                        Log.d("ArticleFragment", s.toString());
+                    public void onNext(ArticleResponse response) {
+                        if(response.getCode().equals("200")){
+                            List<ArticleResponse.DetailBean> articles=response.getDetail();
+                            mData.clear();
+                            mData.addAll(articles);
+                            mAdapter.notifyDataSetChanged();
+                        }
                     }
 
                     @Override
@@ -133,7 +91,8 @@ public class ArticleFragment extends Fragment {
             Context context = view.getContext();
             RecyclerView recyclerView = (RecyclerView) view;
             recyclerView.addItemDecoration(new DividerItemDecoration(mContext, DividerItemDecoration.VERTICAL));
-            recyclerView.setAdapter(new ArticleAdapter(mContext, mData));
+            mAdapter=new ArticleAdapter(mContext, mData);
+            recyclerView.setAdapter(mAdapter);
         }
         return view;
     }

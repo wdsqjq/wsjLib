@@ -50,7 +50,7 @@ public class ScreenUtil {
     /**
      * px转sp
      *
-     * @param fontScale
+     * @param context
      * @param pxVal
      * @return
      */

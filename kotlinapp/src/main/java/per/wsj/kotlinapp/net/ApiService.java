@@ -1,6 +1,7 @@
 package per.wsj.kotlinapp.net;
 
 import io.reactivex.Observable;
+import retrofit2.http.Body;
 import retrofit2.http.POST;
 
 /**
@@ -11,5 +12,5 @@ import retrofit2.http.POST;
 public interface ApiService {
 
     @POST("GetArticleInfo")
-    Observable<ArticleResponse> getArticle(ArticleRequest request);
+    Observable<ArticleResponse> getArticle(@Body ArticleRequest request);
 }

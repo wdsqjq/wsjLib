@@ -2,7 +2,6 @@ package per.wsj.commonlib.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.support.annotation.Nullable;
 
 /**
  * Created by kai.chen on 2017/7/3.
@@ -13,11 +12,6 @@ public class SharedPrefManager {
     private static final int SHARED_MODE = Context.MODE_PRIVATE;
 
     private static final String SHARED_NAME = "wtk_shared";
-
-    public static final String PUBLIC_CHAPTER = "public_chapter";
-    public static final String PUBLIC_MATERIAL = "public_material";
-    public static final String PRIVATE_CHAPTER = "private_chapter";
-    public static final String PRIVATE_MATERIAL = "private_material";
 
     //Util
     private Context context;
@@ -88,22 +82,5 @@ public class SharedPrefManager {
         }
 
         return null;
-    }
-
-    /**
-     * 获取 clearMemoryData
-     *
-     * @return clearMemoryData
-     */
-    @Nullable
-    public void clearMemoryData() {
-         context.getSharedPreferences(SHARED_NAME, SHARED_MODE)
-               .edit().remove(PUBLIC_CHAPTER).commit();
-        context.getSharedPreferences(SHARED_NAME, SHARED_MODE)
-                .edit().remove(PUBLIC_MATERIAL).commit();
-        context.getSharedPreferences(SHARED_NAME, SHARED_MODE)
-                .edit().remove(PRIVATE_CHAPTER).commit();
-        context.getSharedPreferences(SHARED_NAME, SHARED_MODE)
-                .edit().remove(PRIVATE_MATERIAL).commit();
     }
 }

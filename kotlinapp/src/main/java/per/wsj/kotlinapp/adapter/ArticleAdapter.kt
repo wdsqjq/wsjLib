@@ -10,11 +10,12 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import per.wsj.kotlinapp.ArticleActivity
 import per.wsj.kotlinapp.R
+import per.wsj.kotlinapp.net.ArticleResponse.DetailBean
 
 /**
  * Created by shiju.wang on 2017/11/24.
  */
-class ArticleAdapter(var mContext: Context, var mData:List<String>): RecyclerView.Adapter<ArticleAdapter.MyViewHolder>() {
+class ArticleAdapter(var mContext: Context, var mData:List<DetailBean>): RecyclerView.Adapter<ArticleAdapter.MyViewHolder>() {
 
 
     override fun getItemCount(): Int {
@@ -22,12 +23,12 @@ class ArticleAdapter(var mContext: Context, var mData:List<String>): RecyclerVie
     }
 
     override fun onBindViewHolder(holder: MyViewHolder?, position: Int) {
-        holder?.title?.setText(mData.get(position))
+        holder?.title?.setText(mData.get(position).name)
 
         holder?.itemLayout?.setOnClickListener {
             var intent: Intent =Intent(mContext, ArticleActivity::class.java)
-            intent.putExtra("position",position)
-            intent.putExtra("title",mData.get(position))
+            intent.putExtra("url",mData.get(position).url)
+            intent.putExtra("title",mData.get(position).name)
             mContext.startActivity(intent)
         }
     }
