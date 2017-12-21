@@ -12,16 +12,17 @@ import java.util.List;
 
 import per.wsj.kotlinapp.ArticleActivity;
 import per.wsj.kotlinapp.R;
+import per.wsj.kotlinapp.net.ArticleResponse.DetailBean;
 
 /**
  * TODO: Replace the implementation with code for your data type.
  */
-public class BasisAdapter extends RecyclerView.Adapter<BasisAdapter.ViewHolder> {
+public class JArticleAdapter extends RecyclerView.Adapter<JArticleAdapter.ViewHolder> {
 
-    private final List<String> mValues;
+    private final List<DetailBean> mValues;
     private Context mContext;
 
-    public BasisAdapter(Context context, List<String> items) {
+    public JArticleAdapter(Context context, List<DetailBean> items) {
         mValues = items;
         mContext=context;
     }
@@ -29,20 +30,20 @@ public class BasisAdapter extends RecyclerView.Adapter<BasisAdapter.ViewHolder> 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.layout_item_basis, parent, false);
+                .inflate(R.layout.layout_item_article, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
-        holder.mContentView.setText(mValues.get(position));
+        holder.mContentView.setText(mValues.get(position).getName());
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent=new Intent(mContext,ArticleActivity.class);
-                intent.putExtra("position",position);
-                intent.putExtra("title", mValues.get(position));
+                intent.putExtra("url",mValues.get(position).getName());
+                intent.putExtra("title", mValues.get(position).getName());
                 mContext.startActivity(intent);
                 
             }
@@ -61,7 +62,7 @@ public class BasisAdapter extends RecyclerView.Adapter<BasisAdapter.ViewHolder> 
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            mContentView = (TextView) view.findViewById(R.id.content);
+            mContentView = (TextView) view.findViewById(R.id.tvTitle);
         }
 
         @Override

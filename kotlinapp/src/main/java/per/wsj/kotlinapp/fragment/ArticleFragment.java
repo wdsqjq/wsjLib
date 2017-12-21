@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,8 +55,8 @@ public class ArticleFragment extends Fragment implements PullToRefreshLayout.OnP
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_list, container, false);
-        initData();
         initView(view);
+        initData();
         return view;
     }
 
@@ -64,6 +65,7 @@ public class ArticleFragment extends Fragment implements PullToRefreshLayout.OnP
         refreshLayout.setPullUpEnable(false);
         refreshLayout.setOnPullListener(this);
         PullToRefreshRecyclerView recyclerView=view.findViewById(R.id.list);
+        recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
         recyclerView.addItemDecoration(new DividerItemDecoration(mContext, DividerItemDecoration.VERTICAL));
         mAdapter=new ArticleAdapter(mContext, mData);
         recyclerView.setAdapter(mAdapter);
@@ -76,7 +78,7 @@ public class ArticleFragment extends Fragment implements PullToRefreshLayout.OnP
 
     @Override
     public void onLoadMore(PullToRefreshLayout pullToRefreshLayout) {
-
+        
     }
 
     private void initData() {
