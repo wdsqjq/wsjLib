@@ -1,5 +1,9 @@
 package per.wsj.commonlib.utils;
 
+import android.content.Context;
+import android.os.StatFs;
+import android.text.format.Formatter;
+
 import java.io.File;
 
 /**
@@ -29,5 +33,29 @@ public class FileUtil {
             }
         }
         return null;
+    }
+
+    /**
+     * 获取sd卡总大小
+     * @param context
+     * @return
+     */
+    public String getSdTotalSize(Context context){
+        StatFs sf = new StatFs("/mnt/sdcard");
+        long blockSize = sf.getBlockSize();
+        long totalBlocks = sf.getBlockCount();
+        return Formatter.formatFileSize(context, blockSize*totalBlocks);
+    }
+
+    /**
+     * 获取sd卡总大小
+     * @param context
+     * @return
+     */
+    public String getSdAvailableSize(Context context){
+        StatFs sf = new StatFs("/mnt/sdcard");
+        long blockSize = sf.getBlockSize();
+        long availableBlocks = sf.getAvailableBlocks();
+        return Formatter.formatFileSize(context, blockSize*availableBlocks);
     }
 }
