@@ -3,7 +3,7 @@ package per.wsj.kotlinapp.fragment
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.support.v7.widget.DividerItemDecoration
+import android.support.v7.widget.GridLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -47,7 +47,8 @@ class VideoFragment : Fragment() {
     private fun initView() {
 //        var mAdapter = Article2Adapter(context, mData)
         var mAdapter = VideoAdapter(context, mData)
-        rvVideo?.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
+//        rvVideo?.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
+        rvVideo.layoutManager=GridLayoutManager(context,2)
         rvVideo.adapter=mAdapter
     }
 

@@ -42,7 +42,7 @@ public class JArticleAdapter extends RecyclerView.Adapter<JArticleAdapter.ViewHo
             @Override
             public void onClick(View v) {
                 Intent intent=new Intent(mContext,ArticleActivity.class);
-                intent.putExtra("url",mValues.get(position).getName());
+                intent.putExtra("url",mValues.get(position).getUrl());
                 intent.putExtra("title", mValues.get(position).getName());
                 mContext.startActivity(intent);
                 
