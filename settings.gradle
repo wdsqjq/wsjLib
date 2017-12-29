@@ -1,1 +1,1 @@
-include ':app', ':commonlib', ':parent', ':parent', ':kotlinapp'
+include ':app', ':commonlib', ':kotlinapp'

@@ -40,7 +40,7 @@ public class FileUtil {
      * @param context
      * @return
      */
-    public String getSdTotalSize(Context context){
+    public static String getSdTotalSize(Context context){
         StatFs sf = new StatFs("/mnt/sdcard");
         long blockSize = sf.getBlockSize();
         long totalBlocks = sf.getBlockCount();
@@ -52,7 +52,7 @@ public class FileUtil {
      * @param context
      * @return
      */
-    public String getSdAvailableSize(Context context){
+    public static String getSdAvailableSize(Context context){
         StatFs sf = new StatFs("/mnt/sdcard");
         long blockSize = sf.getBlockSize();
         long availableBlocks = sf.getAvailableBlocks();

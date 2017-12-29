@@ -9,10 +9,12 @@
     <cn.jzvd.JZVideoPlayerStandard
         android:id="@+id/videoplayer"
         android:layout_width="match_parent"
-        android:layout_height="200dp"/>
+        android:layout_height="250dp"/>
 
     <TextView
-        android:text="viewo"
+        android:text=""
+        android:id="@+id/tvVideoTitle"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"/>
 </LinearLayout>

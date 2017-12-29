@@ -13,4 +13,7 @@ public interface ApiService {
 
     @POST("GetArticleInfo")
     Observable<ArticleResponse> getArticle(@Body ArticleRequest request);
+
+    @POST("GetBaseVideo")
+    Observable<BaseVideoResponse> getBaseVideo(@Body ArticleRequest request);
 }

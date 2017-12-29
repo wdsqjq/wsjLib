@@ -5,23 +5,23 @@
     android:layout_height="wrap_content"
     app:cardElevation="1dp"
     app:cardCornerRadius="3dp"
-    android:layout_margin="6dp"
-    app:contentPadding="2dp">
+    android:layout_margin="6dp">
 
     <LinearLayout
         android:id="@+id/llItem"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
+        android:padding="2dp"
         android:orientation="vertical">
 
         <ImageView
-            android:id="@+id/ivPreview"
+            android:id="@+id/ivThumb"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:adjustViewBounds="true"
             android:scaleType="centerInside"
-            android:src="@mipmap/ic_thum" />
+            android:src="@mipmap/ic_loading" />
 
         <TextView
             android:id="@+id/tvTitle"

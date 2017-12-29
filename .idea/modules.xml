@@ -5,7 +5,6 @@
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/commonlib/commonlib.iml" filepath="$PROJECT_DIR$/commonlib/commonlib.iml" />
       <module fileurl="file://$PROJECT_DIR$/kotlinapp/kotlinapp.iml" filepath="$PROJECT_DIR$/kotlinapp/kotlinapp.iml" />
-      <module fileurl="file://$PROJECT_DIR$/parent/parent.iml" filepath="$PROJECT_DIR$/parent/parent.iml" />
       <module fileurl="file://$PROJECT_DIR$/wsjLib.iml" filepath="$PROJECT_DIR$/wsjLib.iml" />
     </modules>
   </component>
