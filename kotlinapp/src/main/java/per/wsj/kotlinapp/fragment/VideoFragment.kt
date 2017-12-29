@@ -4,10 +4,10 @@ package per.wsj.kotlinapp.fragment
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.GridLayoutManager
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -74,15 +74,15 @@ class VideoFragment : Fragment() {
                     }
 
                     override fun onError(e: Throwable?) {
-                        Toast.makeText(context,"出错",Toast.LENGTH_LONG).show()
+                        Log.d("VideoFragment",e.toString())
                     }
 
                     override fun onComplete() {
-                        Toast.makeText(context,"完成",Toast.LENGTH_LONG).show()
+                        Log.d("VideoFragment","onComplete")
                     }
 
                     override fun onSubscribe(d: Disposable?) {
-                        Toast.makeText(context,"开始",Toast.LENGTH_LONG).show()
+                        Log.d("VideoFragment","onSubscribe")
                     }
 
                 })

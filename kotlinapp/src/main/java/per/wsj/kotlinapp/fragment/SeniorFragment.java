@@ -2,7 +2,6 @@ package per.wsj.kotlinapp.fragment;
 
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,7 +18,8 @@ import per.wsj.kotlinapp.R;
 public class SeniorFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
 
-    private TextView tvTest;
+    private String mParam1;
+
 
     public SeniorFragment() {
         // Required empty public constructor
@@ -37,24 +37,16 @@ public class SeniorFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
+            mParam1 = getArguments().getString(ARG_PARAM1);
         }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_senior, container, false);
+        TextView textView = new TextView(getActivity());
+        textView.setText(R.string.hello_blank_fragment);
+        return textView;
     }
 
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        tvTest = (TextView) view.findViewById(R.id.tvTest);
-        tvTest.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-            }
-        });
-    }
 }
