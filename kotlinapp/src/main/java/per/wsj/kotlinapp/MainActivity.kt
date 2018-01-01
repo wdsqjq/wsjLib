@@ -9,7 +9,7 @@ import android.support.v4.app.FragmentStatePagerAdapter
 import android.support.v7.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import per.wsj.kotlinapp.fragment.ArticleFragment
-import per.wsj.kotlinapp.fragment.SeniorFragment2
+import per.wsj.kotlinapp.fragment.SeniorFragment
 import per.wsj.kotlinapp.fragment.VideoFragment
 import java.util.*
 
@@ -31,7 +31,7 @@ class MainActivity : AppCompatActivity() {
 
         mFragments.add(ArticleFragment.newInstance(1))
         mFragments.add(VideoFragment.newInstance(""))
-        mFragments.add(SeniorFragment2.newInstance(""))
+        mFragments.add(SeniorFragment.newInstance(""))
         var adapter = object : FragmentStatePagerAdapter(supportFragmentManager) {
             override fun getItem(position: Int): Fragment {
                 return mFragments[position]

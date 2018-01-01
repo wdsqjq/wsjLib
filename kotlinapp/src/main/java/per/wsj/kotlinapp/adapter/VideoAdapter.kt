@@ -35,15 +35,15 @@ class VideoAdapter(var mContext: Context, var mData:List<BaseVideoResponse.BaseV
             intent.putExtra("title",mData.get(position).title)
             mContext.startActivity(intent)
         }
-        val url=Constants.BASE_URL+mData.get(position).thumb
+        val url=Constants.VIDEO_URL+mData.get(position).thumb
         Log.d("VideoAdpater",url)
         Glide.with(mContext)
                 .load(url)//加载资源
                 .placeholder(R.mipmap.ic_loading) // can also be a drawable
 //                .error(error) // will be displayed if the image cannot be loaded
                 .dontAnimate()//don't use animate
-                .skipMemoryCache(true)//跳过内存缓存
-                .diskCacheStrategy(DiskCacheStrategy.NONE)//跳过磁盘缓存
+                .skipMemoryCache(false)//跳过内存缓存
+                .diskCacheStrategy(DiskCacheStrategy.ALL)//跳过磁盘缓存
                 .into(holder?.ivThumb)
     }
 
