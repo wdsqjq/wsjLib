@@ -28,16 +28,16 @@ import java.util.Date;
  * @author WBW
  *
  */
-public class Util {
-	private static Util util;
+public class CommonUtil {
+	private static CommonUtil util;
 
-	public static Util getInstance() { // 单例
+	public static CommonUtil getInstance() { // 单例
 		if (util == null)
-			util = new Util();
+			util = new CommonUtil();
 		return util;
 	}
 
-	private Util() {
+	private CommonUtil() {
 
 	}
 

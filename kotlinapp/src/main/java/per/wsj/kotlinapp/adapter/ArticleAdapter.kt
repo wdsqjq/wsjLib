@@ -25,7 +25,7 @@ class ArticleAdapter(var mContext: Context, var mData:List<DetailBean>): Recycle
     override fun onBindViewHolder(holder: MyViewHolder?, position: Int) {
         holder?.title?.setText(mData.get(position).name)
 
-        holder?.itemLayout?.setOnClickListener {
+        holder?.itemLayout?.setOnClickListener{v ->
             var intent: Intent =Intent(mContext, ArticleActivity::class.java)
             intent.putExtra("url",mData.get(position).url)
             intent.putExtra("title",mData.get(position).name)

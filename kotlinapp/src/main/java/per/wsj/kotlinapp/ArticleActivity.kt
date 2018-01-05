@@ -1,7 +1,12 @@
 package per.wsj.kotlinapp
 
+import android.os.Build
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
+import android.webkit.WebResourceRequest
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import kotlinx.android.synthetic.main.activity_article.*
 
 class ArticleActivity : AppCompatActivity() {
@@ -22,22 +27,16 @@ class ArticleActivity : AppCompatActivity() {
 
         webView.loadUrl("${Constants.BASE_URL}article/${url}")
 
-        /*webView?.setWebViewClient(object : WebViewClient() {
-            override fun onPageStarted(view: WebView, url: String, favicon: Bitmap) {
-                super.onPageStarted(view, url, favicon)
-//                Log.d("setWebViewClient", url)
+        webView?.setWebViewClient(object : WebViewClient() {
+            override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    Log.d("",request?.url.toString())
+                    Log.d("",request?.method.toString())
+                    Log.d("",request?.requestHeaders.toString())
+                }
+                return super.shouldOverrideUrlLoading(view, request)
             }
 
-            override fun onPageFinished(view: WebView, url: String) {
-                super.onPageFinished(view, url)
-//                Log.d("Article","onPageFinished")
-//                Log.d("setWebViewClient", "onPageFinished"+url)
-            }
-
-            override fun onReceivedError(view: WebView, request: WebResourceRequest, error: WebResourceError) {
-                super.onReceivedError(view, request, error)
-//                Log.d("setWebViewClient", "onReceivedError")
-            }
-        })*/
+        })
     }
 }

@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 /**
- * Created by kai.chen on 2017/7/3.
+ * Created by wangshiju on 2017/7/3.
  * 一个SHARED_NAME一个manager
  */
 
@@ -13,7 +13,7 @@ public class SharedPrefManager {
 
     private static final String SHARED_NAME = "wtk_shared";
 
-    //Util
+    //CommonUtil
     private Context context;
 
     public SharedPrefManager(Context context) {

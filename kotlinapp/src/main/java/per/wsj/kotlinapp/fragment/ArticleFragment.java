@@ -18,6 +18,7 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import per.wsj.commonlib.pulltorefreshlib.PullToRefreshLayout;
 import per.wsj.commonlib.pulltorefreshlib.PullToRefreshRecyclerView;
+import per.wsj.kotlinapp.Constants;
 import per.wsj.kotlinapp.R;
 import per.wsj.kotlinapp.adapter.ArticleAdapter;
 import per.wsj.kotlinapp.net.ApiService;
@@ -82,7 +83,7 @@ public class ArticleFragment extends Fragment implements PullToRefreshLayout.OnP
     }
 
     private void initData() {
-        new NetManager(mContext).create(ApiService.class).getArticle(new ArticleRequest("a"))
+        new NetManager(mContext, Constants.BASE_URL).create(ApiService.class).getArticle(new ArticleRequest("a"))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<ArticleResponse>() {

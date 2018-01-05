@@ -27,7 +27,7 @@ import java.util.*
 class VideoFragment : Fragment() {
 
     private var mParam1: String? = null
-    private val mData = ArrayList<BaseVideoResponse.BaseVideo>()
+    private var mData = ArrayList<BaseVideoResponse.BaseVideo>()
     private var mAdapter:VideoAdapter?=null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -67,9 +67,11 @@ class VideoFragment : Fragment() {
                     override fun onNext(value: BaseVideoResponse?) {
                         if (value?.code == "200") {
                             val videos = value.detail
-                            mData.clear()
-                            mData.addAll(videos)
-                            mAdapter?.notifyDataSetChanged()
+                            if (videos != null) {
+                                mData.clear()
+                                mData.addAll(videos)
+                                mAdapter?.notifyDataSetChanged()
+                            }
                         }
                     }
 

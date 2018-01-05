@@ -6,7 +6,7 @@ android {
     defaultConfig {
         applicationId "per.wangsj.downloaddemo"
         minSdkVersion 16
-        targetSdkVersion 26
+        targetSdkVersion 22
         versionCode 1
         versionName "1.0"
 

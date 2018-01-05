@@ -38,15 +38,11 @@ public class JArticleAdapter extends RecyclerView.Adapter<JArticleAdapter.ViewHo
     public void onBindViewHolder(final ViewHolder holder, final int position) {
         holder.mContentView.setText(mValues.get(position).getName());
 
-        holder.mView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent=new Intent(mContext,ArticleActivity.class);
-                intent.putExtra("url",mValues.get(position).getUrl());
-                intent.putExtra("title", mValues.get(position).getName());
-                mContext.startActivity(intent);
-                
-            }
+        holder.mView.setOnClickListener((v)->{
+            Intent intent=new Intent(mContext,ArticleActivity.class);
+            intent.putExtra("url",mValues.get(position).getUrl());
+            intent.putExtra("title", mValues.get(position).getName());
+            mContext.startActivity(intent);
         });
     }
 

@@ -1,5 +1,6 @@
 package per.wangsj.downloaddemo;
 
+import android.Manifest;
 import android.app.DownloadManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -8,15 +9,20 @@ import android.content.IntentFilter;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.content.PermissionChecker;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.webkit.MimeTypeMap;
+import android.widget.Toast;
 
 /**
  * https://www.jianshu.com/p/6c57c93009e4
  */
 public class MainActivity extends AppCompatActivity {
 
+    private static final int PERMISSIONS_REQUEST = 1;
     private Context mContext;
     private DownloadManager downloadManager;
     private long mTaskId;
@@ -26,7 +32,16 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         mContext=this;
-        downloadAPK("http://wangsj.cn:8080/kotlinapp/img/bg.jpg","test");
+        if(ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)== PermissionChecker.PERMISSION_GRANTED){
+            downloadAPK("http://wangsj.cn:8080/kotlinapp/img/bg.jpg","test");
+        }else{
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                Toast.makeText(this, "下载需要文件存储的权限!", Toast.LENGTH_SHORT).show();
+            } else {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                        PERMISSIONS_REQUEST);
+            }
+        }
     }
 
     //使用系统下载器下载
