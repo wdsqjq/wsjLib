@@ -11,8 +11,6 @@
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/commonlib" />
-            <option value="$PROJECT_DIR$/downloaddemo" />
-            <option value="$PROJECT_DIR$/kotlinapp" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />
