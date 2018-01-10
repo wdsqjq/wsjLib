@@ -26,6 +26,7 @@ android {
 }
 
 dependencies {
+    compile 'com.android.support:appcompat-v7:26.1.0'
 
     //adapter
     compile "com.zhy:base-rvadapter:3.0.3"

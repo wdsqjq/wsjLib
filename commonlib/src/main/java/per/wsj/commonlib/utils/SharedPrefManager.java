@@ -30,7 +30,7 @@ public class SharedPrefManager {
     public static void setParam(Context context , String key, Object object){
 
         String type = object.getClass().getSimpleName();
-        SharedPreferences sp = context.getSharedPreferences(SHARED_NAME, SHARED_MODE);
+        SharedPreferences sp = context.getApplicationContext().getSharedPreferences(SHARED_NAME, SHARED_MODE);
         SharedPreferences.Editor editor = sp.edit();
 
         if("String".equals(type)){
@@ -63,7 +63,7 @@ public class SharedPrefManager {
      */
     public static Object getParam(Context context , String key, Object defaultObject){
         String type = defaultObject.getClass().getSimpleName();
-        SharedPreferences sp = context.getSharedPreferences(SHARED_NAME, SHARED_MODE);
+        SharedPreferences sp = context.getApplicationContext().getSharedPreferences(SHARED_NAME, SHARED_MODE);
 
         if("String".equals(type)){
             return sp.getString(key, (String)defaultObject);
