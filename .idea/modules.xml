@@ -3,14 +3,11 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://F:\wsjLib\app\app.iml" filepath="F:\wsjLib\app\app.iml" />
       <module fileurl="file://$PROJECT_DIR$/commonlib/commonlib.iml" filepath="$PROJECT_DIR$/commonlib/commonlib.iml" />
-      <module fileurl="file://F:\wsjLib\commonlib\commonlib.iml" filepath="F:\wsjLib\commonlib\commonlib.iml" />
       <module fileurl="file://D:\work\wsjLib\downloaddemo\downloaddemo.iml" filepath="D:\work\wsjLib\downloaddemo\downloaddemo.iml" />
       <module fileurl="file://F:\wsjLib\downloaddemo\downloaddemo.iml" filepath="F:\wsjLib\downloaddemo\downloaddemo.iml" />
       <module fileurl="file://F:\wsjLib\kotlinapp\kotlinapp.iml" filepath="F:\wsjLib\kotlinapp\kotlinapp.iml" />
       <module fileurl="file://$PROJECT_DIR$/wsjLib.iml" filepath="$PROJECT_DIR$/wsjLib.iml" />
-      <module fileurl="file://F:\wsjLib\wsjLib.iml" filepath="F:\wsjLib\wsjLib.iml" />
     </modules>
   </component>
 </project>

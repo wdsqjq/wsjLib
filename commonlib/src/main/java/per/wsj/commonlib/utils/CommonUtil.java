@@ -49,166 +49,6 @@ public class CommonUtil {
 		return context;
 	}
 
-	/**
-	 *
-	 * @param path 传入路径字符串
-	 * @return File
-	 */
-	public File creatFileIfNotExist(String path) {
-		System.out.println("cr");
-		File file = new File(path);
-		if (!file.exists()) {
-			try {
-				new File(path.substring(0, path.lastIndexOf(File.separator)))
-						.mkdirs();
-				file.createNewFile();
-
-			} catch (IOException e) {
-				e.printStackTrace();
-
-			}
-		}
-		return file;
-	}
-
-	/**
-	 *
-	 * @param path 传入路径字符串
-	 * @return File
-	 */
-	public File creatDirIfNotExist(String path) {
-		File file = new File(path);
-		if (!file.exists()) {
-			try {
-				file.mkdirs();
-
-			} catch (Exception e) {
-				e.printStackTrace();
-
-			}
-		}
-		return file;
-	}
-
-	/**
-	 *
-	 * @param path
-	 * @return
-	 */
-	public boolean IsExist(String path) {
-		File file = new File(path);
-		if (!file.exists())
-			return false;
-		else
-			return true;
-	}
-
-	/**
-	 * 创建新的文件，如果有旧文件，先删除再创建
-	 *
-	 * @param path
-	 * @return
-	 */
-	public File creatNewFile(String path) {
-		File file = new File(path);
-		if (IsExist(path))
-			file.delete();
-		creatFileIfNotExist(path);
-		return file;
-	}
-
-	/**
-	 * 删除文件
-	 *
-	 * @param path
-	 * @return
-	 */
-	public boolean deleteFile(String path) {
-		File file = new File(path);
-		if (IsExist(path))
-			file.delete();
-		return true;
-	}
-
-	// 删除一个目录
-	public boolean deleteFileDir(String path) {
-		boolean flag = false;
-		File file = new File(path);
-		if (!IsExist(path)) {
-			return flag;
-		}
-		if (!file.isDirectory()) {
-
-			file.delete();
-			return true;
-		}
-		String[] filelist = file.list();
-		File temp = null;
-		for (int i = 0; i < filelist.length; i++) {
-			if (path.endsWith(File.separator)) {
-				temp = new File(path + filelist[i]);
-			} else {
-				temp = new File(path + File.separator + filelist[i]);
-			}
-			if (temp.isFile()) {
-
-				temp.delete();
-			}
-			if (temp.isDirectory()) {
-				deleteFileDir(path + "/" + filelist[i]);// 先删除文件夹里面的文件
-			}
-		}
-		file.delete();
-
-		flag = true;
-		return flag;
-	}
-
-	// 删除文件夹
-	// param folderPath 文件夹完整绝对路径
-
-	public void delFolder(String folderPath) {
-		try {
-			delAllFile(folderPath); // 删除完里面所有内容
-			String filePath = folderPath;
-			filePath = filePath.toString();
-			File myFilePath = new File(filePath);
-			myFilePath.delete(); // 删除空文件夹
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	// 删除指定文件夹下所有文件
-	// param path 文件夹完整绝对路径
-	public boolean delAllFile(String path) {
-		boolean flag = false;
-		File file = new File(path);
-		if (!file.exists()) {
-			return flag;
-		}
-		if (!file.isDirectory()) {
-			return flag;
-		}
-		String[] tempList = file.list();
-		File temp = null;
-		for (int i = 0; i < tempList.length; i++) {
-			if (path.endsWith(File.separator)) {
-				temp = new File(path + tempList[i]);
-			} else {
-				temp = new File(path + File.separator + tempList[i]);
-			}
-			if (temp.isFile()) {
-				temp.delete();
-			}
-			if (temp.isDirectory()) {
-				delAllFile(path + "/" + tempList[i]);// 先删除文件夹里面的文件
-				delFolder(path + "/" + tempList[i]);// 再删除空文件夹
-				flag = true;
-			}
-		}
-		return flag;
-	}
 
 	public String[] getFlieName(String rootpath) {
 		File root = new File(rootpath);
@@ -297,7 +137,6 @@ public class CommonUtil {
 	/**
 	 * 将OutputStream转换成byte数组
 	 *
-	 * @param in
 	 *            OutputStream
 	 * @return byte[]
 	 * @throws IOException
@@ -347,7 +186,7 @@ public class CommonUtil {
 		File file = null;
 		OutputStream output = null;
 		try {
-			file = creatFileIfNotExist(path);
+			file = new FileUtil().creatFileIfNotExist(path);
 			output = new FileOutputStream(file);
 			byte[] buffer = new byte[4 * 1024];
 			int temp;
@@ -377,7 +216,7 @@ public class CommonUtil {
 		File file = null;
 		OutputStream output = null;
 		try {
-			file = creatFileIfNotExist(path);
+			file = new FileUtil().creatFileIfNotExist(path);
 			output = new FileOutputStream(file);
 			output.write(b);
 			output.flush();
@@ -399,7 +238,7 @@ public class CommonUtil {
 	public void saveTxtFile(String filePath, String text) {
 		try {
 			// 首先构建一个文件输出流,用于向文件中写入数据.
-			creatFileIfNotExist(filePath);
+			new FileUtil().creatFileIfNotExist(filePath);
 			String txt = readTextLine(filePath);
 			text = text + txt;
 			FileOutputStream out = new FileOutputStream(filePath);
@@ -470,44 +309,6 @@ public class CommonUtil {
 			// Toast.LENGTH_LONG).show();
 			return "";
 		}
-	}
-
-	// 转换dip为px
-	public int convertDipOrPx(Context context, int dip) {
-		float scale = context.getResources().getDisplayMetrics().density;
-		return (int) (dip * scale + 0.5f * (dip >= 0 ? 1 : -1));
-	}
-
-	// 转换px为dip
-	public int convertPxOrDip(Context context, int px) {
-		float scale = context.getResources().getDisplayMetrics().density;
-		return (int) (px / scale + 0.5f * (px >= 0 ? 1 : -1));
-	}
-
-	/**
-	 * 将px值转换为sp值，保证文字大小不变
-	 *
-	 * @param pxValue
-	 * @param fontScale
-	 *            （DisplayMetrics类中属性scaledDensity）
-	 * @return
-	 */
-	public int px2sp(Context context, float pxValue) {
-		float fontScale = context.getResources().getDisplayMetrics().scaledDensity;
-		return (int) (pxValue / fontScale + 0.5f);
-	}
-
-	/**
-	 * 将sp值转换为px值，保证文字大小不变
-	 *
-	 * @param spValue
-	 * @param fontScale
-	 *            （DisplayMetrics类中属性scaledDensity）
-	 * @return
-	 */
-	public int sp2px(Context context, float spValue) {
-		float fontScale = context.getResources().getDisplayMetrics().scaledDensity;
-		return (int) (spValue * fontScale + 0.5f);
 	}
 
 	// 把字加长，使其可以滚动，在音乐界面

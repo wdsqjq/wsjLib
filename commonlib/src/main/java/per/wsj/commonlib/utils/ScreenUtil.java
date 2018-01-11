@@ -1,6 +1,7 @@
 package per.wsj.commonlib.utils;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.util.TypedValue;
 
 /**
@@ -18,7 +19,7 @@ public class ScreenUtil {
     public static int dip2px(Context context, float dpVal)
     {
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
-                dpVal, context.getResources().getDisplayMetrics());
+                dpVal, context.getApplicationContext().getResources().getDisplayMetrics());
     }
 
     /**
@@ -31,7 +32,7 @@ public class ScreenUtil {
     public static int sp2px(Context context, float spVal)
     {
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP,
-                spVal, context.getResources().getDisplayMetrics());
+                spVal, context.getApplicationContext().getResources().getDisplayMetrics());
     }
 
     /**
@@ -43,7 +44,7 @@ public class ScreenUtil {
      */
     public static float px2dp(Context context, float pxVal)
     {
-        final float scale = context.getResources().getDisplayMetrics().density;
+        final float scale = context.getApplicationContext().getResources().getDisplayMetrics().density;
         return (pxVal / scale);
     }
 
@@ -56,6 +57,22 @@ public class ScreenUtil {
      */
     public static float px2sp(Context context, float pxVal)
     {
-        return (pxVal / context.getResources().getDisplayMetrics().scaledDensity);
+        return (pxVal / context.getApplicationContext().getResources().getDisplayMetrics().scaledDensity);
+    }
+
+    /**
+     * 获取屏幕宽度
+     * @return
+     */
+    private int getScreenWidth() {
+        return Resources.getSystem().getDisplayMetrics().widthPixels;
+    }
+
+    /**
+     * 获取屏幕高度
+     * @return
+     */
+    private int getScreenHeight() {
+        return Resources.getSystem().getDisplayMetrics().heightPixels;
     }
 }
