@@ -99,7 +99,7 @@ public class FileUtil {
      * @param path 传入路径字符串
      * @return File
      */
-    public File creatFileIfNotExist(String path) {
+    public static File creatFileIfNotExist(String path) {
         System.out.println("cr");
         File file = new File(path);
         if (!file.exists()) {
@@ -121,7 +121,7 @@ public class FileUtil {
      * @param path 传入路径字符串
      * @return File
      */
-    public File creatDirIfNotExist(String path) {
+    public static File creatDirIfNotExist(String path) {
         File file = new File(path);
         if (!file.exists()) {
             try {
