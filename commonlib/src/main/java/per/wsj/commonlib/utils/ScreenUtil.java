@@ -1,8 +1,14 @@
 package per.wsj.commonlib.utils;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.Color;
+import android.os.Build;
 import android.util.TypedValue;
+import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 
 /**
  * Created by dell 王世举 on 2017/9/3 11:20.
@@ -74,5 +80,18 @@ public class ScreenUtil {
      */
     private int getScreenHeight() {
         return Resources.getSystem().getDisplayMetrics().heightPixels;
+    }
+
+    /**
+     * 状态栏透明
+     */
+    protected void transparentStatusBar(Activity activity){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Window window = activity.getWindow();
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.setStatusBarColor(Color.TRANSPARENT);
+        }
     }
 }
