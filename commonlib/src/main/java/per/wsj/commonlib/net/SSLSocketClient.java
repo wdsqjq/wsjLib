@@ -2,8 +2,6 @@ package per.wsj.commonlib.net;
 
 import android.content.Context;
 
-import com.wtk.corelib.utils.ToastUtil;
-
 import java.security.KeyStore;
 import java.security.SecureRandom;
 import java.security.cert.CertificateException;
@@ -85,7 +83,7 @@ public class SSLSocketClient {
             return sslContext.getSocketFactory();
         } catch (Exception e) {
             e.printStackTrace();
-            ToastUtil.show(e.toString());
+//            ToastUtil.show(e.toString());
         }
         return null;
     }

@@ -12,4 +12,7 @@
     <string name="loading">正在加载...</string>
     <string name="load_succeed">加载成功</string>
     <string name="load_fail">加载失败</string>
+    <string name="net_error_timeout">请求超时,请重试</string>
+    <string name="net_error_nonet">网络错误，请确保网络通畅</string>
+
 </resources>

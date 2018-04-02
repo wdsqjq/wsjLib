@@ -3,9 +3,6 @@ package per.wsj.commonlib.net;
 import android.content.Context;
 
 import com.google.gson.Gson;
-import com.wtk.corelib.BaseApplication;
-import com.wtk.corelib.R;
-import com.wtk.corelib.utils.ValueUtil;
 
 import org.json.JSONObject;
 
@@ -23,6 +20,8 @@ import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
+import per.wsj.commonlib.R;
+import per.wsj.commonlib.utils.ValueUtil;
 import retrofit2.HttpException;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
@@ -50,8 +49,8 @@ public class HttpUtil {
         return ourInstance;
     }*/
 
-    protected HttpUtil(String baseUrl,String cer) {
-        mContext = BaseApplication.getContext();
+    protected HttpUtil(Context context,String baseUrl,String cer) {
+        mContext = context;
 
         OkHttpClient.Builder builder=new OkHttpClient.Builder()
                 //                .addNetworkInterceptor(
