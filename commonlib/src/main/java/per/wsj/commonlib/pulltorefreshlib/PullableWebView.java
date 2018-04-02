@@ -25,19 +25,21 @@ public class PullableWebView extends WebView implements Pullable
 	@Override
 	public boolean canPullDown()
 	{
-		if (getScrollY() == 0)
+		if (getScrollY() == 0) {
 			return true;
-		else
+		} else {
 			return false;
+		}
 	}
 
 	@Override
 	public boolean canPullUp()
 	{
 		if (getScrollY() >= getContentHeight() * getScale()
-				- getMeasuredHeight())
+				- getMeasuredHeight()) {
 			return true;
-		else
+		} else {
 			return false;
+		}
 	}
 }

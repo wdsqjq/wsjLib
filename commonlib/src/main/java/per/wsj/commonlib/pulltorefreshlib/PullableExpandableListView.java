@@ -30,8 +30,9 @@ public class PullableExpandableListView extends ExpandableListView implements Pu
                 && getChildAt(0).getTop() >= 0) {
             // 滑到顶部了
             return true;
-        } else
+        } else {
             return false;
+        }
     }
 
     @Override
@@ -44,8 +45,9 @@ public class PullableExpandableListView extends ExpandableListView implements Pu
             if (getChildAt(getLastVisiblePosition() - getFirstVisiblePosition()) != null
                     && getChildAt(
                     getLastVisiblePosition()
-                            - getFirstVisiblePosition()).getBottom() <= getMeasuredHeight())
+                            - getFirstVisiblePosition()).getBottom() <= getMeasuredHeight()) {
                 return true;
+            }
         }
         return false;
     }
