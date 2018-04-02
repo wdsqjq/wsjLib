@@ -35,6 +35,10 @@ public abstract class CommonRecyclerAdapter<T> extends RecyclerView.Adapter<Recy
      * 异常layout
      */
     private RelativeLayout layout;
+    /**
+     * 对应的recyclerView
+     */
+    private RecyclerView parent;
 
     protected Context mContext;
     protected List<T> mList;
@@ -73,18 +77,16 @@ public abstract class CommonRecyclerAdapter<T> extends RecyclerView.Adapter<Recy
 
     /**
      * 设置空数据页(显示默认的layout)
-     * @param parent    recyclerView
      */
-    public void setEmpty(RecyclerView parent) {
-        setEmpty(parent,-1);
+    public void setEmpty() {
+        setEmpty(-1);
     }
 
     /**
      * 设置空数据页
-     * @param parent    recyclerView
      * @param layoutId  要显示的layout资源id
      */
-    public void setEmpty(RecyclerView parent, int layoutId) {
+    public void setEmpty(int layoutId) {
         emptyView=null;
         if(layoutId==-1) {
             emptyView = LayoutInflater.from(mContext).inflate(R.layout.layout_list_error, parent, false);
@@ -144,6 +146,7 @@ public abstract class CommonRecyclerAdapter<T> extends RecyclerView.Adapter<Recy
     @Override
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
+        parent=recyclerView;
         RecyclerView.LayoutManager manager=recyclerView.getLayoutManager();
         if(manager instanceof GridLayoutManager){
             final GridLayoutManager gridManager= (GridLayoutManager) manager;
