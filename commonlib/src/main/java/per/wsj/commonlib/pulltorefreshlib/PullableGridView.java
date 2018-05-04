@@ -34,8 +34,9 @@ public class PullableGridView extends GridView implements Pullable
 		{
 			// 滑到顶部了
 			return true;
-		} else
+		} else {
 			return false;
+		}
 	}
 
 	@Override
@@ -51,8 +52,9 @@ public class PullableGridView extends GridView implements Pullable
 			if (getChildAt(getLastVisiblePosition() - getFirstVisiblePosition()) != null
 					&& getChildAt(
 							getLastVisiblePosition()
-									- getFirstVisiblePosition()).getBottom() <= getMeasuredHeight())
+									- getFirstVisiblePosition()).getBottom() <= getMeasuredHeight()) {
 				return true;
+			}
 		}
 		return false;
 	}

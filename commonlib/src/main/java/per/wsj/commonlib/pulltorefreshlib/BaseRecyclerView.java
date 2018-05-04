@@ -6,7 +6,6 @@ import android.util.AttributeSet;
 import android.util.Log;
 
 /**
- * Created by jason.huang on 2016/8/4 0004.
  */
 public abstract class BaseRecyclerView extends RecyclerView {
 
@@ -42,7 +41,7 @@ public abstract class BaseRecyclerView extends RecyclerView {
         super(context, attrs, defStyle);
     }
 
-    private void checkIfEmpty() {
+    public void checkIfEmpty() {
 
         if (getAdapter() != null) {
             final boolean emptyViewVisible = getAdapter().getItemCount() == getEmptyCount();

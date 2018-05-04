@@ -25,19 +25,21 @@ public class PullableScrollView extends ScrollView implements Pullable
 	@Override
 	public boolean canPullDown()
 	{
-		if (getScrollY() == 0)
+		if (getScrollY() == 0) {
 			return true;
-		else
+		} else {
 			return false;
+		}
 	}
 
 	@Override
 	public boolean canPullUp()
 	{
-		if (getScrollY() >= (getChildAt(0).getHeight() - getMeasuredHeight()))
+		if (getScrollY() >= (getChildAt(0).getHeight() - getMeasuredHeight())) {
 			return true;
-		else
+		} else {
 			return false;
+		}
 	}
 
 }

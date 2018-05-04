@@ -34,8 +34,9 @@ public class PullableListView extends ListView implements Pullable
 		{
 			// 滑到ListView的顶部了
 			return true;
-		} else
+		} else {
 			return false;
+		}
 	}
 
 	@Override
@@ -51,8 +52,9 @@ public class PullableListView extends ListView implements Pullable
 			if (getChildAt(getLastVisiblePosition() - getFirstVisiblePosition()) != null
 					&& getChildAt(
 							getLastVisiblePosition()
-									- getFirstVisiblePosition()).getBottom() <= getMeasuredHeight())
+									- getFirstVisiblePosition()).getBottom() <= getMeasuredHeight()) {
 				return true;
+			}
 		}
 		return false;
 	}

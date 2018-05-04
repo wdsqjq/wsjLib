@@ -5,6 +5,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.util.AttributeSet;
 
 public class PullToRefreshRecyclerView extends BaseRecyclerView implements Pullable {
+
+    private double scale = 1;   //抛掷速度,滚动阻力
+
     private LinearLayoutManager mLinearLayoutManager;
 
     private DatasChangedListener mListener;
@@ -24,20 +27,23 @@ public class PullToRefreshRecyclerView extends BaseRecyclerView implements Pulla
 
     @Override
     protected void toggleEmptyView() {
-        if (mListener != null)
+        if (mListener != null) {
             mListener.toggleEmptyView();
+        }
     }
 
     @Override
     protected void toggleOriginView() {
-        if (mListener != null)
+        if (mListener != null) {
             mListener.toggleOriginView();
+        }
     }
 
     @Override
     protected int getEmptyCount() {
-        if (mListener != null)
+        if (mListener != null) {
             return mListener.getEmptyCount();
+        }
         return 0;
     }
 
@@ -50,8 +56,9 @@ public class PullToRefreshRecyclerView extends BaseRecyclerView implements Pulla
                 && getChildAt(0).getTop() >= 0) {
             // 滑到ListView的顶部了
             return true;
-        } else
+        } else {
             return false;
+        }
     }
 
 
@@ -66,8 +73,9 @@ public class PullToRefreshRecyclerView extends BaseRecyclerView implements Pulla
             if (getChildAt(getManager().findLastVisibleItemPosition() - getManager()
                     .findFirstVisibleItemPosition()) != null && getChildAt(getManager()
                     .findLastVisibleItemPosition() - getManager().findFirstVisibleItemPosition())
-                    .getBottom() <= getMeasuredHeight())
+                    .getBottom() <= getMeasuredHeight()) {
                 return true;
+            }
         }
         return false;
     }
@@ -88,7 +96,7 @@ public class PullToRefreshRecyclerView extends BaseRecyclerView implements Pulla
      *
      * @param listener
      */
-    public void setDatasChangedListener(DatasChangedListener listener) {
+    public void setDataChangedListener(DatasChangedListener listener) {
         this.mListener = listener;
     }
 
@@ -100,4 +108,13 @@ public class PullToRefreshRecyclerView extends BaseRecyclerView implements Pulla
         int getEmptyCount();
     }
 
+    public void setFlingScale(double scale){
+        this.scale=scale;
+    }
+
+    @Override
+    public boolean fling(int velocityX, int velocityY) {
+        velocityY*=scale;
+        return super.fling(velocityX, velocityY);
+    }
 }
