@@ -16,17 +16,16 @@ import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.wtk.corelib.R;
+
 import java.lang.ref.WeakReference;
 import java.util.Timer;
 import java.util.TimerTask;
-
-import per.wsj.commonlib.R;
 
 /**
  * 自定义的布局，用来管理三个子控件，其中一个是下拉头，一个是包含内容的pullableView（可以是实现Pullable接口的的任何View），
  * 还有一个上拉头，更多详解见博客http://blog.csdn.net/zhongkejingwang/article/details/38868463
  *
- * @author 陈靖
  */
 public class PullToRefreshLayout extends RelativeLayout {
     public static final String TAG = "PullToRefreshLayout";
@@ -126,10 +125,16 @@ public class PullToRefreshLayout extends RelativeLayout {
     // 上拉加载更多过程监听器
     private OnPullProcessListener mOnLoadmoreProcessListener;
 
+
+    private OnPullingListener mOnPullingListener;
     // 下拉头
     private View refreshView;
     // 上拉头
     private View loadmoreView;
+    /**
+     * 下拉中
+     */
+    private boolean isPulling=false;
 
     public PullToRefreshLayout(Context context) {
         this(context, null, 0);
@@ -656,6 +661,18 @@ public class PullToRefreshLayout extends RelativeLayout {
                 loadmoreView.getMeasuredWidth(),
                 (int) (pullDownY + pullUpY) + pullableView.getMeasuredHeight()
                         + loadmoreView.getMeasuredHeight());
+
+        if (pullDownY > 0 && !isPulling) {
+            if(mOnPullingListener!=null) {
+                mOnPullingListener.onPulling();
+                isPulling=true;
+            }
+        }else if(pullDownY==0 && isPulling){
+            if(mOnPullingListener!=null) {
+                mOnPullingListener.onPulled();
+                isPulling=false;
+            }
+        }
     }
 
 
@@ -830,6 +847,19 @@ public class PullToRefreshLayout extends RelativeLayout {
          * 加载操作
          */
         public void onLoadMore(PullToRefreshLayout pullToRefreshLayout);
+    }
+
+    public static interface OnPullingListener {
+        /**
+         * 下拉了
+         */
+        public void onPulling();
+
+        public void onPulled();
+    }
+
+    public void setmOnPullingListener(OnPullingListener mOnPullingListener) {
+        this.mOnPullingListener = mOnPullingListener;
     }
 
     /**
