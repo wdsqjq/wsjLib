@@ -15,6 +15,7 @@ import android.view.animation.RotateAnimation;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import java.lang.ref.WeakReference;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -124,10 +125,16 @@ public class PullToRefreshLayout extends RelativeLayout {
     // 上拉加载更多过程监听器
     private OnPullProcessListener mOnLoadmoreProcessListener;
 
+
+    private OnPullingListener mOnPullingListener;
     // 下拉头
     private View refreshView;
     // 上拉头
     private View loadmoreView;
+    /**
+     * 下拉中
+     */
+    private boolean isPulling=false;
 
     public PullToRefreshLayout(Context context) {
         this(context, null, 0);
@@ -235,11 +242,8 @@ public class PullToRefreshLayout extends RelativeLayout {
                     OnPullProcessListener.REFRESH);
         }
         if (null == customRefreshView) {
-            /////////////////////////// shiju.wang添加2018/3/19 ////////////////////////
-            if(refreshingView!=null) {
-                refreshingView.clearAnimation();
-                refreshingView.setVisibility(View.GONE);
-            }
+            refreshingView.clearAnimation();
+            refreshingView.setVisibility(View.GONE);
         }
         switch (refreshResult) {
             case SUCCEED:
@@ -254,15 +258,10 @@ public class PullToRefreshLayout extends RelativeLayout {
             default:
                 // 刷新失败
                 if (null == customRefreshView) {
-                    /////////////////////////// shiju.wang添加2018/3/19 ////////////////////////
-                    if(refreshStateTextView!=null) {
-                        refreshStateTextView.setText(R.string.refresh_fail);
-                    }
-                    if(refreshStateImageView!=null) {
-                        refreshStateImageView.setVisibility(View.VISIBLE);
-                        refreshStateImageView
-                                .setBackgroundResource(R.drawable.refresh_failed);
-                    }
+                    refreshStateImageView.setVisibility(View.VISIBLE);
+                    refreshStateTextView.setText(R.string.refresh_fail);
+                    refreshStateImageView
+                            .setBackgroundResource(R.drawable.refresh_failed);
                 }
                 break;
         }
@@ -469,9 +468,8 @@ public class PullToRefreshLayout extends RelativeLayout {
                             mCanPullDown = false;
                             mCanPullUp = true;
                         }
-                        if (pullDownY > getMeasuredHeight()) {
+                        if (pullDownY > getMeasuredHeight())
                             pullDownY = getMeasuredHeight();
-                        }
                         if (state == REFRESHING) {
                             // 正在刷新的时候触摸移动
                             isTouch = true;
@@ -486,26 +484,22 @@ public class PullToRefreshLayout extends RelativeLayout {
                             mCanPullDown = true;
                             mCanPullUp = false;
                         }
-                        if (pullUpY < -getMeasuredHeight()) {
+                        if (pullUpY < -getMeasuredHeight())
                             pullUpY = -getMeasuredHeight();
-                        }
                         if (state == LOADING) {
                             // 正在加载的时候触摸移动
                             isTouch = true;
                         }
-                    } else {
+                    } else
                         releasePull();
-                    }
-                } else {
+                } else
                     mEvents = 0;
-                }
                 lastY = ev.getY();
                 // 根据下拉距离改变比例
                 radio = (float) (2 + 2 * Math.tan(Math.PI / 2 / getMeasuredHeight()
                         * (pullDownY + Math.abs(pullUpY))));
-                if (pullDownY > 0 || pullUpY < 0) {
+                if (pullDownY > 0 || pullUpY < 0)
                     requestLayout();
-                }
                 if (pullDownY > 0) {
                     if (pullDownY <= refreshDist
                             && (state == RELEASE_TO_REFRESH || state == DONE)) {
@@ -544,15 +538,13 @@ public class PullToRefreshLayout extends RelativeLayout {
                 if (state == RELEASE_TO_REFRESH) {
                     changeState(REFRESHING);
                     // 刷新操作
-                    if (mListener != null) {
+                    if (mListener != null)
                         mListener.onRefresh(this);
-                    }
                 } else if (state == RELEASE_TO_LOAD) {
                     changeState(LOADING);
                     // 加载操作
-                    if (mListener != null) {
+                    if (mListener != null)
                         mListener.onLoadMore(this);
-                    }
                 }
                 hide();
             default:
@@ -587,17 +579,15 @@ public class PullToRefreshLayout extends RelativeLayout {
         protected void onPostExecute(String result) {
             changeState(REFRESHING);
             // 刷新操作
-            if (mListener != null) {
+            if (mListener != null)
                 mListener.onRefresh(PullToRefreshLayout.this);
-            }
             hide();
         }
 
         @Override
         protected void onProgressUpdate(Float... values) {
-            if (pullDownY > refreshDist) {
+            if (pullDownY > refreshDist)
                 changeState(RELEASE_TO_REFRESH);
-            }
             requestLayout();
         }
 
@@ -621,9 +611,8 @@ public class PullToRefreshLayout extends RelativeLayout {
         requestLayout();
         changeState(LOADING);
         // 加载操作
-        if (mListener != null) {
+        if (mListener != null)
             mListener.onLoadMore(this);
-        }
     }
 
     private void initView() {
@@ -672,6 +661,18 @@ public class PullToRefreshLayout extends RelativeLayout {
                 loadmoreView.getMeasuredWidth(),
                 (int) (pullDownY + pullUpY) + pullableView.getMeasuredHeight()
                         + loadmoreView.getMeasuredHeight());
+
+        if (pullDownY > 0 && !isPulling) {
+            if(mOnPullingListener!=null) {
+                mOnPullingListener.onPulling();
+                isPulling=true;
+            }
+        }else if(pullDownY==0 && isPulling){
+            if(mOnPullingListener!=null) {
+                mOnPullingListener.onPulled();
+                isPulling=false;
+            }
+        }
     }
 
 
@@ -767,11 +768,10 @@ public class PullToRefreshLayout extends RelativeLayout {
                     }
 
                 }
-                if (layout.pullDownY > 0) {
+                if (layout.pullDownY > 0)
                     layout.pullDownY -= layout.mMoveSpeed;
-                } else if (layout.pullUpY < 0) {
+                else if (layout.pullUpY < 0)
                     layout.pullUpY += layout.mMoveSpeed;
-                }
                 if (layout.pullDownY < 0) {
                     // 已完成回弹
                     layout.pullDownY = 0;
@@ -779,9 +779,8 @@ public class PullToRefreshLayout extends RelativeLayout {
                         layout.pullDownView.clearAnimation();
                     }
                     // 隐藏下拉头时有可能还在刷新，只有当前状态不是正在刷新时才改变状态
-                    if (layout.state != REFRESHING && layout.state != LOADING) {
+                    if (layout.state != REFRESHING && layout.state != LOADING)
                         layout.changeState(INIT);
-                    }
                     layout.timer.cancel();
                     layout.requestLayout();
                 }
@@ -792,18 +791,16 @@ public class PullToRefreshLayout extends RelativeLayout {
                         layout.pullUpView.clearAnimation();
                     }
                     // 隐藏上拉头时有可能还在刷新，只有当前状态不是正在刷新时才改变状态
-                    if (layout.state != REFRESHING && layout.state != LOADING) {
+                    if (layout.state != REFRESHING && layout.state != LOADING)
                         layout.changeState(INIT);
-                    }
                     layout.timer.cancel();
                     layout.requestLayout();
                 }
                 // 刷新布局,会自动调用onLayout
                 layout.requestLayout();
                 // 没有拖拉或者回弹完成
-                if (layout.pullDownY + Math.abs(layout.pullUpY) == 0) {
+                if (layout.pullDownY + Math.abs(layout.pullUpY) == 0)
                     layout.timer.cancel();
-                }
             }
         }
 
@@ -850,6 +847,19 @@ public class PullToRefreshLayout extends RelativeLayout {
          * 加载操作
          */
         public void onLoadMore(PullToRefreshLayout pullToRefreshLayout);
+    }
+
+    public static interface OnPullingListener {
+        /**
+         * 下拉了
+         */
+        public void onPulling();
+
+        public void onPulled();
+    }
+
+    public void setmOnPullingListener(OnPullingListener mOnPullingListener) {
+        this.mOnPullingListener = mOnPullingListener;
     }
 
     /**
@@ -936,16 +946,14 @@ public class PullToRefreshLayout extends RelativeLayout {
         protected void onPostExecute(String result) {
             changeState(REFRESHING);
             // 刷新操作
-            if (mListener != null) {
+            if (mListener != null)
                 mListener.onRefresh(PullToRefreshLayout.this);
-            }
         }
 
         @Override
         protected void onProgressUpdate(Float... values) {
-            if (pullDownY > refreshDist) {
+            if (pullDownY > refreshDist)
                 changeState(RELEASE_TO_REFRESH);
-            }
             requestLayout();
         }
 
