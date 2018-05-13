@@ -8,8 +8,11 @@ import org.json.JSONObject;
 
 import java.net.ConnectException;
 import java.net.SocketTimeoutException;
+import java.net.UnknownHostException;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+
+import javax.net.ssl.SSLHandshakeException;
 
 import io.reactivex.Observable;
 import io.reactivex.Observer;
@@ -143,7 +146,10 @@ public class HttpUtil {
                     public void onError(Throwable e) {
                         if(e instanceof SocketTimeoutException){
                             callBack.onError(e,mContext.getString(R.string.net_error_timeout));
-                        }else if(e instanceof HttpException){
+                        }else if(e instanceof HttpException
+                                || e instanceof ConnectException
+                                || e instanceof SSLHandshakeException
+                                || e instanceof UnknownHostException){
                             callBack.onError(e,mContext.getString(R.string.net_error_nonet));
                         }else {
                             callBack.onError(e,e.toString());
@@ -210,7 +216,10 @@ public class HttpUtil {
                     public void onError(Throwable e) {
                         if(e instanceof SocketTimeoutException){
                             callBack.onError(e,mContext.getString(R.string.net_error_timeout));
-                        }else if(e instanceof HttpException || e instanceof ConnectException){
+                        }else if(e instanceof HttpException
+                                || e instanceof ConnectException
+                                || e instanceof SSLHandshakeException
+                                || e instanceof UnknownHostException){
                             callBack.onError(e,mContext.getString(R.string.net_error_nonet));
                         }else {
                             callBack.onError(e,e.toString());

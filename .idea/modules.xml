@@ -4,9 +4,9 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/commonlib/commonlib.iml" filepath="$PROJECT_DIR$/commonlib/commonlib.iml" />
-      <module fileurl="file://D:\work\wsjLib\downloaddemo\downloaddemo.iml" filepath="D:\work\wsjLib\downloaddemo\downloaddemo.iml" />
-      <module fileurl="file://F:\wsjLib\downloaddemo\downloaddemo.iml" filepath="F:\wsjLib\downloaddemo\downloaddemo.iml" />
-      <module fileurl="file://F:\wsjLib\kotlinapp\kotlinapp.iml" filepath="F:\wsjLib\kotlinapp\kotlinapp.iml" />
+      <module fileurl="file://D:/work/wsjLib/downloaddemo/downloaddemo.iml" filepath="D:/work/wsjLib/downloaddemo/downloaddemo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/downloaddemo/downloaddemo.iml" filepath="$PROJECT_DIR$/downloaddemo/downloaddemo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/kotlinapp/kotlinapp.iml" filepath="$PROJECT_DIR$/kotlinapp/kotlinapp.iml" />
       <module fileurl="file://$PROJECT_DIR$/wsjLib.iml" filepath="$PROJECT_DIR$/wsjLib.iml" />
     </modules>
   </component>
