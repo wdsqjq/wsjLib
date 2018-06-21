@@ -2,6 +2,7 @@ package per.wsj.commonlib.net;
 
 import android.content.Context;
 
+import com.alibaba.fastjson.JSON;
 import com.google.gson.Gson;
 
 import org.json.JSONObject;
@@ -52,10 +53,10 @@ public class HttpUtil {
         return ourInstance;
     }*/
 
-    protected HttpUtil(Context context,String baseUrl,String cer) {
+    protected HttpUtil(Context context, String baseUrl, String cer) {
         mContext = context;
 
-        OkHttpClient.Builder builder=new OkHttpClient.Builder()
+        OkHttpClient.Builder builder = new OkHttpClient.Builder()
                 //                .addNetworkInterceptor(
                 //                        new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.HEADERS))
                 //                .cookieJar(new NovateCookieManger(context))
@@ -64,14 +65,14 @@ public class HttpUtil {
                 .retryOnConnectionFailure(true)
                 .hostnameVerifier(SSLSocketClient.getHostnameVerifier());
         // 证书不为空则使用证书，否则忽略证书
-        if(ValueUtil.isStrNotEmpty(cer)){
-            builder.sslSocketFactory(SSLSocketClient.getSSLSocketFactory(mContext,"")) ;        // https证书
-        }else{
+        if (ValueUtil.isStrNotEmpty(cer)) {
+            builder.sslSocketFactory(SSLSocketClient.getSSLSocketFactory(mContext, ""));        // https证书
+        } else {
             builder.sslSocketFactory(SSLSocketClient.getSSLSocketFactoryIgnore());
         }
 
         okHttpClient = builder.build();
-        
+
         Retrofit retrofit = new Retrofit.Builder()
                 .client(okHttpClient)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -87,7 +88,7 @@ public class HttpUtil {
      * @param callBack
      * @param <T>
      */
-    public <T> void get(Map<String, Object> param,Class clazz, CallBack<T> callBack) {
+    public <T> void get(Map<String, Object> param, Class clazz, CallBack<T> callBack) {
         get("req.action", param, clazz, callBack);
     }
 
@@ -138,21 +139,21 @@ public class HttpUtil {
                             String msg = jsonObject.getString("msg");
                             callBack.onSuccess((T) new Gson().fromJson(responseBody, clazz), code, msg);
                         } catch (Exception e) {
-                            callBack.onError(e,e.toString());
+                            callBack.onError(e, e.toString());
                         }
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        if(e instanceof SocketTimeoutException){
-                            callBack.onError(e,mContext.getString(R.string.net_error_timeout));
-                        }else if(e instanceof HttpException
+                        if (e instanceof SocketTimeoutException) {
+                            callBack.onError(e, mContext.getString(R.string.net_error_timeout));
+                        } else if (e instanceof HttpException
                                 || e instanceof ConnectException
                                 || e instanceof SSLHandshakeException
-                                || e instanceof UnknownHostException){
-                            callBack.onError(e,mContext.getString(R.string.net_error_nonet));
-                        }else {
-                            callBack.onError(e,e.toString());
+                                || e instanceof UnknownHostException) {
+                            callBack.onError(e, mContext.getString(R.string.net_error_nonet));
+                        } else {
+                            callBack.onError(e, e.toString());
                         }
                         callBack.onComplete();
                     }
@@ -208,21 +209,21 @@ public class HttpUtil {
 //                            String msg = jsonObject.getString("msg");
                             callBack.onSuccess((T) new Gson().fromJson(responseBody, clazz), code, "");
                         } catch (Exception e) {
-                            callBack.onError(e,e.toString());
+                            callBack.onError(e, e.toString());
                         }
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        if(e instanceof SocketTimeoutException){
-                            callBack.onError(e,mContext.getString(R.string.net_error_timeout));
-                        }else if(e instanceof HttpException
+                        if (e instanceof SocketTimeoutException) {
+                            callBack.onError(e, mContext.getString(R.string.net_error_timeout));
+                        } else if (e instanceof HttpException
                                 || e instanceof ConnectException
                                 || e instanceof SSLHandshakeException
-                                || e instanceof UnknownHostException){
-                            callBack.onError(e,mContext.getString(R.string.net_error_nonet));
-                        }else {
-                            callBack.onError(e,e.toString());
+                                || e instanceof UnknownHostException) {
+                            callBack.onError(e, mContext.getString(R.string.net_error_nonet));
+                        } else {
+                            callBack.onError(e, e.toString());
                         }
                         callBack.onComplete();
                     }
@@ -234,6 +235,178 @@ public class HttpUtil {
 
                 });
     }
+
+
+    /***********************************新的*****************************************/
+
+    /**
+     * GET请求
+     *
+     * @param url
+     * @param param
+     * @param callBack
+     * @param <T>
+     */
+    public <T> void get(String url, Map<String, Object> param, final CallBack<T> callBack) {
+        if (callBack == null) {
+            return;
+        }
+        Observable<ResponseBody> observable;
+        if (param == null) {
+            observable = apiService.executeGet(url);
+        } else {
+            observable = apiService.executeGet(url, param);
+        }
+        observable.subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<ResponseBody>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        callBack.onStart(d);
+                    }
+
+                    @Override
+                    public void onNext(ResponseBody value) {
+                        try {
+                            String responseBody = value.string();
+                            BaseResponse response = JSON.parseObject(responseBody, BaseResponse.class);
+
+                            callBack.onSuccess((T) response.detail, response.code, response.msg);
+                        } catch (Exception e) {
+                            callBack.onError(e, e.toString());
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        if (e instanceof SocketTimeoutException) {
+                            callBack.onError(e, mContext.getString(R.string.net_error_timeout));
+                        } else if (e instanceof HttpException
+                                || e instanceof ConnectException
+                                || e instanceof SSLHandshakeException
+                                || e instanceof UnknownHostException) {
+                            callBack.onError(e, mContext.getString(R.string.net_error_nonet));
+                        } else {
+                            callBack.onError(e, e.toString());
+                        }
+                        callBack.onComplete();
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        callBack.onComplete();
+                    }
+                });
+    }
+
+    /**
+     * POST请求
+     *
+     * @param url
+     * @param param
+     * @param callBack
+     * @param <T>
+     */
+    public <T> void post(String url, Object param, final CallBack<T> callBack) {
+        if (callBack == null) {
+            return;
+        }
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), new Gson().toJson(param));
+        apiService.executePost(url, requestBody)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(new MyObserver<T>(callBack));
+                .subscribe(new Observer<ResponseBody>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        callBack.onStart(d);
+                    }
+
+                    @Override
+                    public void onNext(ResponseBody value) {
+                        try {
+                            String responseBody = value.string();
+                            BaseResponse response = JSON.parseObject(responseBody, BaseResponse.class);
+                            callBack.onSuccess((T) response.detail, response.code, response.msg);
+                        } catch (Exception e) {
+                            callBack.onError(e, e.toString());
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        if (e instanceof SocketTimeoutException) {
+                            callBack.onError(e, mContext.getString(R.string.net_error_timeout));
+                        } else if (e instanceof HttpException
+                                || e instanceof ConnectException
+                                || e instanceof SSLHandshakeException
+                                || e instanceof UnknownHostException) {
+                            callBack.onError(e, mContext.getString(R.string.net_error_nonet));
+                        } else {
+                            callBack.onError(e, e.toString());
+                        }
+                        callBack.onComplete();
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        callBack.onComplete();
+                    }
+
+                });
+    }
+
+    /**
+     * 公用Observer
+     * @param <T>
+     */
+    class MyObserver<T> implements Observer<ResponseBody>{
+        CallBack<T> callBack;
+        public MyObserver(CallBack<T> callBack){
+            this.callBack=callBack;
+        }
+
+        @Override
+        public void onSubscribe(Disposable d) {
+            callBack.onStart(d);
+        }
+
+        @Override
+        public void onNext(ResponseBody value) {
+            try {
+                String responseBody = value.string();
+                BaseResponse response = JSON.parseObject(responseBody, BaseResponse.class);
+                callBack.onSuccess((T) response.detail, response.code, response.msg);
+            } catch (Exception e) {
+                callBack.onError(e, e.toString());
+            }
+        }
+
+        @Override
+        public void onError(Throwable e) {
+            if (e instanceof SocketTimeoutException) {
+                callBack.onError(e, mContext.getString(R.string.net_error_timeout));
+            } else if (e instanceof HttpException
+                    || e instanceof ConnectException
+                    || e instanceof SSLHandshakeException
+                    || e instanceof UnknownHostException) {
+                callBack.onError(e, mContext.getString(R.string.net_error_nonet));
+            } else {
+                callBack.onError(e, e.toString());
+            }
+            callBack.onComplete();
+        }
+
+        @Override
+        public void onComplete() {
+            callBack.onComplete();
+        }
+
+    }
+
+    /****************************************************************************/
 
     public interface CallBack<T> {
 

@@ -27,18 +27,16 @@ android {
 
 dependencies {
     compile 'com.android.support:appcompat-v7:26.1.0'
-
     //adapter
-    compile "com.zhy:base-rvadapter:3.0.3"
-
-//    compile 'io.reactivex.rxjava2:rxjava:2.0.1'
+    compile 'com.zhy:base-rvadapter:3.0.3'
+    //    compile 'io.reactivex.rxjava2:rxjava:2.0.1'
     compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
     compile 'com.squareup.okhttp3:okhttp:3.9.1'
     compile 'com.squareup.retrofit2:retrofit:2.3.0'
     compile 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
     compile 'com.squareup.retrofit2:converter-gson:2.3.0'
-//    compile 'com.google.code.gson:gson:2.5' // gson
-
+    //    compile 'com.google.code.gson:gson:2.5' // gson
     //glide
-    compile "com.github.bumptech.glide:glide:3.8.0"
+    compile 'com.github.bumptech.glide:glide:3.8.0'
+    implementation files('libs/fastjson-1.2.28.jar')
 }
