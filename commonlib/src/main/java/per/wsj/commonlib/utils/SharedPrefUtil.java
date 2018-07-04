@@ -8,7 +8,7 @@ import android.content.SharedPreferences;
  * 一个SHARED_NAME一个manager
  */
 
-public class SharedPrefManager {
+public class SharedPrefUtil {
     private static final int SHARED_MODE = Context.MODE_PRIVATE;
 
     private static final String SHARED_NAME = "wtk_shared";
@@ -16,7 +16,7 @@ public class SharedPrefManager {
     //CommonUtil
     private Context context;
 
-    public SharedPrefManager(Context context) {
+    public SharedPrefUtil(Context context) {
         this.context = context.getApplicationContext();
     }
 
@@ -82,5 +82,19 @@ public class SharedPrefManager {
         }
 
         return null;
+    }
+
+    /**
+     * 清除所有数据
+     *
+     * @param context
+     */
+    public static void clear(Context context)
+    {
+        SharedPreferences sp = context.getSharedPreferences(SHARED_NAME,
+                Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.clear();
+        editor.commit();
     }
 }

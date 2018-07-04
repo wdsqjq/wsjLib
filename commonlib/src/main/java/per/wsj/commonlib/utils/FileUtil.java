@@ -4,6 +4,7 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Environment;
 import android.os.StatFs;
 import android.provider.MediaStore;
 import android.text.format.Formatter;
@@ -253,5 +254,17 @@ public class FileUtil {
             }
         }
         return flag;
+    }
+
+    /**
+     * 外部存储是否可读写
+     * @return
+     */
+    public static boolean isExternalStorageWritable(){
+        String state = Environment.getExternalStorageState();
+        if(Environment.MEDIA_MOUNTED.equals(state)){
+            return true;
+        }
+        return false;
     }
 }
