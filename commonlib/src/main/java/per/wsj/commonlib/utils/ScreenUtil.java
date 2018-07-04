@@ -102,7 +102,7 @@ public class ScreenUtil {
      *
      * @return 返回状态栏高度的像素值。
      */
-    private int getStatusBarHeight(Context context) {
+    public static int getStatusBarHeight(Context context) {
         int statusBarHeight=0;
         if (statusBarHeight == 0) {
             try {
