@@ -83,28 +83,7 @@ public class HttpUtil {
     }
 
     /**
-     * GET请求
-     *
-     * @param callBack
-     * @param <T>
-     */
-    public <T> void get(Map<String, Object> param, Class clazz, CallBack<T> callBack) {
-        get("req.action", param, clazz, callBack);
-    }
-
-    /**
-     * GET请求
-     *
-     * @param url
-     * @param callBack
-     * @param <T>
-     */
-    public <T> void get(String url, Class clazz, CallBack<T> callBack) {
-        get(url, null, clazz, callBack);
-    }
-
-    /**
-     * GET请求
+     * GET请求（弃用了）
      *
      * @param url
      * @param param
@@ -166,18 +145,7 @@ public class HttpUtil {
     }
 
     /**
-     * POST请求
-     *
-     * @param param
-     * @param callBack
-     * @param <T>
-     */
-    public <T> void post(Object param, final Class clazz, final CallBack<T> callBack) {
-        post("req.action", param, clazz, callBack);
-    }
-
-    /**
-     * POST请求
+     * POST请求（弃用了）
      *
      * @param url
      * @param param
