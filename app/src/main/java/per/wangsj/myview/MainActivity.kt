@@ -27,8 +27,7 @@ class MainActivity : AppCompatActivity() {
                     tvResult.text = "正在请求..."
                 }
 
-                override fun onSuccess(result: List<ArticleList>, code: String, msg: String) {
-                    Log.d("MainActivity", "result:$result")
+                override fun onSuccess(result: ArrayList<ArticleList>, code: String, msg: String) {
                     tvResult.text = result.toString()
                 }
 

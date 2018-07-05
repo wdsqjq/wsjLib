@@ -10,7 +10,7 @@ import org.json.JSONObject;
 import java.net.ConnectException;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
-import java.util.List;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -83,6 +83,7 @@ public class HttpUtil {
 
     /**
      * GET请求（对象）
+     *
      * @param url
      * @param param
      * @param callBack
@@ -106,6 +107,7 @@ public class HttpUtil {
 
     /**
      * GET请求 (List)
+     *
      * @param url
      * @param param
      * @param callBack
@@ -129,6 +131,7 @@ public class HttpUtil {
 
     /**
      * POST请求(对象)
+     *
      * @param url
      * @param param
      * @param callBack
@@ -149,6 +152,7 @@ public class HttpUtil {
 
     /**
      * POST请求（List）
+     *
      * @param url
      * @param param
      * @param callBack
@@ -197,13 +201,14 @@ public class HttpUtil {
                 JSONObject jsonObject = new JSONObject(responseBody);
                 String code = jsonObject.getString("code");
                 String msg = jsonObject.getString("msg");
-                String detail =jsonObject.getString("detail");
-                if(callBack instanceof ListCallBack) {
-                    List<T> result = JSON.parseArray(detail, clazz);
-                    ((ListCallBack)callBack).onSuccess(result, code, msg);
-                }else{
-                    ((CallBack)callBack).onSuccess((T) JSON.parseObject(detail,clazz), code, msg);
+                String detail = jsonObject.getString("detail");
+                if (callBack instanceof ListCallBack) {
+                    ArrayList<T> result = (ArrayList<T>) JSON.parseArray(detail, clazz);
+                    ((ListCallBack) callBack).onSuccess(result, code, msg);
+                } else {
+                    ((CallBack) callBack).onSuccess((T) JSON.parseObject(detail, clazz), code, msg);
                 }
+
             } catch (Exception e) {
                 onError(e);
             }
@@ -232,7 +237,7 @@ public class HttpUtil {
 
     /****************************************************************************/
 
-    public interface CallBack<T> extends BaseCallBack<T>{
+    public interface CallBack<T> extends BaseCallBack<T> {
 
         /**
          * 请求成功
@@ -253,7 +258,7 @@ public class HttpUtil {
          * @param code
          * @param msg
          */
-        public void onSuccess(List<T> result, String code, String msg);
+        public void onSuccess(ArrayList<T> result, String code, String msg);
     }
 
     public interface BaseCallBack<T> {
