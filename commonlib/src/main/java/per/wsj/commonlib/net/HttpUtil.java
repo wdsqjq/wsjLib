@@ -7,6 +7,7 @@ import com.google.gson.Gson;
 
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.net.ConnectException;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
@@ -21,9 +22,12 @@ import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
+import okhttp3.Interceptor;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
+import okhttp3.Request;
 import okhttp3.RequestBody;
+import okhttp3.Response;
 import okhttp3.ResponseBody;
 import per.wsj.commonlib.R;
 import per.wsj.commonlib.utils.ValueUtil;
@@ -56,10 +60,24 @@ public class HttpUtil {
         mContext = context;
 
         OkHttpClient.Builder builder = new OkHttpClient.Builder()
-                //                .addNetworkInterceptor(
-                //                        new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.HEADERS))
-                //                .cookieJar(new NovateCookieManger(context))
-                //                .addInterceptor(new BaseInterceptor(mContext))
+//                                .addNetworkInterceptor(
+//                                        new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.HEADERS))
+//                                .cookieJar(new NovateCookieManger(context))
+//                                .addInterceptor(new BaseInterceptor(mContext))
+                .addInterceptor(new Interceptor() {
+                    @Override
+                    public Response intercept(Chain chain) throws IOException {
+                        Request request = chain.request()
+                        .newBuilder()
+                        .addHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8")
+                        .addHeader("Accept-Encoding", "gzip, deflate")
+                        .addHeader("Connection", "keep-alive")
+                        .addHeader("Accept", "*/*")
+                        .addHeader("Cookie", "add cookies here")
+                        .build();
+                        return chain.proceed(request);
+                    }
+                })
                 .connectTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS)
                 .retryOnConnectionFailure(true)
                 .hostnameVerifier(SSLSocketClient.getHostnameVerifier());
