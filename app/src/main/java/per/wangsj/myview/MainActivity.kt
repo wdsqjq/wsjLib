@@ -15,9 +15,9 @@ class MainActivity : AppCompatActivity() {
 
         setContentView(R.layout.activity_main)
 
-//        /**
-//         * get List请求
-//         */
+        /**
+         * get List请求
+         */
 //        btn1.setOnClickListener {
 //            val map = HashMap<String, Any>()
 //            map["type"] = "3"

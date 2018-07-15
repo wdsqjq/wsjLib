@@ -50,37 +50,19 @@ public class HttpUtil {
 
     protected Context mContext;
 
-    /*private static final HttpUtil ourInstance = new HttpUtil();
-
-    public static HttpUtil getInstance() {
-        return ourInstance;
-    }*/
-
-    protected HttpUtil(Context context, String baseUrl, String cer) {
+    protected HttpUtil(Context context, String baseUrl, String cer,Interceptor interceptor) {
         mContext = context;
 
         OkHttpClient.Builder builder = new OkHttpClient.Builder()
 //                                .addNetworkInterceptor(
 //                                        new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.HEADERS))
 //                                .cookieJar(new NovateCookieManger(context))
-//                                .addInterceptor(new BaseInterceptor(mContext))
-                .addInterceptor(new Interceptor() {
-                    @Override
-                    public Response intercept(Chain chain) throws IOException {
-                        Request request = chain.request()
-                        .newBuilder()
-                        .addHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8")
-                        .addHeader("Accept-Encoding", "gzip, deflate")
-                        .addHeader("Connection", "keep-alive")
-                        .addHeader("Accept", "*/*")
-                        .addHeader("Cookie", "add cookies here")
-                        .build();
-                        return chain.proceed(request);
-                    }
-                })
                 .connectTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS)
                 .retryOnConnectionFailure(true)
                 .hostnameVerifier(SSLSocketClient.getHostnameVerifier());
+        if(interceptor!=null){
+            builder.addInterceptor(interceptor);
+        }
         // 证书不为空则使用证书，否则忽略证书
         if (ValueUtil.isStrNotEmpty(cer)) {
             builder.sslSocketFactory(SSLSocketClient.getSSLSocketFactory(mContext, ""));        // https证书
@@ -99,6 +81,10 @@ public class HttpUtil {
         apiService = retrofit.create(ApiService.class);
     }
 
+    public <T> void get(String url, Class clazz, CallBack<T> callBack) {
+        get(url, null, clazz, callBack);
+    }
+
     /**
      * GET请求（对象）
      *
@@ -108,19 +94,11 @@ public class HttpUtil {
      * @param <T>
      */
     public <T> void get(String url, Map<String, Object> param, final Class clazz, final CallBack<T> callBack) {
-        if (callBack == null) {
-            return;
-        }
-        Observable<ResponseBody> observable;
-        if (param == null) {
-            observable = apiService.executeGet(url);
-        } else {
-            observable = apiService.executeGet(url, param);
-        }
-        observable.subscribeOn(Schedulers.io())
-                .unsubscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new MyObserver<T>(clazz, callBack));
+        getRequest(url,param,clazz,callBack);
+    }
+
+    public <T> void get(String url, Class clazz, ListCallBack<T> callBack) {
+        get(url, null, clazz, callBack);
     }
 
     /**
@@ -132,6 +110,10 @@ public class HttpUtil {
      * @param <T>
      */
     public <T> void get(String url, Map<String, Object> param, final Class clazz, final ListCallBack<T> callBack) {
+        getRequest(url,param,clazz,callBack);
+    }
+
+    public <T> void getRequest(String url, Map<String, Object> param, final Class clazz, final BaseCallBack<T> callBack) {
         if (callBack == null) {
             return;
         }
@@ -147,6 +129,10 @@ public class HttpUtil {
                 .subscribe(new MyObserver<T>(clazz, callBack));
     }
 
+    public <T> void post(String url, Class clazz, ListCallBack<T> callBack) {
+        post(url,null,clazz,callBack);
+    }
+
     /**
      * POST请求(对象)
      *
@@ -156,16 +142,11 @@ public class HttpUtil {
      * @param <T>
      */
     public <T> void post(String url, Object param, final Class clazz, final ListCallBack<T> callBack) {
-        if (callBack == null) {
-            return;
-        }
-        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), new Gson().toJson(param));
-        apiService.executePost(url, requestBody)
-                .subscribeOn(Schedulers.io())
-                .unsubscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe(new MyObserver<T>(callBack));
-                .subscribe(new MyObserver<T>(clazz, callBack));
+        postRequest(url,param,clazz,callBack);
+    }
+
+    public <T> void post(String url, Class clazz, CallBack<T> callBack) {
+        post(url,null,clazz,callBack);
     }
 
     /**
@@ -177,6 +158,10 @@ public class HttpUtil {
      * @param <T>
      */
     public <T> void post(String url, Object param, final Class clazz, final CallBack<T> callBack) {
+        postRequest(url,param,clazz,callBack);
+    }
+
+    public <T> void postRequest(String url, Object param, final Class clazz, final BaseCallBack<T> callBack) {
         if (callBack == null) {
             return;
         }
@@ -197,12 +182,7 @@ public class HttpUtil {
         BaseCallBack<T> callBack;
         Class clazz;
 
-        public MyObserver(Class clazz, ListCallBack<T> callBack) {
-            this.clazz = clazz;
-            this.callBack = callBack;
-        }
-
-        public MyObserver(Class clazz, CallBack<T> callBack) {
+        public MyObserver(Class clazz, BaseCallBack<T> callBack) {
             this.clazz = clazz;
             this.callBack = callBack;
         }
@@ -264,7 +244,7 @@ public class HttpUtil {
          * @param code
          * @param msg
          */
-        public void onSuccess(T result, String code, String msg);
+        void onSuccess(T result, String code, String msg);
     }
 
     public interface ListCallBack<T> extends BaseCallBack<T> {
@@ -276,30 +256,6 @@ public class HttpUtil {
          * @param code
          * @param msg
          */
-        public void onSuccess(ArrayList<T> result, String code, String msg);
-    }
-
-    public interface BaseCallBack<T> {
-
-        /**
-         * 开始请求
-         *
-         * @param disposable
-         */
-        public void onStart(Disposable disposable);
-
-
-        /**
-         * 请求失败
-         *
-         * @param throwable
-         * @param string
-         */
-        public void onError(Throwable throwable, String string);
-
-        /**
-         * 请求结束,不管是成功或失败都会走这里
-         */
-        public void onComplete();
+        void onSuccess(ArrayList<T> result, String code, String msg);
     }
 }

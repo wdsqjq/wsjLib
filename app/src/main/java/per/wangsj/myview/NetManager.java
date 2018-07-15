@@ -1,6 +1,7 @@
 package per.wangsj.myview;
 
 
+import per.wsj.commonlib.net.BaseInterceptor;
 import per.wsj.commonlib.net.HttpUtil;
 
 /**
@@ -20,26 +21,12 @@ public class NetManager extends HttpUtil {
     }
 
     private NetManager(String url) {
-        super(BaseApplication.getContext(), url, "");
+        super(BaseApplication.getContext(), url, "", new BaseInterceptor());
     }
 
     private NetManager(String url, String cer) {
-        super(BaseApplication.getContext(), url, cer);
+        super(BaseApplication.getContext(), url, cer,null);
     }
 
-    public <T> void get(String url, Class clazz, ListCallBack<T> callBack) {
-        super.get(url, null, clazz, callBack);
-    }
 
-    public <T> void get(String url, Class clazz, CallBack<T> callBack) {
-        super.get(url, null, clazz, callBack);
-    }
-
-    public <T> void post(String url, Class clazz, ListCallBack<T> callBack) {
-        super.post(url,null,clazz,callBack);
-    }
-
-    public <T> void post(String url, Class clazz, CallBack<T> callBack) {
-        super.post(url,null,clazz,callBack);
-    }
 }
