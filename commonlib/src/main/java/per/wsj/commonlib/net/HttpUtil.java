@@ -50,7 +50,7 @@ public class HttpUtil {
 
     protected Context mContext;
 
-    protected HttpUtil(Context context, String baseUrl, String cer,Interceptor interceptor) {
+    protected HttpUtil(Context context, String baseUrl, String cer) {
         mContext = context;
 
         OkHttpClient.Builder builder = new OkHttpClient.Builder()
@@ -60,9 +60,9 @@ public class HttpUtil {
                 .connectTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS)
                 .retryOnConnectionFailure(true)
                 .hostnameVerifier(SSLSocketClient.getHostnameVerifier());
-        if(interceptor!=null){
-            builder.addInterceptor(interceptor);
-        }
+//        if(interceptor!=null){
+//            builder.addInterceptor(interceptor);
+//        }
         // 证书不为空则使用证书，否则忽略证书
         if (ValueUtil.isStrNotEmpty(cer)) {
             builder.sslSocketFactory(SSLSocketClient.getSSLSocketFactory(mContext, ""));        // https证书

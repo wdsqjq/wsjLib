@@ -27,6 +27,7 @@ android {
 
 dependencies {
     implementation 'com.android.support:appcompat-v7:26.1.0'
+    implementation 'com.android.support:recyclerview-v7:26.1.0'
     //adapter
 //    implementation 'com.zhy:base-rvadapter:3.0.3'
 //    implementation 'io.reactivex.rxjava2:rxjava:2.0.1'
