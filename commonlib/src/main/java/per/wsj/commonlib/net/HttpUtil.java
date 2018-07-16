@@ -7,7 +7,6 @@ import com.google.gson.Gson;
 
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.net.ConnectException;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
@@ -25,9 +24,7 @@ import io.reactivex.schedulers.Schedulers;
 import okhttp3.Interceptor;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
-import okhttp3.Request;
 import okhttp3.RequestBody;
-import okhttp3.Response;
 import okhttp3.ResponseBody;
 import per.wsj.commonlib.R;
 import per.wsj.commonlib.utils.ValueUtil;
@@ -50,19 +47,30 @@ public class HttpUtil {
 
     protected Context mContext;
 
-    protected HttpUtil(Context context, String baseUrl, String cer) {
+    protected HttpUtil(Context context, String baseUrl, String cer, Interceptor interceptor) {
         mContext = context;
 
         OkHttpClient.Builder builder = new OkHttpClient.Builder()
 //                                .addNetworkInterceptor(
 //                                        new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.HEADERS))
 //                                .cookieJar(new NovateCookieManger(context))
+//                .addInterceptor(new Interceptor() {
+//                    @Override
+//                    public Response intercept(Chain chain) throws IOException {
+//                        Request original = chain.request();
+//                        Request.Builder requestBuilder = original.newBuilder()
+//                                .addHeader("header-key", "value1")
+//                                .addHeader("header-key", "value2");
+//                        Request request = requestBuilder.build();
+//                        return chain.proceed(request);
+//                    }
+//                })
                 .connectTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS)
                 .retryOnConnectionFailure(true)
                 .hostnameVerifier(SSLSocketClient.getHostnameVerifier());
-//        if(interceptor!=null){
-//            builder.addInterceptor(interceptor);
-//        }
+        if(interceptor!=null){
+            builder.addInterceptor(interceptor);
+        }
         // 证书不为空则使用证书，否则忽略证书
         if (ValueUtil.isStrNotEmpty(cer)) {
             builder.sslSocketFactory(SSLSocketClient.getSSLSocketFactory(mContext, ""));        // https证书

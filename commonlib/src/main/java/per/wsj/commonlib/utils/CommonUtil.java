@@ -25,28 +25,34 @@ import java.util.Date;
 /**
  * 工具类，所有通用
  *
- * @author WBW
- *
  */
 public class CommonUtil {
-	private static CommonUtil util;
 
-	public static CommonUtil getInstance() { // 单例
-		if (util == null)
-			util = new CommonUtil();
-		return util;
-	}
+//	private static CommonUtil util;
+//
+//	public static CommonUtil getInstance() { // 单例
+//		if (util == null)
+//			util = new CommonUtil();
+//		return util;
+//	}
+//
+//	private CommonUtil() {
+//
+//	}
 
-	private CommonUtil() {
-
-	}
-
-	private Context context = null;
-	public void setContext(Context c){
-		this.context = c;
-	}
-	public Context getContext(){
-		return context;
+	public static String getVersionId(Context context) {
+		try {
+			//applicationId 获取
+			String pkName = context.getPackageName();
+			//versionName获取
+			String versionName = context.getPackageManager().getPackageInfo(
+					pkName, 0).versionName;
+			//versionCode获取
+			int versionCode = context.getPackageManager().getPackageInfo(pkName, 0).versionCode;
+			return String.valueOf(versionCode);
+		} catch (Exception e) {
+		}
+		return "";
 	}
 
 
@@ -352,7 +358,7 @@ public class CommonUtil {
 	 * @return
 	 * @throws IOException
 	 */
-	public InputStream getAssetsInputStream(Context paramContext,
+	public static InputStream getAssetsInputStream(Context paramContext,
 											String paramString) throws IOException {
 		return paramContext.getResources().getAssets().open(paramString);
 	}
