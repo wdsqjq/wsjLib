@@ -242,8 +242,16 @@ public class PullToRefreshLayout extends RelativeLayout {
                     OnPullProcessListener.REFRESH);
         }
         if (null == customRefreshView) {
-            refreshingView.clearAnimation();
-            refreshingView.setVisibility(View.GONE);
+            if (refreshingView != null) {
+                refreshingView.clearAnimation();
+                refreshingView.setVisibility(View.GONE);
+            }
+        }
+        if (null == customLoadmoreView) {     // 不是用的自定义
+            if (loadingView != null) {
+                loadingView.clearAnimation();
+                loadingView.setVisibility(View.GONE);
+            }
         }
         switch (refreshResult) {
             case SUCCEED:
