@@ -15,14 +15,13 @@ public class Font32 {
     private final static String ENCODE = "GB2312";
     private final static String ZK32 = "HZK32F";
 
-    private boolean[][] arr;
     public boolean[][] drawString(String str){
         byte[] data = null;
         int[] code = null;
         int byteCount;//到点阵数据的第几个字节了
         int lCount;//控制列
 
-        arr = new boolean[32][32]; // 插入的数组
+        boolean[][] arr = new boolean[32][32];
         //g.setColor(color);
         for(int i = 0;i < str.length();i ++){
             if(str.charAt(i) < 0x80){//非中文

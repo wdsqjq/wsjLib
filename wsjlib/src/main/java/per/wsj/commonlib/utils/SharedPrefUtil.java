@@ -49,7 +49,7 @@ public class SharedPrefUtil {
             editor.putLong(key, (Long)object);
         }
 
-        editor.commit();
+        editor.apply();
     }
 
 
@@ -95,6 +95,6 @@ public class SharedPrefUtil {
                 Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
         editor.clear();
-        editor.commit();
+        editor.apply();
     }
 }

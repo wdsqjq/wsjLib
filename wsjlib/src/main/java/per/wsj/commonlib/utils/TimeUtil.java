@@ -1,6 +1,7 @@
 package per.wsj.commonlib.utils;
 
 import java.text.SimpleDateFormat;
+import java.util.Locale;
 
 /**
  * Created by shiju.wang on 2018/1/16.
@@ -13,7 +14,7 @@ public class TimeUtil {
      * @return
      */
     public static String ts2Str(long time) {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINESE);
         return sdf.format(time);
     }
 }

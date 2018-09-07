@@ -21,11 +21,8 @@ public class ValueUtil {
         } else {
             // 判断是否全是全角空格
             value = value.replaceAll(" ", "").trim();
-            if (null == value || "".equals(value.trim())) {
-                return true;
-            }
+            return null == value || "".equals(value.trim());
         }
-        return false;
     }
 
     public static boolean isNotEmpty(Object object) {// 不为空方�?
@@ -42,11 +39,8 @@ public class ValueUtil {
         } else {
             // 判断是否全是全角空格
             value = value.replaceAll(" ", "").trim();
-            if (null == value || "".equals(value.trim())) {
-                return false;
-            }
+            return null != value && !"".equals(value.trim());
         }
-        return true;
     }
 
     public static String getString(Context mContext, int resId) {

@@ -11,6 +11,7 @@ import android.text.format.Formatter;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Locale;
 
 /**
  * Created by shiju.wang on 2017/11/10.
@@ -19,6 +20,7 @@ import java.io.IOException;
 public class FileUtil {
     /**
      * 获取文件大小
+     *
      * @param file
      * @return
      */
@@ -31,11 +33,11 @@ public class FileUtil {
             if (result < kb) {
                 return result + "B";
             } else if (result >= kb && result < mb) {
-                return String.format("%.2fKB", result / (double) kb);
+                return String.format(Locale.CHINESE, "%.2fKB", result / (double) kb);
             } else if (result >= mb && result < gb) {
-                return String.format("%.2fMB", result / (double) mb);
+                return String.format(Locale.CHINESE, "%.2fMB", result / (double) mb);
             } else if (result >= gb) {
-                return String.format("%.2fGB", result / (double) gb);
+                return String.format(Locale.CHINESE, "%.2fGB", result / (double) gb);
             }
         }
         return null;
@@ -43,31 +45,34 @@ public class FileUtil {
 
     /**
      * 获取sd卡总大小
+     *
      * @param context
      * @return
      */
-    public static String getSdTotalSize(Context context){
+    public static String getSdTotalSize(Context context) {
         StatFs sf = new StatFs("/mnt/sdcard");
         long blockSize = sf.getBlockSize();
         long totalBlocks = sf.getBlockCount();
-        return Formatter.formatFileSize(context, blockSize*totalBlocks);
+        return Formatter.formatFileSize(context, blockSize * totalBlocks);
     }
 
     /**
      * 获取sd卡可用大小
+     *
      * @param context
      * @return
      */
-    public static String getSdAvailableSize(Context context){
+    public static String getSdAvailableSize(Context context) {
         StatFs sf = new StatFs("/mnt/sdcard");
         long blockSize = sf.getBlockSize();
         long availableBlocks = sf.getAvailableBlocks();
-        return Formatter.formatFileSize(context, blockSize*availableBlocks);
+        return Formatter.formatFileSize(context, blockSize * availableBlocks);
     }
 
     /**
      * Try to return the absolute file path from the given Uri  兼容了file:///开头的 和 content://开头的情况
      * Uri转File路径
+     *
      * @param context
      * @param uri
      * @return the file path or null
@@ -96,7 +101,6 @@ public class FileUtil {
     }
 
     /**
-     *
      * @param path 传入路径字符串
      * @return File
      */
@@ -118,7 +122,6 @@ public class FileUtil {
     }
 
     /**
-     *
      * @param path 传入路径字符串
      * @return File
      */
@@ -137,16 +140,12 @@ public class FileUtil {
     }
 
     /**
-     *
      * @param path
      * @return
      */
     public boolean IsExist(String path) {
         File file = new File(path);
-        if (!file.exists())
-            return false;
-        else
-            return true;
+        return file.exists();
     }
 
     /**
@@ -258,13 +257,11 @@ public class FileUtil {
 
     /**
      * 外部存储是否可读写
+     *
      * @return
      */
-    public static boolean isExternalStorageWritable(){
+    public static boolean isExternalStorageWritable() {
         String state = Environment.getExternalStorageState();
-        if(Environment.MEDIA_MOUNTED.equals(state)){
-            return true;
-        }
-        return false;
+        return Environment.MEDIA_MOUNTED.equals(state);
     }
 }

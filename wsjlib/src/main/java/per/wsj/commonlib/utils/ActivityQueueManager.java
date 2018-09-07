@@ -88,7 +88,7 @@ public class ActivityQueueManager {
     @SuppressLint("NewApi")
     public void doPushActivity(Activity activity) {
         // 解决系统2.2版本的bug
-        if (android.os.Build.VERSION.SDK_INT > Build.VERSION_CODES.FROYO) {
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.FROYO) {
             mQueue.push(activity);
         } else {
             mQueue.addFirst(activity);

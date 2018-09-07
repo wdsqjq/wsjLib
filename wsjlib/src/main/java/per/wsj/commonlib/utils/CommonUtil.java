@@ -21,6 +21,7 @@ import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * 工具类，所有通用
@@ -96,8 +97,7 @@ public class CommonUtil {
 		fileout = new FileOutputStream(new File(path));
 		OutputStreamWriter writer = null;
 		writer = new OutputStreamWriter(fileout, "UTF-8");
-		BufferedWriter w = new BufferedWriter(writer); // 缓冲区
-		return w;
+		return new BufferedWriter(writer);
 	}
 
 	public InputStream getInputStream(String path) throws FileNotFoundException {
@@ -117,9 +117,7 @@ public class CommonUtil {
 		File f = new File(path);
 		if (!f.exists())
 			return false;
-		if (f.length() == 0)
-			return false;
-		return true;
+		return f.length() != 0;
 	}
 
 	/**
@@ -163,8 +161,7 @@ public class CommonUtil {
 	 * @throws Exception
 	 */
 	public static InputStream byteTOInputStream(byte[] in) {
-		ByteArrayInputStream is = new ByteArrayInputStream(in);
-		return is;
+		return new ByteArrayInputStream(in);
 	}
 
 	/**
@@ -319,11 +316,10 @@ public class CommonUtil {
 
 	// 把字加长，使其可以滚动，在音乐界面
 	public String dealString(String st, int size) {
-		int value = size;
-		if (st.length() >= value)
+		if (st.length() >= size)
 			return "  " + st + "  ";
 		else {
-			int t = (value - st.length()) / 2;
+			int t = (size - st.length()) / 2;
 			for (int i = 0; i < t; i++) {
 				st = " " + st + "  ";
 			}
@@ -332,15 +328,14 @@ public class CommonUtil {
 	}
 
 	public String getTimeByFormat(String format) {
-		SimpleDateFormat formatter = new SimpleDateFormat(format);
+		SimpleDateFormat formatter = new SimpleDateFormat(format, Locale.CHINESE);
 		Date curDate = new Date(System.currentTimeMillis());// 获取当前时间
-		String str = formatter.format(curDate);
-		return str;
+		return formatter.format(curDate);
 	}
 
 	public String getDateTimeBylong(long time_data, String dateformat_batt) {
 		Date date = new Date(time_data);
-		SimpleDateFormat format = new SimpleDateFormat(dateformat_batt);
+		SimpleDateFormat format = new SimpleDateFormat(dateformat_batt, Locale.CHINESE);
 		return format.format(date);
 	}
 
