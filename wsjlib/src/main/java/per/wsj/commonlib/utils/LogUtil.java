@@ -4,7 +4,7 @@ import android.util.Log;
 
 public class LogUtil {
     private static boolean DEBUG = true;
-    public static final String TAG = "SMART_EXERBOOK_PARENT";
+    public static final String TAG = "Wsj_Lib";
 
     public static void LOGI(String tag, String msg) {
         if (DEBUG) {
