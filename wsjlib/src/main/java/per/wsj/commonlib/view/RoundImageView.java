@@ -42,6 +42,12 @@ public class RoundImageView extends AppCompatImageView {
 
         mPaint = new Paint();
         mEdgePaint = new Paint();
+        mEdgePaint.setAntiAlias(true);
+        mEdgePaint.setStyle(Paint.Style.STROKE);
+        mEdgePaint.setColor(Color.parseColor("#999999"));
+        mEdgePaint.setStrokeWidth(mStroke);
+        PathEffect effects = new DashPathEffect(new float[]{5, 5, 5, 5}, 1);
+        mEdgePaint.setPathEffect(effects);
     }
 
 
@@ -66,12 +72,6 @@ public class RoundImageView extends AppCompatImageView {
     }
 
     private void drawEdge(Canvas canvas, Bitmap b) {
-        mEdgePaint.setAntiAlias(true);
-        mEdgePaint.setStyle(Paint.Style.STROKE);
-        mEdgePaint.setColor(Color.parseColor("#999999"));
-        mEdgePaint.setStrokeWidth(mStroke);
-        PathEffect effects = new DashPathEffect(new float[]{5, 5, 5, 5}, 1);
-        mEdgePaint.setPathEffect(effects);
         int x = getWidth();
         canvas.drawCircle(x / 2, x / 2, x/2 - mStroke , mEdgePaint);
     }
