@@ -2,6 +2,7 @@ package per.wsj.commonlib.utils;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -19,31 +20,34 @@ public class BitmapUtil {
 
     /**
      * drawable转bitmap
+     *
      * @param drawable
      * @return
      */
-    public static Bitmap drawable2Bitmap(Drawable drawable){
-        BitmapDrawable db= (BitmapDrawable) drawable;
+    public static Bitmap drawable2Bitmap(Drawable drawable) {
+        BitmapDrawable db = (BitmapDrawable) drawable;
         return db.getBitmap();
     }
 
     /**
      * bitmap转drawable
+     *
      * @param bitmap
      * @return
      */
-    public static Drawable bitmap2Drawable(Bitmap bitmap){
-        return new BitmapDrawable(null,bitmap);
+    public static Drawable bitmap2Drawable(Bitmap bitmap) {
+        return new BitmapDrawable(null, bitmap);
     }
 
     /**
      * bitmap添加水印
+     *
      * @param src
      * @param watermark
      * @return
      */
     private Bitmap addWatermark(Bitmap src, Bitmap watermark) {
-        if (src == null || watermark  == null) {
+        if (src == null || watermark == null) {
             return src;
         }
 
@@ -75,12 +79,13 @@ public class BitmapUtil {
 
     /**
      * Bitmap保存为图片文件
+     *
      * @param bitmap
      * @param fileName
      * @return
      */
     public static boolean saveBitmap(Context context, Bitmap bitmap, String fileName) {
-        String  imagePath = context.getFilesDir().getAbsolutePath() + "/temp.png";
+        String imagePath = context.getFilesDir().getAbsolutePath() + "/temp.png";
         File file = new File(imagePath);
         if (!file.exists()) {
             file.mkdir();
@@ -98,6 +103,35 @@ public class BitmapUtil {
             e.printStackTrace();
         }
         return true;
+    }
+
+    /**
+     * 根据分辨率压缩图片比例
+     *
+     * @param w
+     * @param h
+     * @return
+     */
+    public static Bitmap compressByResolution(Context context, int resourceId, int w, int h) {
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+//        BitmapFactory.decodeFile(imgPath, opts);
+        BitmapFactory.decodeResource(context.getResources(), resourceId, options);
+
+        float width = options.outWidth;
+        float height = options.outHeight;
+        int widthScale = (int) (width / w);
+        int heightScale = (int) (height / h);
+
+        int scale = Math.min(widthScale, heightScale);//保留压缩比例小的
+
+        if (scale < 1) {
+            scale = 1;
+        }
+        options.inSampleSize = scale;
+        options.inJustDecodeBounds = false;
+        Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), resourceId, options);
+        return bitmap;
     }
 
 }
