@@ -4,7 +4,7 @@ import android.util.Log;
 
 public class LogUtil {
     private static boolean DEBUG = true;
-    public static final String TAG = "AND_COMMUNITY";
+    public static final String TAG = "wsjLib";
 
     public static void LOGI(String tag, String msg) {
         if (DEBUG) {
