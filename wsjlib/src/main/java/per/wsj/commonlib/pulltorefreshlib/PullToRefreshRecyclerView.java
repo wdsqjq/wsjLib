@@ -2,15 +2,14 @@ package per.wsj.commonlib.pulltorefreshlib;
 
 import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 
-public class PullToRefreshRecyclerView extends BaseRecyclerView implements Pullable {
+public class PullToRefreshRecyclerView extends RecyclerView implements Pullable {
 
     private double scale = 1;   //抛掷速度,滚动阻力
 
     private LinearLayoutManager mLinearLayoutManager;
-
-    private DatasChangedListener mListener;
 
 
     public PullToRefreshRecyclerView(Context context) {
@@ -23,28 +22,6 @@ public class PullToRefreshRecyclerView extends BaseRecyclerView implements Pulla
 
     public PullToRefreshRecyclerView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-    }
-
-    @Override
-    protected void toggleEmptyView() {
-        if (mListener != null) {
-            mListener.toggleEmptyView();
-        }
-    }
-
-    @Override
-    protected void toggleOriginView() {
-        if (mListener != null) {
-            mListener.toggleOriginView();
-        }
-    }
-
-    @Override
-    protected int getEmptyCount() {
-        if (mListener != null) {
-            return mListener.getEmptyCount();
-        }
-        return 0;
     }
 
     @Override
@@ -91,30 +68,13 @@ public class PullToRefreshRecyclerView extends BaseRecyclerView implements Pulla
         return mLinearLayoutManager;
     }
 
-    /**
-     * 设置数据监听
-     *
-     * @param listener
-     */
-    public void setDataChangedListener(DatasChangedListener listener) {
-        this.mListener = listener;
-    }
-
-    public interface DatasChangedListener {
-        void toggleEmptyView();
-
-        void toggleOriginView();
-
-        int getEmptyCount();
-    }
-
-    public void setFlingScale(double scale){
-        this.scale=scale;
+    public void setFlingScale(double scale) {
+        this.scale = scale;
     }
 
     @Override
     public boolean fling(int velocityX, int velocityY) {
-        velocityY*=scale;
+        velocityY *= scale;
         return super.fling(velocityX, velocityY);
     }
 }

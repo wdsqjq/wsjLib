@@ -25,7 +25,6 @@ import per.wsj.commonlib.R;
 /**
  * 自定义的布局，用来管理三个子控件，其中一个是下拉头，一个是包含内容的pullableView（可以是实现Pullable接口的的任何View），
  * 还有一个上拉头，更多详解见博客http://blog.csdn.net/zhongkejingwang/article/details/38868463
- *
  */
 public class PullToRefreshLayout extends RelativeLayout {
     public static final String TAG = "PullToRefreshLayout";
@@ -134,7 +133,7 @@ public class PullToRefreshLayout extends RelativeLayout {
     /**
      * 下拉中
      */
-    private boolean isPulling=false;
+    private boolean isPulling = false;
 
     public PullToRefreshLayout(Context context) {
         this(context, null, 0);
@@ -671,14 +670,14 @@ public class PullToRefreshLayout extends RelativeLayout {
                         + loadmoreView.getMeasuredHeight());
 
         if (pullDownY > 0 && !isPulling) {
-            if(mOnPullingListener!=null) {
+            if (mOnPullingListener != null) {
                 mOnPullingListener.onPulling();
-                isPulling=true;
+                isPulling = true;
             }
-        }else if(pullDownY==0 && isPulling){
-            if(mOnPullingListener!=null) {
+        } else if (pullDownY == 0 && isPulling) {
+            if (mOnPullingListener != null) {
                 mOnPullingListener.onPulled();
-                isPulling=false;
+                isPulling = false;
             }
         }
     }
@@ -746,6 +745,62 @@ public class PullToRefreshLayout extends RelativeLayout {
     }
 
     /**
+     * 回滚操作
+     */
+    public void springback() {
+        // 回弹速度随下拉距离moveDeltaY增大而增大
+        mMoveSpeed = (float) (8 + 5 * Math.tan(Math.PI / 2
+                / getMeasuredHeight()
+                * (pullDownY + Math.abs(pullUpY))));
+        if (!isTouch) {
+            // 正在刷新，且没有往上推的话则悬停，显示"正在刷新..."
+            if (state == REFRESHING
+                    && pullDownY <= refreshDist) {
+                pullDownY = refreshDist;
+                timer.cancel();
+            } else if (state == LOADING
+                    && -pullUpY <= loadmoreDist) {
+                pullUpY = -loadmoreDist;
+                timer.cancel();
+            }
+        }
+        if (pullDownY > 0)
+            pullDownY -= mMoveSpeed;
+        else if (pullUpY < 0)
+            pullUpY += mMoveSpeed;
+        if (pullDownY < 0) {
+            // 已完成回弹
+            pullDownY = 0;
+            if (null == customRefreshView) {
+                pullDownView.clearAnimation();
+            }
+            // 隐藏下拉头时有可能还在刷新，只有当前状态不是正在刷新时才改变状态
+            if (state != REFRESHING && state != LOADING)
+                changeState(INIT);
+            timer.cancel();
+            requestLayout();
+        }
+        if (pullUpY > 0) {
+            // 已完成回弹
+            pullUpY = 0;
+            if (null == customLoadmoreView) {
+                pullUpView.clearAnimation();
+            }
+            // 隐藏上拉头时有可能还在刷新，只有当前状态不是正在刷新时才改变状态
+            if (state != REFRESHING && state != LOADING)
+                changeState(INIT);
+            timer.cancel();
+            requestLayout();
+        }
+        // 刷新布局,会自动调用onLayout
+        requestLayout();
+        // 没有拖拉或者回弹完成
+        if (pullDownY + Math.abs(pullUpY) == 0) {
+            timer.cancel();
+        }
+    }
+
+    /**
      * 执行自动回滚的handler
      */
     static class UpdateHandler extends Handler {
@@ -758,63 +813,9 @@ public class PullToRefreshLayout extends RelativeLayout {
         @Override
         public void handleMessage(Message msg) {
             PullToRefreshLayout layout = mLayout.get();
-            if (null != layout) {
-                // 回弹速度随下拉距离moveDeltaY增大而增大
-                layout.mMoveSpeed = (float) (8 + 5 * Math.tan(Math.PI / 2
-                        / layout.getMeasuredHeight()
-                        * (layout.pullDownY + Math.abs(layout.pullUpY))));
-                if (!layout.isTouch) {
-                    // 正在刷新，且没有往上推的话则悬停，显示"正在刷新..."
-                    if (layout.state == REFRESHING
-                            && layout.pullDownY <= layout.refreshDist) {
-                        layout.pullDownY = layout.refreshDist;
-                        layout.timer.cancel();
-                    } else if (layout.state == LOADING
-                            && -layout.pullUpY <= layout.loadmoreDist) {
-                        layout.pullUpY = -layout.loadmoreDist;
-                        layout.timer.cancel();
-                    }
-
-                }
-                if (layout.pullDownY > 0)
-                    layout.pullDownY -= layout.mMoveSpeed;
-                else if (layout.pullUpY < 0)
-                    layout.pullUpY += layout.mMoveSpeed;
-                if (layout.pullDownY < 0) {
-                    // 已完成回弹
-                    layout.pullDownY = 0;
-                    if (null == layout.customRefreshView) {
-                        layout.pullDownView.clearAnimation();
-                    }
-                    // 隐藏下拉头时有可能还在刷新，只有当前状态不是正在刷新时才改变状态
-                    if (layout.state != REFRESHING && layout.state != LOADING)
-                        layout.changeState(INIT);
-                    layout.timer.cancel();
-                    layout.requestLayout();
-                }
-                if (layout.pullUpY > 0) {
-                    // 已完成回弹
-                    layout.pullUpY = 0;
-                    if (null == layout.customLoadmoreView) {
-                        layout.pullUpView.clearAnimation();
-                    }
-                    // 隐藏上拉头时有可能还在刷新，只有当前状态不是正在刷新时才改变状态
-                    if (layout.state != REFRESHING && layout.state != LOADING)
-                        layout.changeState(INIT);
-                    layout.timer.cancel();
-                    layout.requestLayout();
-                }
-                // 刷新布局,会自动调用onLayout
-                layout.requestLayout();
-                // 没有拖拉或者回弹完成
-                if (layout.pullDownY + Math.abs(layout.pullUpY) == 0)
-                    layout.timer.cancel();
-            }
+            layout.springback();
         }
-
     }
-
-    ;
 
     public void setOnPullListener(OnPullListener listener) {
         mListener = listener;
