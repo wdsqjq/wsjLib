@@ -85,6 +85,23 @@ public class ActivityQueueManager {
         mInstance.doFinishAll();
     }
 
+    /**
+     * finish all activity from queue except current
+     *
+     * @return void
+     * @throws
+     */
+    public void finishAllOtherActivity(Activity activity) {
+        Iterator<Activity> it = mQueue.iterator();
+        while (it.hasNext()) {
+            Activity a = it.next();
+            if (!activity.getLocalClassName().equals(a.getLocalClassName())) {
+                it.remove();
+                a.finish();
+            }
+        }
+    }
+
     @SuppressLint("NewApi")
     public void doPushActivity(Activity activity) {
         // 解决系统2.2版本的bug
