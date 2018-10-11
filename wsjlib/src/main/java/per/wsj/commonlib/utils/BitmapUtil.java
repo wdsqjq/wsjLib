@@ -68,7 +68,8 @@ public class BitmapUtil {
             Canvas cv = new Canvas(bitmap);
             cv.drawBitmap(src, 0, 0, null);
             cv.drawBitmap(watermark, sWid - wWid - 5, sHei - wHei - 5, null);
-            cv.save(Canvas.ALL_SAVE_FLAG);
+//            cv.save(Canvas.ALL_SAVE_FLAG);
+            cv.save();
             cv.restore();
         } catch (Exception e) {
             bitmap = null;

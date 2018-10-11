@@ -1,12 +1,12 @@
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 26
-    buildToolsVersion '28.0.2'
+    compileSdkVersion 28
+    buildToolsVersion rootProject.ext.buildToolVersion
 
     defaultConfig {
         minSdkVersion 16
-        targetSdkVersion 26
+        targetSdkVersion 28
         versionCode 1
         versionName "1.0"
 
@@ -27,8 +27,8 @@ android {
 }
 
 dependencies {
-    implementation "com.android.support:appcompat-v7:26.0.2"
-    implementation "com.android.support:recyclerview-v7:26.0.2"
+    implementation "com.android.support:appcompat-v7:$rootProject.ext.supportLibVersion"
+    implementation "com.android.support:recyclerview-v7:$rootProject.ext.supportLibVersion"
     //adapter
 //    implementation 'com.zhy:base-rvadapter:3.0.3'
 //    implementation 'io.reactivex.rxjava2:rxjava:2.0.1'
