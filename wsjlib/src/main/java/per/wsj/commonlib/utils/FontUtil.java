@@ -33,4 +33,14 @@ public class FontUtil {
         return height;
     }
 
+    /**
+     * 获取文字开始绘制的Y(从中心到baseline的距离）
+     *
+     * @param paint
+     * @return
+     */
+    public static float getTextStartY(Paint paint) {
+        Paint.FontMetrics fontMetrics = paint.getFontMetrics();
+        return (fontMetrics.bottom - fontMetrics.top) / 2 - fontMetrics.bottom;
+    }
 }
