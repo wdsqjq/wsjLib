@@ -62,7 +62,7 @@ public class CircleImageView extends android.support.v7.widget.AppCompatImageVie
 
         Bitmap bitmap = ((BitmapDrawable) getDrawable()).getBitmap();
         //根据bitmap创建Shader
-        BitmapShader shader = new BitmapShader(bitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
+        BitmapShader shader = new BitmapShader(bitmap, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT);
         // 获取缩放比例
         int bWidth = bitmap.getWidth();
         int bHeight = bitmap.getHeight();
@@ -70,6 +70,7 @@ public class CircleImageView extends android.support.v7.widget.AppCompatImageVie
         float scaleY = (float) mHeight / bHeight;
         float scale = Math.min(scaleX, scaleY);
 
+        matrix.reset();
         // 创建矩阵设置缩放比例
         matrix.postScale(scale, scale);
         //
