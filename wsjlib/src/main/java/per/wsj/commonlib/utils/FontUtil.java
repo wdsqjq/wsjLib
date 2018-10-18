@@ -3,6 +3,9 @@ package per.wsj.commonlib.utils;
 import android.graphics.Paint;
 import android.graphics.Rect;
 
+/**
+ * create by shiju.wang
+ */
 public class FontUtil {
 
     /**
