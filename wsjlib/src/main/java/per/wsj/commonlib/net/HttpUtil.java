@@ -3,7 +3,6 @@ package per.wsj.commonlib.net;
 import android.content.Context;
 
 import com.alibaba.fastjson.JSON;
-import com.google.gson.Gson;
 
 import org.json.JSONObject;
 
@@ -13,9 +12,7 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
-
 import javax.net.ssl.SSLHandshakeException;
-
 import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -31,7 +28,6 @@ import per.wsj.commonlib.utils.ValueUtil;
 import retrofit2.HttpException;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * 请继承该类，重写参数
@@ -43,32 +39,27 @@ public class HttpUtil {
 
     protected ApiService apiService;
 
+    protected String mBaseUrl;
+
     protected OkHttpClient okHttpClient;
 
     protected Context mContext;
 
+    protected OkHttpClient.Builder builder;
+
     protected HttpUtil(Context context, String baseUrl, String cer, Interceptor interceptor) {
         mContext = context;
+        mBaseUrl=baseUrl;
 
-        OkHttpClient.Builder builder = new OkHttpClient.Builder()
+        builder = new OkHttpClient.Builder()
 //                                .addNetworkInterceptor(
 //                                        new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.HEADERS))
 //                                .cookieJar(new NovateCookieManger(context))
-//                .addInterceptor(new Interceptor() {
-//                    @Override
-//                    public Response intercept(Chain chain) throws IOException {
-//                        Request original = chain.request();
-//                        Request.Builder requestBuilder = original.newBuilder()
-//                                .addHeader("header-key", "value1")
-//                                .addHeader("header-key", "value2");
-//                        Request request = requestBuilder.build();
-//                        return chain.proceed(request);
-//                    }
-//                })
                 .connectTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS)
                 .retryOnConnectionFailure(true)
                 .hostnameVerifier(SSLSocketClient.getHostnameVerifier());
-        if(interceptor!=null){
+
+        if (interceptor != null) {
             builder.addInterceptor(interceptor);
         }
         // 证书不为空则使用证书，否则忽略证书
@@ -82,7 +73,7 @@ public class HttpUtil {
 
         Retrofit retrofit = new Retrofit.Builder()
                 .client(okHttpClient)
-                .addConverterFactory(GsonConverterFactory.create())
+//                .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .baseUrl(baseUrl)
                 .build();
@@ -102,7 +93,7 @@ public class HttpUtil {
      * @param <T>
      */
     public <T> void get(String url, Map<String, Object> param, final Class clazz, final CallBack<T> callBack) {
-        getRequest(url,param,clazz,callBack);
+        getRequest(url, param, clazz, callBack);
     }
 
     public <T> void get(String url, Class clazz, ListCallBack<T> callBack) {
@@ -118,7 +109,7 @@ public class HttpUtil {
      * @param <T>
      */
     public <T> void get(String url, Map<String, Object> param, final Class clazz, final ListCallBack<T> callBack) {
-        getRequest(url,param,clazz,callBack);
+        getRequest(url, param, clazz, callBack);
     }
 
     public <T> void getRequest(String url, Map<String, Object> param, final Class clazz, final BaseCallBack<T> callBack) {
@@ -138,7 +129,7 @@ public class HttpUtil {
     }
 
     public <T> void post(String url, Class clazz, ListCallBack<T> callBack) {
-        post(url,null,clazz,callBack);
+        post(url, null, clazz, callBack);
     }
 
     /**
@@ -150,11 +141,11 @@ public class HttpUtil {
      * @param <T>
      */
     public <T> void post(String url, Object param, final Class clazz, final ListCallBack<T> callBack) {
-        postRequest(url,param,clazz,callBack);
+        postRequest(url, param, clazz, callBack);
     }
 
     public <T> void post(String url, Class clazz, CallBack<T> callBack) {
-        post(url,null,clazz,callBack);
+        post(url, null, clazz, callBack);
     }
 
     /**
@@ -166,14 +157,15 @@ public class HttpUtil {
      * @param <T>
      */
     public <T> void post(String url, Object param, final Class clazz, final CallBack<T> callBack) {
-        postRequest(url,param,clazz,callBack);
+        postRequest(url, param, clazz, callBack);
     }
 
     public <T> void postRequest(String url, Object param, final Class clazz, final BaseCallBack<T> callBack) {
         if (callBack == null) {
             return;
         }
-        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), new Gson().toJson(param));
+//        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), new Gson().toJson(param));
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), JSON.toJSONString(param));
         apiService.executePost(url, requestBody)
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
@@ -214,7 +206,6 @@ public class HttpUtil {
                 } else {
                     ((CallBack) callBack).onSuccess((T) JSON.parseObject(detail, clazz), code, msg);
                 }
-
             } catch (Exception e) {
                 onError(e);
             }
