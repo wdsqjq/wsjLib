@@ -31,16 +31,15 @@ dependencies {
     implementation "com.android.support:recyclerview-v7:$rootProject.ext.supportLibVersion"
     //adapter
 //    implementation 'com.zhy:base-rvadapter:3.0.3'
-//    implementation 'io.reactivex.rxjava2:rxjava:2.0.1'
-    implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
-//    implementation 'com.squareup.okhttp3:okhttp:3.9.1'
-    implementation 'com.squareup.okhttp3:logging-interceptor:3.6.0'
 
-    implementation 'com.squareup.retrofit2:retrofit:2.3.0'
-    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
-//    implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
-    //    compile 'com.google.code.gson:gson:2.5' // gson
+    // 网络相关
+    api 'io.reactivex.rxjava2:rxandroid:2.0.1'
+    api 'com.squareup.okhttp3:okhttp:3.9.1'
+    api 'com.squareup.retrofit2:retrofit:2.3.0'
+    api 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
+//    api 'com.squareup.retrofit2:converter-gson:2.3.0'
     //glide
-    implementation 'com.github.bumptech.glide:glide:3.8.0'
-    compile files('libs/fastjson-1.2.28.jar')
+    api "com.github.bumptech.glide:glide:4.0.0"
+
+    api files('libs/fastjson-1.2.28.jar')
 }
