@@ -116,7 +116,7 @@ public class HttpUtil {
         getRequest(url, param, clazz, callBack);
     }
 
-    public <T> void getRequest(String url, Map<String, Object> param, final Class clazz, final BaseCallBack<T> callBack) {
+    private <T> void getRequest(String url, Map<String, Object> param, final Class clazz, final BaseCallBack<T> callBack) {
         if (callBack == null) {
             return;
         }
@@ -164,7 +164,7 @@ public class HttpUtil {
         postRequest(url, param, clazz, callBack);
     }
 
-    public <T> void postRequest(String url, Object param, final Class clazz, final BaseCallBack<T> callBack) {
+    private <T> void postRequest(String url, Object param, final Class clazz, final BaseCallBack<T> callBack) {
         if (callBack == null) {
             return;
         }

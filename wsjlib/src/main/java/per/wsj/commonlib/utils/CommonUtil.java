@@ -16,11 +16,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.LineNumberReader;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 /**
@@ -368,5 +371,25 @@ public class CommonUtil {
 		//获取资源图片
 		//InputStream is = mContext.getResources().openRawResource(resId);
 		return BitmapFactory.decodeStream(is,null,opt);
+	}
+
+	/**
+	 * List深拷贝
+	 * @param src
+	 * @param <T>
+	 * @return
+	 * @throws IOException
+	 * @throws ClassNotFoundException
+	 */
+	public static <T> List<T> deepCopy(List<T> src) throws IOException, ClassNotFoundException {
+		ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
+		ObjectOutputStream out = new ObjectOutputStream(byteOut);
+		out.writeObject(src);
+
+		ByteArrayInputStream byteIn = new ByteArrayInputStream(byteOut.toByteArray());
+		ObjectInputStream in = new ObjectInputStream(byteIn);
+		@SuppressWarnings("unchecked")
+		List<T> dest = (List<T>) in.readObject();
+		return dest;
 	}
 }
