@@ -12,7 +12,9 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+
 import javax.net.ssl.SSLHandshakeException;
+
 import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -47,9 +49,11 @@ public class HttpUtil {
 
     protected OkHttpClient.Builder builder;
 
+    protected String mCode = "code", mMsg = "msg", mDetail = "detail";
+
     protected HttpUtil(Context context, String baseUrl, String cer, Interceptor interceptor) {
         mContext = context;
-        mBaseUrl=baseUrl;
+        mBaseUrl = baseUrl;
 
         builder = new OkHttpClient.Builder()
 //                                .addNetworkInterceptor(
@@ -160,7 +164,7 @@ public class HttpUtil {
         postRequest(url, param, clazz, callBack);
     }
 
-    public <T> void postRequest(String url, Object param, final Class clazz, final BaseCallBack<T> callBack) {
+    private <T> void postRequest(String url, Object param, final Class clazz, final BaseCallBack<T> callBack) {
         if (callBack == null) {
             return;
         }
@@ -197,14 +201,14 @@ public class HttpUtil {
             try {
                 String responseBody = value.string();
                 JSONObject jsonObject = new JSONObject(responseBody);
-                String code = jsonObject.getString("code");
-                String msg = jsonObject.getString("msg");
-                String detail = jsonObject.getString("detail");
+                String code = jsonObject.getString(mCode);
+                String msg = jsonObject.getString(mMsg);
+                String detail = jsonObject.getString(mDetail);
                 if (callBack instanceof ListCallBack) {
                     ArrayList<T> result = (ArrayList<T>) JSON.parseArray(detail, clazz);
                     ((ListCallBack) callBack).onSuccess(result, code, msg);
                 } else {
-                    ((CallBack) callBack).onSuccess((T) JSON.parseObject(detail, clazz), code, msg);
+                    ((CallBack) callBack).onSuccess(JSON.parseObject(detail, clazz), code, msg);
                 }
             } catch (Exception e) {
                 onError(e);
