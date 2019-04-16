@@ -4,7 +4,7 @@ package per.wsj.commonlib.pulltorefreshlib;
 import android.content.Context;
 import android.util.AttributeSet;
 
-public class PullableTextView extends android.support.v7.widget.AppCompatTextView implements Pullable
+public class PullableTextView extends androidx.appcompat.widget.AppCompatTextView implements Pullable
 {
 
 	public PullableTextView(Context context)

@@ -18,7 +18,7 @@ import android.view.ViewTreeObserver;
  * Created by shiju.wang on 2017/10/10.
  */
 
-public class ZoomImageView extends android.support.v7.widget.AppCompatImageView implements ViewTreeObserver.OnGlobalLayoutListener, ScaleGestureDetector.OnScaleGestureListener, View.OnTouchListener {
+public class ZoomImageView extends androidx.appcompat.widget.AppCompatImageView implements ViewTreeObserver.OnGlobalLayoutListener, ScaleGestureDetector.OnScaleGestureListener, View.OnTouchListener {
     private boolean mOnce;
     //初始化时所发的比例
     private float mInitScale;

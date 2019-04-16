@@ -1,6 +1,6 @@
 package per.wsj.commonlib.permission;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 /**
  * Created by shiju.wang on 2018/3/1.
