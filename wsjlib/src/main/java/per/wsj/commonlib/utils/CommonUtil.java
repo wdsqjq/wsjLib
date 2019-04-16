@@ -32,18 +32,6 @@ import java.util.Locale;
  */
 public class CommonUtil {
 
-//	private static CommonUtil util;
-//
-//	public static CommonUtil getInstance() { // 单例
-//		if (util == null)
-//			util = new CommonUtil();
-//		return util;
-//	}
-//
-//	private CommonUtil() {
-//
-//	}
-
 	public static String getVersionId(Context context) {
 		try {
 			//applicationId 获取
