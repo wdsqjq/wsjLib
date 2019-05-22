@@ -14,6 +14,7 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import javax.net.ssl.SSLHandshakeException;
+import javax.net.ssl.X509TrustManager;
 
 import io.reactivex.Observable;
 import io.reactivex.Observer;
@@ -68,7 +69,7 @@ public class HttpUtil {
         }
         // 证书不为空则使用证书，否则忽略证书
         if (ValueUtil.isStrNotEmpty(cer)) {
-            builder.sslSocketFactory(SSLSocketClient.getSSLSocketFactory(mContext, ""));        // https证书
+            builder.sslSocketFactory(SSLSocketClient.getSSLSocketFactory(mContext, cer));        // https证书
         } else {
             builder.sslSocketFactory(SSLSocketClient.getSSLSocketFactoryIgnore());
         }
@@ -221,9 +222,10 @@ public class HttpUtil {
                 callBack.onError(e, mContext.getString(R.string.net_error_timeout));
             } else if (e instanceof HttpException
                     || e instanceof ConnectException
-                    || e instanceof SSLHandshakeException
                     || e instanceof UnknownHostException) {
                 callBack.onError(e, mContext.getString(R.string.net_error_nonet));
+            } else if (e instanceof SSLHandshakeException) {
+                callBack.onError(e, mContext.getString(R.string.net_error_proxy));
             } else {
                 callBack.onError(e, e.toString());
             }

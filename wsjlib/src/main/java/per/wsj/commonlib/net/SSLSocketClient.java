@@ -2,7 +2,11 @@ package per.wsj.commonlib.net;
 
 import android.content.Context;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
@@ -24,68 +28,83 @@ import javax.net.ssl.X509TrustManager;
 public class SSLSocketClient {
 
     //获取这个SSLSocketFactory 忽略证书
-    public static SSLSocketFactory getSSLSocketFactoryIgnore() {
+    static SSLSocketFactory getSSLSocketFactoryIgnore() {
         try {
             SSLContext sslContext = SSLContext.getInstance("SSL");
-            sslContext.init(null, getTrustManager(), new SecureRandom());
+            sslContext.init(null, getTrustManager(null, null), new SecureRandom());
             return sslContext.getSocketFactory();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 
-    //获取TrustManager
-    private static TrustManager[] getTrustManager() {
-        TrustManager[] trustAllCerts = new TrustManager[]{
-                new X509TrustManager() {
-                    @Override
-                    public void checkClientTrusted(X509Certificate[] chain, String authType) throws CertificateException {
-
-                    }
-
-                    @Override
-                    public void checkServerTrusted(X509Certificate[] chain, String authType) throws CertificateException {
-
-                    }
-
-                    @Override
-                    public X509Certificate[] getAcceptedIssuers() {
-                        return new X509Certificate[]{};
-//                        return new X509Certificate[0];
-                    }
-                }
-        };
-        return trustAllCerts;
-    }
-
     /**
-     *
      * @return
      */
-    public static SSLSocketFactory getSSLSocketFactory(Context context,String assetName){
+    static SSLSocketFactory getSSLSocketFactory(Context context, String assetName) {
         try {
-            CertificateFactory certificateFactory = CertificateFactory.getInstance("X.509");
-            KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
-            keyStore.load(null);
-            String certificateAlias = Integer.toString(0);
-            keyStore.setCertificateEntry(certificateAlias, certificateFactory.generateCertificate(context.getAssets().open(assetName)));//拷贝好的证书
+            TrustManager[] trustManager = getTrustManager(context, assetName);
 
-            final TrustManagerFactory trustManagerFactory =
-                    TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
-            trustManagerFactory.init(keyStore);
             SSLContext sslContext = SSLContext.getInstance("TLS");
-            sslContext.init
-                    (
-                            null,
-                            trustManagerFactory.getTrustManagers(),
-                            new SecureRandom()
-                    );
+            sslContext.init(null,
+                    new TrustManager[]{new MyTrustManager(chooseTrustManager(trustManager))},
+                    new SecureRandom());
             return sslContext.getSocketFactory();
         } catch (Exception e) {
             e.printStackTrace();
-//            ToastUtil.show(e.toString());
         }
         return null;
+    }
+
+    /**
+     * 获取TrustManager
+     *
+     * @param assetName 为空时信任所有证书，否则根据证书生成
+     * @return
+     */
+    private static TrustManager[] getTrustManager(Context context, String assetName) throws CertificateException, KeyStoreException, IOException, NoSuchAlgorithmException {
+        TrustManager[] trustManagers;
+        if (context == null) {
+            trustManagers = new TrustManager[]{
+                    new X509TrustManager() {
+                        @Override
+                        public void checkClientTrusted(X509Certificate[] chain, String authType) throws CertificateException {
+
+                        }
+
+                        @Override
+                        public void checkServerTrusted(X509Certificate[] chain, String authType) throws CertificateException {
+
+                        }
+
+                        @Override
+                        public X509Certificate[] getAcceptedIssuers() {
+                            return new X509Certificate[]{};
+                        }
+                    }
+            };
+        } else {
+            CertificateFactory certificateFactory = CertificateFactory.getInstance("X.509");
+            KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
+            keyStore.load(null);
+            InputStream is = context.getAssets().open(assetName);
+            String certificateAlias = Integer.toString(0);
+            keyStore.setCertificateEntry(certificateAlias, certificateFactory.generateCertificate(is));//拷贝好的证书
+            is.close();
+//            InputStream[] certificates = {is};
+//            int index = 0;
+//            for (InputStream certificate : certificates) {
+//                String certificateAlias = Integer.toString(index++);
+//                keyStore.setCertificateEntry(certificateAlias, certificateFactory.generateCertificate(certificate));
+//                certificate.close();
+//            }
+
+            TrustManagerFactory trustManagerFactory =
+                    TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
+            trustManagerFactory.init(keyStore);
+            trustManagers = trustManagerFactory.getTrustManagers();
+        }
+        return trustManagers;
     }
 
     //获取HostnameVerifier
@@ -97,5 +116,53 @@ public class SSLSocketClient {
             }
         };
         return hostnameVerifier;
+    }
+
+    private static X509TrustManager chooseTrustManager(TrustManager[] trustManagers) {
+        for (TrustManager trustManager : trustManagers) {
+            if (trustManager instanceof X509TrustManager) {
+                return (X509TrustManager) trustManager;
+            }
+        }
+        return null;
+    }
+
+    private static class MyTrustManager implements X509TrustManager {
+        private X509TrustManager defaultTrustManager;
+        private X509TrustManager localTrustManager;
+
+        public MyTrustManager(X509TrustManager localTrustManager) throws NoSuchAlgorithmException, KeyStoreException {
+            TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
+            trustManagerFactory.init((KeyStore) null);
+            defaultTrustManager = chooseTrustManager(trustManagerFactory.getTrustManagers());
+            this.localTrustManager = localTrustManager;
+        }
+
+        @Override
+        public void checkClientTrusted(X509Certificate[] chain, String authType) throws CertificateException {
+
+        }
+
+        @Override
+        public void checkServerTrusted(X509Certificate[] chain, String authType) throws CertificateException {
+            try {
+                defaultTrustManager.checkServerTrusted(chain, authType);
+            } catch (CertificateException ce) {
+                localTrustManager.checkServerTrusted(chain, authType);
+            }
+        }
+
+        @Override
+        public X509Certificate[] getAcceptedIssuers() {
+            return new X509Certificate[0];
+        }
+    }
+
+    public static class SSLParams {
+        public SSLSocketFactory sslSocketFactory;
+        public X509TrustManager x509TrustManager;
+
+        public SSLParams() {
+        }
     }
 }
