@@ -14,6 +14,7 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import javax.net.ssl.SSLHandshakeException;
+import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.X509TrustManager;
 
 import io.reactivex.Observable;
@@ -69,9 +70,9 @@ public class HttpUtil {
         }
         // 证书不为空则使用证书，否则忽略证书
         if (ValueUtil.isStrNotEmpty(cer)) {
-            builder.sslSocketFactory(SSLSocketClient.getSSLSocketFactory(mContext, cer));        // https证书
+            builder.sslSocketFactory(SSLSocketClient.getSSLSocketFactory(mContext, cer), SSLSocketClient.getX509TrustManager(context, cer)); // https证书
         } else {
-            builder.sslSocketFactory(SSLSocketClient.getSSLSocketFactoryIgnore());
+            builder.sslSocketFactory(SSLSocketClient.getSSLSocketFactoryIgnore(), SSLSocketClient.getX509TrustManager());
         }
 
         okHttpClient = builder.build();
