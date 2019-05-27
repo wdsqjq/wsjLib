@@ -130,10 +130,8 @@ public class FileUtil {
         if (!file.exists()) {
             try {
                 file.mkdirs();
-
             } catch (Exception e) {
                 e.printStackTrace();
-
             }
         }
         return file;
