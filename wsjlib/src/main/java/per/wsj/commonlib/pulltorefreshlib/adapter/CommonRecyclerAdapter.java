@@ -8,7 +8,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.RelativeLayout;
+
 import java.util.List;
+
 import per.wsj.commonlib.R;
 
 /**
@@ -22,15 +24,15 @@ public abstract class CommonRecyclerAdapter<T> extends RecyclerView.Adapter<Recy
     /**
      * 加载异常
      */
-    private int TYPE_EMPTY=0;
+    private int TYPE_EMPTY = 0;
     /**
      * 加载正常
      */
-    private int TYPE_NORMAL=1;
+    private int TYPE_NORMAL = 1;
     /**
      * 异常view
      */
-    private View emptyView=null;
+    private View emptyView = null;
     /**
      * 异常layout
      */
@@ -47,7 +49,7 @@ public abstract class CommonRecyclerAdapter<T> extends RecyclerView.Adapter<Recy
     protected AdapterView.OnItemClickListener onItemClickListener;
     protected AdapterView.OnItemLongClickListener onItemLongClickListener;
 
-    public CommonRecyclerAdapter(Context context,List<T> data) {
+    public CommonRecyclerAdapter(Context context, List<T> data) {
         this.mContext = context;
 //        this.mList = new ArrayList<>();
         this.mList = data;
@@ -55,10 +57,10 @@ public abstract class CommonRecyclerAdapter<T> extends RecyclerView.Adapter<Recy
 
     @Override
     public int getItemViewType(int position) {
-        if(emptyView==null){
+        if (emptyView == null) {
             return TYPE_NORMAL;
         }
-        if(position==0){
+        if (position == 0) {
             return TYPE_EMPTY;
         }
         return super.getItemViewType(position);
@@ -68,9 +70,9 @@ public abstract class CommonRecyclerAdapter<T> extends RecyclerView.Adapter<Recy
      * 清除空数据页
      * 调用了setEmpty()方法后要再显示数据必须调用这个方法
      */
-    public void removeEmptyView() {
-        emptyView=null;
-        if(layout!=null) {
+    public void clearEmptyView() {
+        emptyView = null;
+        if (layout != null) {
             layout.removeAllViews();
         }
     }
@@ -84,17 +86,18 @@ public abstract class CommonRecyclerAdapter<T> extends RecyclerView.Adapter<Recy
 
     /**
      * 设置空数据页
-     * @param layoutId  要显示的layout资源id
+     *
+     * @param layoutId 要显示的layout资源id
      */
     public void setEmpty(int layoutId) {
-        emptyView=null;
-        if(layoutId==-1) {
+        emptyView = null;
+        if (layoutId == -1) {
             emptyView = LayoutInflater.from(mContext).inflate(R.layout.layout_list_error, parent, false);
-        }else {
+        } else {
             emptyView = LayoutInflater.from(mContext).inflate(layoutId, parent, false);
         }
-        if(layout==null){
-            layout=new RelativeLayout(mContext);
+        if (layout == null) {
+            layout = new RelativeLayout(mContext);
             layout.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         }
         layout.removeAllViews();
@@ -104,9 +107,9 @@ public abstract class CommonRecyclerAdapter<T> extends RecyclerView.Adapter<Recy
 
     @Override
     public RecyclerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        if(emptyView!=null&&viewType==TYPE_EMPTY){
+        if (emptyView != null && viewType == TYPE_EMPTY) {
             return new RecyclerViewHolder(layout);
-        }else {
+        } else {
             View view = LayoutInflater.from(mContext).inflate(onCreateViewLayoutID(viewType), parent, false);
             return new RecyclerViewHolder(view);
         }
@@ -119,7 +122,7 @@ public abstract class CommonRecyclerAdapter<T> extends RecyclerView.Adapter<Recy
 
     @Override
     public void onBindViewHolder(final RecyclerViewHolder holder, final int position) {
-        if(getItemViewType(position)==TYPE_EMPTY) {
+        if (getItemViewType(position) == TYPE_EMPTY) {
             return;
         }
         onBindViewHolder(holder.getViewHolder(), position);
@@ -146,14 +149,14 @@ public abstract class CommonRecyclerAdapter<T> extends RecyclerView.Adapter<Recy
     @Override
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
-        parent=recyclerView;
-        RecyclerView.LayoutManager manager=recyclerView.getLayoutManager();
-        if(manager instanceof GridLayoutManager){
-            final GridLayoutManager gridManager= (GridLayoutManager) manager;
+        parent = recyclerView;
+        RecyclerView.LayoutManager manager = recyclerView.getLayoutManager();
+        if (manager instanceof GridLayoutManager) {
+            final GridLayoutManager gridManager = (GridLayoutManager) manager;
             gridManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
                 @Override
                 public int getSpanSize(int position) {
-                    return getItemViewType(position)==TYPE_EMPTY?gridManager.getSpanCount():1;
+                    return getItemViewType(position) == TYPE_EMPTY ? gridManager.getSpanCount() : 1;
                 }
             });
         }
@@ -162,6 +165,7 @@ public abstract class CommonRecyclerAdapter<T> extends RecyclerView.Adapter<Recy
 
     /**
      * 抽象方法,设置layout
+     *
      * @param viewType
      * @return
      */
@@ -171,7 +175,7 @@ public abstract class CommonRecyclerAdapter<T> extends RecyclerView.Adapter<Recy
 
     @Override
     public int getItemCount() {
-        return emptyView!=null? mList.size()+1 : mList.size();
+        return emptyView != null ? mList.size() + 1 : mList.size();
     }
 
     /**
@@ -251,7 +255,7 @@ public abstract class CommonRecyclerAdapter<T> extends RecyclerView.Adapter<Recy
      * 替换RecyclerView数据
      */
     public void replaceList(List<T> list) {
-        if (list != null){
+        if (list != null) {
             this.mList = list;
         } else {
             mList.clear();
@@ -284,7 +288,7 @@ public abstract class CommonRecyclerAdapter<T> extends RecyclerView.Adapter<Recy
      * 删除RecyclerView指定位置的数据
      */
     public void remove(T t) {
-        if(mList != null) {
+        if (mList != null) {
             this.mList.remove(t);
             notifyDataSetChanged();
         }
