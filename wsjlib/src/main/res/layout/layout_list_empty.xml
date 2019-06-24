@@ -18,6 +18,5 @@
         android:layout_below="@+id/ivEmpty"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="4dp"
-        android:text="网络异常,请重试"/>
-
+        android:text="暂无数据"/>
 </RelativeLayout>

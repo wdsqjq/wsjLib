@@ -46,8 +46,10 @@ public abstract class CommonRecyclerAdapter<T> extends RecyclerView.Adapter<Recy
     protected List<T> mList;
 
     protected ViewHolderClick<T> holderClick;
-    protected AdapterView.OnItemClickListener onItemClickListener;
+    protected AdapterView.OnItemClickListener  onItemClickListener;
     protected AdapterView.OnItemLongClickListener onItemLongClickListener;
+
+    ReLoadListener mReLoadListener;
 
     public CommonRecyclerAdapter(Context context, List<T> data) {
         this.mContext = context;
@@ -110,7 +112,7 @@ public abstract class CommonRecyclerAdapter<T> extends RecyclerView.Adapter<Recy
         if (emptyView != null && viewType == TYPE_EMPTY) {
             return new RecyclerViewHolder(layout);
         } else {
-            View view = LayoutInflater.from(mContext).inflate(onCreateViewLayoutID(viewType), parent, false);
+            View view = LayoutInflater.from(mContext).inflate(onCreateViewLayoutId(viewType), parent, false);
             return new RecyclerViewHolder(view);
         }
     }
@@ -123,25 +125,22 @@ public abstract class CommonRecyclerAdapter<T> extends RecyclerView.Adapter<Recy
     @Override
     public void onBindViewHolder(final RecyclerViewHolder holder, final int position) {
         if (getItemViewType(position) == TYPE_EMPTY) {
+            holder.itemView.setOnClickListener(v -> {
+                if (mReLoadListener != null) {
+                    mReLoadListener.onReload();
+                }
+            });
             return;
         }
         onBindViewHolder(holder.getViewHolder(), position);
         if (onItemClickListener != null) {
-            holder.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    onItemClickListener.onItemClick(null, v, holder.getAdapterPosition(), holder.getItemId());
-                }
-            });
+            holder.itemView.setOnClickListener(v -> onItemClickListener.onItemClick(null, v, holder.getAdapterPosition(), holder.getItemId()));
         }
 
         if (onItemLongClickListener != null) {
-            holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    onItemLongClickListener.onItemLongClick(null, v, holder.getAdapterPosition(), holder.getItemId());
-                    return false;
-                }
+            holder.itemView.setOnLongClickListener(v -> {
+                onItemLongClickListener.onItemLongClick(null, v, holder.getAdapterPosition(), holder.getItemId());
+                return false;
             });
         }
     }
@@ -169,7 +168,7 @@ public abstract class CommonRecyclerAdapter<T> extends RecyclerView.Adapter<Recy
      * @param viewType
      * @return
      */
-    public abstract int onCreateViewLayoutID(int viewType);
+    public abstract int onCreateViewLayoutId(int viewType);
 
     public abstract void onBindViewHolder(BaseViewHolder holder, int position);
 
@@ -335,5 +334,13 @@ public abstract class CommonRecyclerAdapter<T> extends RecyclerView.Adapter<Recy
 
     public interface ViewHolderClick<T> {
         void onViewClick(View view, T t, int position);
+    }
+
+    public void setOnReLoadListener(ReLoadListener mReLoadListener) {
+        this.mReLoadListener = mReLoadListener;
+    }
+
+    public interface ReLoadListener {
+        void onReload();
     }
 }
