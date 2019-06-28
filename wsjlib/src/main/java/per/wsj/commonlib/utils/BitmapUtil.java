@@ -1,11 +1,16 @@
 package per.wsj.commonlib.utils;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.VectorDrawable;
+import android.os.Build;
+import androidx.annotation.RequiresApi;
+import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -24,9 +29,30 @@ public class BitmapUtil {
      * @param drawable
      * @return
      */
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public static Bitmap drawable2Bitmap(Drawable drawable) {
-        BitmapDrawable db = (BitmapDrawable) drawable;
-        return db.getBitmap();
+        if (drawable instanceof BitmapDrawable) {
+            return ((BitmapDrawable) drawable).getBitmap();
+        } else if (drawable instanceof VectorDrawableCompat ||
+                drawable instanceof VectorDrawable) {
+            return getBitmapFromVectorDrawable(drawable);
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * drawable.getIntrinsicWidth() 获取宽度的单位是dp
+     * @param drawable
+     * @return
+     */
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    private static Bitmap getBitmapFromVectorDrawable(Drawable drawable) {
+        Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_4444);
+        Canvas canvas = new Canvas(bitmap);
+        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+        drawable.draw(canvas);
+        return bitmap;
     }
 
     /**
