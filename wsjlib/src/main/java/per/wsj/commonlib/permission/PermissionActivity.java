@@ -18,7 +18,6 @@ public class PermissionActivity extends Activity {
     private static final int PERMISSION_REQUEST_CODE = 64;
     private boolean isRequireCheck;
     private String[] permission;
-    private boolean showTip;
 
     private final String defaultTitle = "提示";
     private final String defaultContent = "当前应用缺少必要权限。\n \n 请点击 \"设置\"-\"权限\"-打开所需权限。";
@@ -30,15 +29,14 @@ public class PermissionActivity extends Activity {
     private static final String KEY_SHOW_TIP = "KEY_SHOW_TIP";
 
     /**
-     * Request for permissions.
+     * IRequest for permissions.
      */
-    public static void requestPermission(Context context, String[] permissions, PermissionListener permissionListener, boolean showTip) {
+    public static void requestPermission(Context context, String[] permissions, PermissionListener permissionListener) {
         mPermissionListener = permissionListener;
 
         Intent intent = new Intent(context, PermissionActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.putExtra(KEY_INPUT_PERMISSIONS, permissions);
-        intent.putExtra(KEY_SHOW_TIP, showTip);
         context.startActivity(intent);
     }
 
@@ -51,7 +49,6 @@ public class PermissionActivity extends Activity {
         }
         isRequireCheck = true;
         permission = getIntent().getStringArrayExtra(KEY_INPUT_PERMISSIONS);
-        showTip = getIntent().getBooleanExtra(KEY_SHOW_TIP, false);
     }
 
     @Override
@@ -74,40 +71,23 @@ public class PermissionActivity extends Activity {
         ActivityCompat.requestPermissions(this, permission, PERMISSION_REQUEST_CODE);
     }
 
-
     /**
      * 用户权限处理,
      * 如果全部获取, 则直接过.
      * 如果权限缺失, 则提示Dialog.
-     *
      * @param requestCode  请求码
      * @param permissions  权限
      * @param grantResults 结果
      */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-
         //部分厂商手机系统返回授权成功时，厂商可以拒绝权限，所以要用PermissionChecker二次判断
         if (requestCode == PERMISSION_REQUEST_CODE && PermissionUtil.isGranted(grantResults)
                 && PermissionUtil.hasPermission(this, permissions)) {
             permissionsGranted();
-        } else if (showTip) {
-            showMissingPermissionDialog();
         } else { //不需要提示用户
             permissionsDenied();
         }
-    }
-
-    // 显示缺失权限提示
-    private void showMissingPermissionDialog() {
-        new AlertDialog.Builder(this)
-                .setTitle(defaultTitle)
-                .setMessage(defaultContent)
-                .setNegativeButton(defaultCancel, (dialog, which) ->
-                        permissionsDenied())
-                .setPositiveButton(defaultEnsure, (dialog, which) ->
-                        PermissionUtil.gotoSetting(PermissionActivity.this)).setCancelable(false)
-                .show();
     }
 
     private void permissionsDenied() {
