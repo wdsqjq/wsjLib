@@ -1,7 +1,9 @@
 package per.wsj.commonlib.permission;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -16,37 +18,40 @@ public class PermissionActivity extends Activity {
     private static final int PERMISSION_REQUEST_CODE = 64;
     private boolean isRequireCheck;
     private String[] permission;
-    private String key;
     private boolean showTip;
-    private PermissionUtil.TipInfo tipInfo;
-    private final String defaultTitle = "帮助";
+
+    private final String defaultTitle = "提示";
     private final String defaultContent = "当前应用缺少必要权限。\n \n 请点击 \"设置\"-\"权限\"-打开所需权限。";
     private final String defaultCancel = "取消";
     private final String defaultEnsure = "设置";
 
-    public PermissionActivity() {
+    private static PermissionListener mPermissionListener;
+    private static final String KEY_INPUT_PERMISSIONS = "KEY_INPUT_PERMISSIONS";
+    private static final String KEY_SHOW_TIP = "KEY_SHOW_TIP";
+
+    /**
+     * Request for permissions.
+     */
+    public static void requestPermission(Context context, String[] permissions, PermissionListener permissionListener, boolean showTip) {
+        mPermissionListener = permissionListener;
+
+        Intent intent = new Intent(context, PermissionActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.putExtra(KEY_INPUT_PERMISSIONS, permissions);
+        intent.putExtra(KEY_SHOW_TIP, showTip);
+        context.startActivity(intent);
     }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getIntent() == null || !getIntent().hasExtra("permission")) {
+        if (getIntent() == null || !getIntent().hasExtra(KEY_INPUT_PERMISSIONS)) {
             finish();
             return;
         }
-
         isRequireCheck = true;
-        permission = getIntent().getStringArrayExtra("permission");
-        key = getIntent().getStringExtra("key");
-        showTip = getIntent().getBooleanExtra("showTip", true);
-        Serializable ser = getIntent().getSerializableExtra("tip");
-
-        if (ser == null) {
-            tipInfo = new PermissionUtil.TipInfo(defaultTitle, defaultContent, defaultCancel, defaultEnsure);
-        } else {
-            tipInfo = (PermissionUtil.TipInfo)ser;
-        }
-
+        permission = getIntent().getStringArrayExtra(KEY_INPUT_PERMISSIONS);
+        showTip = getIntent().getBooleanExtra(KEY_SHOW_TIP, false);
     }
 
     @Override
@@ -86,7 +91,7 @@ public class PermissionActivity extends Activity {
         if (requestCode == PERMISSION_REQUEST_CODE && PermissionUtil.isGranted(grantResults)
                 && PermissionUtil.hasPermission(this, permissions)) {
             permissionsGranted();
-        } else if (showTip){
+        } else if (showTip) {
             showMissingPermissionDialog();
         } else { //不需要提示用户
             permissionsDenied();
@@ -95,48 +100,34 @@ public class PermissionActivity extends Activity {
 
     // 显示缺失权限提示
     private void showMissingPermissionDialog() {
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(PermissionActivity.this);
-
-        builder.setTitle(TextUtils.isEmpty(tipInfo.title) ? defaultTitle : tipInfo.title);
-        builder.setMessage(TextUtils.isEmpty(tipInfo.content) ? defaultContent : tipInfo.content);
-
-        builder.setNegativeButton(TextUtils.isEmpty(tipInfo.cancel) ? defaultCancel : tipInfo.cancel, new DialogInterface.OnClickListener(){
-            @Override public void onClick(DialogInterface dialog, int which) {
-                permissionsDenied();
-            }
-        });
-
-        builder.setPositiveButton(TextUtils.isEmpty(tipInfo.ensure) ? defaultEnsure : tipInfo.ensure, new DialogInterface.OnClickListener() {
-            @Override public void onClick(DialogInterface dialog, int which) {
-                PermissionUtil.gotoSetting(PermissionActivity.this);
-            }
-        });
-
-        builder.setCancelable(false);
-        builder.show();
+        new AlertDialog.Builder(this)
+                .setTitle(defaultTitle)
+                .setMessage(defaultContent)
+                .setNegativeButton(defaultCancel, (dialog, which) ->
+                        permissionsDenied())
+                .setPositiveButton(defaultEnsure, (dialog, which) ->
+                        PermissionUtil.gotoSetting(PermissionActivity.this)).setCancelable(false)
+                .show();
     }
 
     private void permissionsDenied() {
-        PermissionListener listener = PermissionUtil.fetchListener(key);
-        if (listener != null) {
-            listener.permissionDenied(permission);
+        if(mPermissionListener!=null){
+            mPermissionListener.permissionDenied(permission);
         }
         finish();
     }
 
     // 全部权限均已获取
     private void permissionsGranted() {
-        PermissionListener listener = PermissionUtil.fetchListener(key);
-        if (listener != null) {
-            listener.permissionGranted(permission);
+        if(mPermissionListener!=null){
+            mPermissionListener.permissionGranted(permission);
         }
         finish();
     }
 
     @Override
     protected void onDestroy() {
-        PermissionUtil.fetchListener(key);
+        mPermissionListener = null;
         super.onDestroy();
     }
 
