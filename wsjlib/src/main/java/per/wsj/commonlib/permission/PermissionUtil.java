@@ -1,18 +1,9 @@
 package per.wsj.commonlib.permission;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.net.Uri;
-import android.os.Build;
-import android.provider.Settings;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.core.content.PermissionChecker;
-import android.util.Log;
-
-import java.io.Serializable;
-import java.util.HashMap;
 
 /**
  * Created by shiju.wang on 2018/3/1.
