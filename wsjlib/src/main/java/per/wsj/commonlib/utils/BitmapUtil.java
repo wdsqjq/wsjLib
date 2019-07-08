@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.VectorDrawable;
@@ -159,6 +160,55 @@ public class BitmapUtil {
         options.inJustDecodeBounds = false;
         Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), resourceId, options);
         return bitmap;
+    }
+
+
+    /**
+     * 根据给定的宽和高进行拉伸
+     *
+     * @param origin    原图
+     * @param newWidth  新图的宽
+     * @param newHeight 新图的高
+     * @return new Bitmap
+     */
+    public static Bitmap scaleBitmap(Bitmap origin, int newWidth, int newHeight) {
+        if (origin == null) {
+            return null;
+        }
+        int height = origin.getHeight();
+        int width = origin.getWidth();
+        float scaleWidth = ((float) newWidth) / width;
+        float scaleHeight = ((float) newHeight) / height;
+        Matrix matrix = new Matrix();
+        matrix.postScale(scaleWidth, scaleHeight);// 使用后乘
+        Bitmap newBM = Bitmap.createBitmap(origin, 0, 0, width, height, matrix, false);
+        if (!origin.isRecycled()) {
+            origin.recycle();
+        }
+        return newBM;
+    }
+
+    /**
+     * 按比例缩放图片
+     *
+     * @param origin 原图
+     * @param ratio  比例
+     * @return 新的bitmap
+     */
+    public static Bitmap scaleBitmap(Bitmap origin, float ratio) {
+        if (origin == null) {
+            return null;
+        }
+        int width = origin.getWidth();
+        int height = origin.getHeight();
+        Matrix matrix = new Matrix();
+        matrix.preScale(ratio, ratio);
+        Bitmap newBM = Bitmap.createBitmap(origin, 0, 0, width, height, matrix, false);
+        if (newBM.equals(origin)) {
+            return newBM;
+        }
+        origin.recycle();
+        return newBM;
     }
 
 }
