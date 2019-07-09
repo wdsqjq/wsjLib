@@ -52,7 +52,7 @@ public class LogUtil {
     private static String buildMessage(String msg) {
         StackTraceElement targetStackTraceElement = getTargetStackTraceElement();
 
-        return String.format(Locale.US, "位置-->%s 内容-->%s",
+        return String.format(Locale.US, "%s -->%s",
                 "(" + targetStackTraceElement.getFileName() + ":"
                         + targetStackTraceElement.getLineNumber() + ")", msg);
     }
