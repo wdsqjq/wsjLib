@@ -16,7 +16,11 @@ public class SharedPrefUtil {
     //CommonUtil
     private Context context;
 
-    public static String ROUTE_LINE_INT = "route_line";
+    public static final String IS_FIRST = "is_first";
+
+    public static final String IS_SHARED = "is_shared";
+
+    public static final String ROUTE_LINE_INT = "route_line";
 
     public SharedPrefUtil(Context context) {
         this.context = context.getApplicationContext();
