@@ -11,7 +11,7 @@ import android.content.SharedPreferences;
 public class SharedPrefUtil {
     private static final int SHARED_MODE = Context.MODE_PRIVATE;
 
-    private static final String SHARED_NAME = "wtk_shared";
+    private static final String SHARED_NAME = "wsj_shared";
 
     //CommonUtil
     private Context context;
@@ -21,6 +21,8 @@ public class SharedPrefUtil {
     public static final String IS_SHARED = "is_shared";
 
     public static final String ROUTE_LINE_INT = "route_line";
+    // 自动启动
+    public static final String IS_AUTO_CONNECT = "is_auto_connect";
 
     public SharedPrefUtil(Context context) {
         this.context = context.getApplicationContext();
