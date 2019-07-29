@@ -48,6 +48,19 @@ public class CommonUtil {
         return "";
     }
 
+    public static String getVersionName(Context context) {
+        try {
+            //applicationId 获取
+            String pkName = context.getPackageName();
+            //versionName获取
+            String versionName = context.getPackageManager().getPackageInfo(
+                    pkName, 0).versionName;
+            return String.valueOf(versionName);
+        } catch (Exception e) {
+        }
+        return "";
+    }
+
     /**
      * 判断是否安装某apk
      * @param context
