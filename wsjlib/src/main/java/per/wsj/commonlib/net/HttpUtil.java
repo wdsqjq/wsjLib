@@ -143,6 +143,17 @@ public class HttpUtil {
         postRequest(url, param, clazz, callBack);
     }
 
+    /**
+     * POST请求(对象)
+     * @param url
+     * @param param
+     * @param callBack
+     * @param <T>
+     */
+    public <T> void post(String url, Object param, final Class clazz, final StringCallBack<T> callBack) {
+        postRequest(url, param, clazz, callBack);
+    }
+
     public <T> void post(String url, Class clazz, CallBack<T> callBack) {
         post(url, null, clazz, callBack);
     }
@@ -202,7 +213,9 @@ public class HttpUtil {
                 if (callBack instanceof ListCallBack) {
                     ArrayList<T> result = (ArrayList<T>) JSON.parseArray(detail, clazz);
                     ((ListCallBack) callBack).onSuccess(result, code, msg);
-                } else {
+                } else if(callBack instanceof StringCallBack){
+                    ((StringCallBack) callBack).onSuccess(detail, code, msg);
+                }else {
                     ((CallBack) callBack).onSuccess(JSON.parseObject(detail, clazz), code, msg);
                 }
             } catch (Exception e) {
@@ -244,6 +257,17 @@ public class HttpUtil {
          * @param msg
          */
         void onSuccess(T result, String code, String msg);
+    }
+
+    public interface StringCallBack<T> extends BaseCallBack<T> {
+
+        /**
+         * 请求成功
+         * @param result 泛型
+         * @param code
+         * @param msg
+         */
+        void onSuccess(String result, String code, String msg);
     }
 
     public interface ListCallBack<T> extends BaseCallBack<T> {
