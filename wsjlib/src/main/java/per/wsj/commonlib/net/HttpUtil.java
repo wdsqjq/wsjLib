@@ -2,6 +2,7 @@ package per.wsj.commonlib.net;
 
 import android.content.Context;
 import com.alibaba.fastjson.JSON;
+import com.google.gson.Gson;
 import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -155,6 +156,22 @@ public class HttpUtil {
         post(url, null, clazz, callBack);
     }
 
+    public <T> void post(String url,  final MyObserver2<T> callBack) {
+        post(url,null,callBack);
+    }
+
+    public <T> void post(String url, Object param, final MyObserver2<T> callBack) {
+        if (callBack == null) {
+            return;
+        }
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), new Gson().toJson(param));
+        apiService.executePost(url, requestBody)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(callBack);
+    }
+
     /**
      * POST请求（List）
      *
@@ -164,7 +181,7 @@ public class HttpUtil {
      * @param <T>
      */
     public <T> void post(String url, Object param, final Class clazz, final CallBack<T> callBack) {
-        postRequest(url, param, clazz, callBack);
+//        postRequest(url, param, clazz, callBack);
     }
 
     private <T> void postRequest(String url, Object param, final Class clazz, final BaseCallBack<T> callBack) {
