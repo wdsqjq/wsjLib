@@ -33,7 +33,7 @@ import java.util.Locale;
  */
 public class CommonUtil {
 
-    public static String getVersionId(Context context) {
+    public static String getVersionCode(Context context) {
         try {
             //applicationId 获取
             String pkName = context.getPackageName();

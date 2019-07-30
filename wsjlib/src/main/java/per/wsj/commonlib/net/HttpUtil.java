@@ -2,29 +2,26 @@ package per.wsj.commonlib.net;
 
 import android.content.Context;
 import com.alibaba.fastjson.JSON;
+import io.reactivex.Observable;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
+import okhttp3.*;
 import org.json.JSONObject;
+import per.wsj.commonlib.R;
+import per.wsj.commonlib.utils.ValueUtil;
+import retrofit2.HttpException;
+import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
+
+import javax.net.ssl.SSLHandshakeException;
 import java.net.ConnectException;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
-import javax.net.ssl.SSLHandshakeException;
-import io.reactivex.Observable;
-import io.reactivex.Observer;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
-import okhttp3.Interceptor;
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.RequestBody;
-import okhttp3.ResponseBody;
-import per.wsj.commonlib.R;
-import per.wsj.commonlib.utils.ValueUtil;
-import retrofit2.HttpException;
-import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 
 /**
  * 请继承该类，重写参数
@@ -32,7 +29,7 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
  */
 
 public class HttpUtil {
-    protected static final int DEFAULT_TIMEOUT = 15;
+    private static final int DEFAULT_TIMEOUT = 15;
 
     protected ApiService apiService;
 
@@ -44,7 +41,7 @@ public class HttpUtil {
 
     protected OkHttpClient.Builder builder;
 
-    protected String mCode = "code", mMsg = "msg", mDetail = "detail";
+    private static final String mCode = "code", mMsg = "msg", mDetail = "detail";
 
     protected HttpUtil(Context context, String baseUrl, String cer, Interceptor interceptor) {
         mContext = context;
@@ -174,6 +171,8 @@ public class HttpUtil {
         if (callBack == null) {
             return;
         }
+//        Map<String, String> headers = new HashMap<>();
+//        headers.put("token","123456");
 //        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), new Gson().toJson(param));
         RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), JSON.toJSONString(param));
         apiService.executePost(url, requestBody)

@@ -1,19 +1,11 @@
 package per.wsj.commonlib.net;
 
-import java.util.Map;
-
 import io.reactivex.Observable;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
-import retrofit2.http.Body;
-import retrofit2.http.GET;
-import retrofit2.http.POST;
-import retrofit2.http.Part;
-import retrofit2.http.PartMap;
-import retrofit2.http.Path;
-import retrofit2.http.QueryMap;
-import retrofit2.http.Streaming;
-import retrofit2.http.Url;
+import retrofit2.http.*;
+
+import java.util.Map;
 
 /**
  * Description:
@@ -32,6 +24,12 @@ public interface ApiService {
     Observable<ResponseBody> executeGet(
             @Path(value = "url", encoded = true) String url,
             @QueryMap(encoded = true) Map<String, Object> map);
+
+    @POST("{url}")
+    Observable<ResponseBody> executePost(
+            @HeaderMap Map<String, String> headers,
+            @Path(value = "url", encoded = true) String url,
+            @Body RequestBody request);
 
     @POST("{url}")
     Observable<ResponseBody> executePost(
