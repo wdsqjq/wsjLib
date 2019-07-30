@@ -9,7 +9,7 @@ import okhttp3.ResponseBody;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
-public abstract class MyObserver2<T> implements Observer<ResponseBody> {
+public abstract class HttpCallback<T> implements Observer<ResponseBody> {
 
     @Override
     public void onNext(ResponseBody value) {

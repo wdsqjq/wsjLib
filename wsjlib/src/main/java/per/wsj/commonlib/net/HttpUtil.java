@@ -1,26 +1,16 @@
 package per.wsj.commonlib.net;
 
 import android.content.Context;
-import com.alibaba.fastjson.JSON;
 import com.google.gson.Gson;
 import io.reactivex.Observable;
-import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.*;
-import org.json.JSONObject;
-import per.wsj.commonlib.R;
 import per.wsj.commonlib.utils.ValueUtil;
-import retrofit2.HttpException;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
+import retrofit2.converter.gson.GsonConverterFactory;
 
-import javax.net.ssl.SSLHandshakeException;
-import java.net.ConnectException;
-import java.net.SocketTimeoutException;
-import java.net.UnknownHostException;
-import java.util.ArrayList;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -41,8 +31,6 @@ public class HttpUtil {
     protected Context mContext;
 
     protected OkHttpClient.Builder builder;
-
-    private static final String mCode = "code", mMsg = "msg", mDetail = "detail";
 
     protected HttpUtil(Context context, String baseUrl, String cer, Interceptor interceptor) {
         mContext = context;
@@ -70,46 +58,18 @@ public class HttpUtil {
 
         Retrofit retrofit = new Retrofit.Builder()
                 .client(okHttpClient)
-//                .addConverterFactory(GsonConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .baseUrl(baseUrl)
                 .build();
         apiService = retrofit.create(ApiService.class);
     }
 
-    public <T> void get(String url, Class clazz, CallBack<T> callBack) {
-        get(url, null, clazz, callBack);
+    public <T> void get(String url,  final HttpCallback<T> callBack) {
+        get(url,null,callBack);
     }
 
-    /**
-     * GET请求（对象）
-     *
-     * @param url
-     * @param param
-     * @param callBack
-     * @param <T>
-     */
-    public <T> void get(String url, Map<String, Object> param, final Class clazz, final CallBack<T> callBack) {
-        getRequest(url, param, clazz, callBack);
-    }
-
-    public <T> void get(String url, Class clazz, ListCallBack<T> callBack) {
-        get(url, null, clazz, callBack);
-    }
-
-    /**
-     * GET请求 (List)
-     *
-     * @param url
-     * @param param
-     * @param callBack
-     * @param <T>
-     */
-    public <T> void get(String url, Map<String, Object> param, final Class clazz, final ListCallBack<T> callBack) {
-        getRequest(url, param, clazz, callBack);
-    }
-
-    private <T> void getRequest(String url, Map<String, Object> param, final Class clazz, final BaseCallBack<T> callBack) {
+    public <T> void get(String url, Map<String, Object> param, final HttpCallback<T> callBack) {
         if (callBack == null) {
             return;
         }
@@ -122,179 +82,25 @@ public class HttpUtil {
         observable.subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new MyObserver<T>(clazz, callBack));
+                .subscribe(callBack);
     }
 
-    public <T> void post(String url, Class clazz, ListCallBack<T> callBack) {
-        post(url, null, clazz, callBack);
-    }
 
-    /**
-     * POST请求(对象)
-     *
-     * @param url
-     * @param param
-     * @param callBack
-     * @param <T>
-     */
-    public <T> void post(String url, Object param, final Class clazz, final ListCallBack<T> callBack) {
-        postRequest(url, param, clazz, callBack);
-    }
-
-    /**
-     * POST请求(对象)
-     * @param url
-     * @param param
-     * @param callBack
-     * @param <T>
-     */
-    public <T> void post(String url, Object param, final Class clazz, final StringCallBack<T> callBack) {
-        postRequest(url, param, clazz, callBack);
-    }
-
-    public <T> void post(String url, Class clazz, CallBack<T> callBack) {
-        post(url, null, clazz, callBack);
-    }
-
-    public <T> void post(String url,  final MyObserver2<T> callBack) {
+    public <T> void post(String url,  final HttpCallback<T> callBack) {
         post(url,null,callBack);
     }
 
-    public <T> void post(String url, Object param, final MyObserver2<T> callBack) {
+    public <T> void post(String url, Object param, final HttpCallback<T> callBack) {
         if (callBack == null) {
             return;
         }
+        // Map<String, String> headers = new HashMap<>();
+        // headers.put("token","123456");
         RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), new Gson().toJson(param));
         apiService.executePost(url, requestBody)
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(callBack);
-    }
-
-    /**
-     * POST请求（List）
-     *
-     * @param url
-     * @param param
-     * @param callBack
-     * @param <T>
-     */
-    public <T> void post(String url, Object param, final Class clazz, final CallBack<T> callBack) {
-//        postRequest(url, param, clazz, callBack);
-    }
-
-    private <T> void postRequest(String url, Object param, final Class clazz, final BaseCallBack<T> callBack) {
-        if (callBack == null) {
-            return;
-        }
-//        Map<String, String> headers = new HashMap<>();
-//        headers.put("token","123456");
-//        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), new Gson().toJson(param));
-        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), JSON.toJSONString(param));
-        apiService.executePost(url, requestBody)
-                .subscribeOn(Schedulers.io())
-                .unsubscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new MyObserver<T>(clazz, callBack));
-    }
-
-    /**
-     * 公用Observer
-     *
-     * @param <T>
-     */
-    class MyObserver<T> implements Observer<ResponseBody> {
-        BaseCallBack<T> callBack;
-        Class clazz;
-
-        public MyObserver(Class clazz, BaseCallBack<T> callBack) {
-            this.clazz = clazz;
-            this.callBack = callBack;
-        }
-
-        @Override
-        public void onSubscribe(Disposable d) {
-            callBack.onStart(d);
-        }
-
-        @Override
-        public void onNext(ResponseBody value) {
-            try {
-                String responseBody = value.string();
-                JSONObject jsonObject = new JSONObject(responseBody);
-                String code = jsonObject.getString(mCode);
-                String msg = jsonObject.getString(mMsg);
-                String detail = jsonObject.getString(mDetail);
-                if (callBack instanceof ListCallBack) {
-                    ArrayList<T> result = (ArrayList<T>) JSON.parseArray(detail, clazz);
-                    ((ListCallBack) callBack).onSuccess(result, code, msg);
-                } else if(callBack instanceof StringCallBack){
-                    ((StringCallBack) callBack).onSuccess(detail, code, msg);
-                }else {
-                    ((CallBack) callBack).onSuccess(JSON.parseObject(detail, clazz), code, msg);
-                }
-            } catch (Exception e) {
-                onError(e);
-            }
-        }
-
-        @Override
-        public void onError(Throwable e) {
-            if (e instanceof SocketTimeoutException) {
-                callBack.onError(e, mContext.getString(R.string.net_error_timeout));
-            } else if (e instanceof HttpException
-                    || e instanceof ConnectException
-                    || e instanceof UnknownHostException) {
-                callBack.onError(e, mContext.getString(R.string.net_error_nonet));
-            } else if (e instanceof SSLHandshakeException) {
-                callBack.onError(e, mContext.getString(R.string.net_error_proxy));
-            } else {
-                callBack.onError(e, e.toString());
-            }
-            callBack.onComplete();
-        }
-
-        @Override
-        public void onComplete() {
-            callBack.onComplete();
-        }
-    }
-
-    /****************************************************************************/
-
-    public interface CallBack<T> extends BaseCallBack<T> {
-
-        /**
-         * 请求成功
-         *
-         * @param result 泛型
-         * @param code
-         * @param msg
-         */
-        void onSuccess(T result, String code, String msg);
-    }
-
-    public interface StringCallBack<T> extends BaseCallBack<T> {
-
-        /**
-         * 请求成功
-         * @param result 泛型
-         * @param code
-         * @param msg
-         */
-        void onSuccess(String result, String code, String msg);
-    }
-
-    public interface ListCallBack<T> extends BaseCallBack<T> {
-
-        /**
-         * 请求成功
-         *
-         * @param result 泛型
-         * @param code
-         * @param msg
-         */
-        void onSuccess(ArrayList<T> result, String code, String msg);
     }
 }
