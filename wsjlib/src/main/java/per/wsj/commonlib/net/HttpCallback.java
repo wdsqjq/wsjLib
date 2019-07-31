@@ -5,9 +5,14 @@ import io.reactivex.Observer;
 import io.reactivex.annotations.Nullable;
 import io.reactivex.disposables.Disposable;
 import okhttp3.ResponseBody;
+import retrofit2.HttpException;
 
+import javax.net.ssl.SSLHandshakeException;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.net.ConnectException;
+import java.net.SocketTimeoutException;
+import java.net.UnknownHostException;
 
 public abstract class HttpCallback<T> implements Observer<ResponseBody> {
 
@@ -37,18 +42,17 @@ public abstract class HttpCallback<T> implements Observer<ResponseBody> {
 
     @Override
     public void onError(Throwable e) {
-//        if (e instanceof SocketTimeoutException) {
-//            callBack.onError(e, mContext.getString(R.string.net_error_timeout));
-//        } else if (e instanceof HttpException
-//                || e instanceof ConnectException
-//                || e instanceof UnknownHostException) {
-//            callBack.onError(e, mContext.getString(R.string.net_error_nonet));
-//        } else if (e instanceof SSLHandshakeException) {
-//            callBack.onError(e, mContext.getString(R.string.net_error_proxy));
-//        } else {
-//            callBack.onError(e, e.toString());
-//        }
-        onError(e,e.toString());
+        if (e instanceof SocketTimeoutException) {
+            onError(e, "请求超时,请重试");
+        } else if (e instanceof HttpException
+                || e instanceof ConnectException
+                || e instanceof UnknownHostException) {
+            onError(e, "网络错误，请确保网络通畅");
+        } else if (e instanceof SSLHandshakeException) {
+            onError(e, "网络异常，如使用网络代理，请关闭后重试");
+        } else {
+            onError(e, e.toString());
+        }
         onComplete();
     }
 
