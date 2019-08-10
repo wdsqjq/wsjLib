@@ -25,22 +25,48 @@ public class FileUtil {
      * @return
      */
     public static String generateSize(File file) {
+        long result;
         if (file.isFile()) {
-            long result = file.length();
-            long gb = 2 << 29;
-            long mb = 2 << 19;
-            long kb = 2 << 9;
-            if (result < kb) {
-                return result + "B";
-            } else if (result >= kb && result < mb) {
-                return String.format(Locale.CHINESE, "%.2fKB", result / (double) kb);
-            } else if (result >= mb && result < gb) {
-                return String.format(Locale.CHINESE, "%.2fMB", result / (double) mb);
-            } else if (result >= gb) {
-                return String.format(Locale.CHINESE, "%.2fGB", result / (double) gb);
-            }
+            result = file.length();
+        }else{
+            result = getFolderSize(file);
+        }
+        long gb = 2 << 29;
+        long mb = 2 << 19;
+        long kb = 2 << 9;
+        if (result < kb) {
+            return result + "B";
+        } else if (result >= kb && result < mb) {
+            return String.format(Locale.CHINESE, "%.2fKB", result / (double) kb);
+        } else if (result >= mb && result < gb) {
+            return String.format(Locale.CHINESE, "%.2fMB", result / (double) mb);
+        } else if (result >= gb) {
+            return String.format(Locale.CHINESE, "%.2fGB", result / (double) gb);
         }
         return null;
+    }
+
+    /**
+     * 获取指定文件夹内所有文件大小的和
+     *
+     * @param file file
+     * @return size
+     */
+    private static long getFolderSize(File file) {
+        long size = 0;
+        try {
+            File[] fileList = file.listFiles();
+            for (File aFileList : fileList) {
+                if (aFileList.isDirectory()) {
+                    size = size + getFolderSize(aFileList);
+                } else {
+                    size = size + aFileList.length();
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return size;
     }
 
     /**
