@@ -1,20 +1,21 @@
 package per.wsj.commonlib.net;
 
 import com.google.gson.Gson;
-import io.reactivex.Observer;
-import io.reactivex.annotations.Nullable;
-import io.reactivex.disposables.Disposable;
-import okhttp3.ResponseBody;
-import retrofit2.HttpException;
 
-import javax.net.ssl.SSLHandshakeException;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.net.ConnectException;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
 
-public abstract class HttpCallback<T> implements Observer<ResponseBody> {
+import javax.net.ssl.SSLHandshakeException;
+
+import io.reactivex.Observer;
+import io.reactivex.disposables.Disposable;
+import okhttp3.ResponseBody;
+import retrofit2.HttpException;
+
+public abstract class HttpCallback<T> implements Observer<ResponseBody>,CallBack<T> {
 
     @Override
     public void onNext(ResponseBody value) {
@@ -53,24 +54,17 @@ public abstract class HttpCallback<T> implements Observer<ResponseBody> {
         } else {
             onError(e, e.toString());
         }
-        onComplete();
+        onFinished();
+    }
+
+    @Override
+    public void onComplete() {
+        onFinished();
     }
 
     @Override
     public void onSubscribe(Disposable d) {
         onStart(d);
     }
-
-    public abstract void onStart(Disposable disposable);
-
-    public abstract void onSuccess(T result, String code, String msg);
-
-    /**
-     * 请求失败
-     *
-     * @param throwable
-     * @param string
-     */
-    public abstract void onError(@Nullable Throwable throwable, String string);
 
 }
