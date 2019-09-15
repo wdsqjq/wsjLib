@@ -12,12 +12,12 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import androidx.appcompat.widget.AppCompatImageView;
 import android.util.AttributeSet;
+
+import androidx.appcompat.widget.AppCompatImageView;
 
 /**
  * 圆形ImageView
- * Created by huanglongfei on 2017/7/22.
  */
 
 public class RoundImageView extends AppCompatImageView {
@@ -26,7 +26,10 @@ public class RoundImageView extends AppCompatImageView {
     private Paint mEdgePaint;
 
     private int mStroke = 1;
-    public final int mPadding = 5;
+    private int mPadding = 5;
+    private Rect rectSrc;
+    private Rect rectDest;
+    private Bitmap circleBitmap;
 
     public RoundImageView(Context context) {
         this(context, null);
@@ -38,8 +41,6 @@ public class RoundImageView extends AppCompatImageView {
 
     public RoundImageView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        //TODO:动画获取属性
-
         mPaint = new Paint();
         mEdgePaint = new Paint();
         mEdgePaint.setAntiAlias(true);
@@ -48,8 +49,22 @@ public class RoundImageView extends AppCompatImageView {
         mEdgePaint.setStrokeWidth(mStroke);
         PathEffect effects = new DashPathEffect(new float[]{5, 5, 5, 5}, 1);
         mEdgePaint.setPathEffect(effects);
+
+        Drawable drawable = getDrawable();
+        if(null!=drawable){
+            Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
+            circleBitmap = getCircleBitmap(bitmap);
+        }else{
+            circleBitmap = null;
+        }
+        mPaint.reset();
     }
 
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        rectDest = new Rect(0, 0, getMeasuredWidth(), getMeasuredHeight());
+    }
 
     /**
      * 绘制圆形图片
@@ -57,15 +72,9 @@ public class RoundImageView extends AppCompatImageView {
     @Override
     protected void onDraw(Canvas canvas) {
 
-        Drawable drawable = getDrawable();
-        if (null != drawable) {
-            Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
-            Bitmap b = getCircleBitmap(bitmap, 14);
-            final Rect rectSrc = new Rect(0, 0, b.getWidth(), b.getHeight());
-            final Rect rectDest = new Rect(0, 0, getWidth(), getHeight());
-            mPaint.reset();
-            canvas.drawBitmap(b, rectSrc, rectDest, mPaint);
-            drawEdge(canvas, b);
+        if (null != circleBitmap) {
+            canvas.drawBitmap(circleBitmap, rectSrc, rectDest, mPaint);
+            drawEdge(canvas, circleBitmap);
         } else {
             super.onDraw(canvas);
         }
@@ -80,27 +89,23 @@ public class RoundImageView extends AppCompatImageView {
      * 获取圆形图片方法
      *
      * @param bitmap
-     * @param pixels
      * @return Bitmap
      */
-    private Bitmap getCircleBitmap(Bitmap bitmap, int pixels) {
+    private Bitmap getCircleBitmap(Bitmap bitmap) {
         Bitmap output = Bitmap.createBitmap(bitmap.getWidth(),
                 bitmap.getHeight(), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(output);
 
-        final int color = 0xff424242;
-
-        final Rect rect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
         mPaint.setAntiAlias(true);
-        canvas.drawARGB(0, 0, 0, 0);
-        mPaint.setColor(color);
-        int x = bitmap.getWidth();
 
+        int x = bitmap.getWidth();
+        canvas.drawARGB(0, 0, 0, 0);
         canvas.drawCircle(x / 2, x / 2, (x - 2 * mStroke - mPadding) / 2, mPaint);
+
         mPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
-        canvas.drawBitmap(bitmap, rect, rect, mPaint);
+
+        rectSrc = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
+        canvas.drawBitmap(bitmap, rectSrc, rectSrc, mPaint);
         return output;
     }
-
-
 }

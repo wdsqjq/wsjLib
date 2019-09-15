@@ -8,8 +8,6 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Shader;
 import android.graphics.drawable.BitmapDrawable;
-
-import androidx.annotation.Nullable;
 import android.util.AttributeSet;
 
 /**
@@ -18,22 +16,28 @@ import android.util.AttributeSet;
 
 public class CircleImageView extends androidx.appcompat.widget.AppCompatImageView {
 
+    // 控件宽高
     private int mWidth, mHeight;
-
+    // 缩放矩阵
     private Matrix matrix;
+    // 画笔
     private Paint paint;
+    // 着色器
+    private BitmapShader shader;
+    // 图片的实际宽高
+    private int bWidth, bHeight;
 
     public CircleImageView(Context context) {
         super(context);
         init();
     }
 
-    public CircleImageView(Context context, @Nullable AttributeSet attrs) {
+    public CircleImageView(Context context, @androidx.annotation.Nullable AttributeSet attrs) {
         super(context, attrs);
         init();
     }
 
-    public CircleImageView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public CircleImageView(Context context, @androidx.annotation.Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init();
     }
@@ -42,6 +46,13 @@ public class CircleImageView extends androidx.appcompat.widget.AppCompatImageVie
         matrix = new Matrix();
         paint = new Paint();
         paint.setAntiAlias(true);
+
+        Bitmap bitmap = ((BitmapDrawable) getDrawable()).getBitmap();
+        //根据bitmap创建Shader
+        shader = new BitmapShader(bitmap, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT);
+        // 获取缩放比例
+        bWidth = bitmap.getWidth();
+        bHeight = bitmap.getHeight();
     }
 
     @Override
@@ -49,6 +60,24 @@ public class CircleImageView extends androidx.appcompat.widget.AppCompatImageVie
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         mWidth = getMeasuredWidth();
         mHeight = getMeasuredHeight();
+
+        float scaleX = (float) mWidth / bWidth;
+        float scaleY = (float) mHeight / bHeight;
+        float scale = Math.min(scaleX, scaleY);
+
+        matrix.reset();
+        // 创建矩阵设置缩放比例
+        matrix.postScale(scale, scale);
+        // 计算缩放矩阵
+        if (scaleX < scaleY) {
+            matrix.postTranslate(-(bWidth * scale - mWidth) / 2, 0);
+        } else {
+            matrix.postTranslate(0, -(bHeight * scale - mHeight) / 2);
+        }
+
+        // shader设置矩阵
+        shader.setLocalMatrix(matrix);
+        paint.setShader(shader);
     }
 
     @Override
@@ -58,30 +87,6 @@ public class CircleImageView extends androidx.appcompat.widget.AppCompatImageVie
             super.onDraw(canvas);
             return;
         }
-
-        Bitmap bitmap = ((BitmapDrawable) getDrawable()).getBitmap();
-        //根据bitmap创建Shader
-        BitmapShader shader = new BitmapShader(bitmap, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT);
-        // 获取缩放比例
-        int bWidth = bitmap.getWidth();
-        int bHeight = bitmap.getHeight();
-        float scaleX = (float) mWidth / bWidth;
-        float scaleY = (float) mHeight / bHeight;
-        float scale = Math.min(scaleX, scaleY);
-
-        matrix.reset();
-        // 创建矩阵设置缩放比例
-        matrix.postScale(scale, scale);
-        //
-        if (scaleX < scaleY) {
-            matrix.postTranslate(-(bWidth * scale - mWidth) / 2, 0);
-        } else {
-            matrix.postTranslate(0, -(bHeight * scale - mHeight) / 2);
-        }
-        // shader设置矩阵
-        shader.setLocalMatrix(matrix);
-
-        paint.setShader(shader);
 
         canvas.drawCircle(mWidth / 2, mHeight / 2, mWidth / 2, paint);
     }
