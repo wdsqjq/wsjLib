@@ -7,5 +7,5 @@ allprojects {
 }
 
 dependencies {
-    implementation 'com.github.giswangsj:wsjLib:v2.1.1'
+    implementation 'com.github.giswangsj:wsjLib:3.0.2'
 }
