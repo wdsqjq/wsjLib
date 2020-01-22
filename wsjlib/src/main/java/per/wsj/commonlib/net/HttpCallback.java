@@ -31,7 +31,7 @@ public abstract class HttpCallback<T> implements Observer<ResponseBody>,CallBack
                 if(data == null || data.code == null){
                     onError(null,"请求失败");
                 }else{
-                    onSuccess(data.detail,data.code,data.msg);
+                    onSuccess(data.result,data.code,data.msg);
                 }
             }else{
                 onError(null,"未知异常");
