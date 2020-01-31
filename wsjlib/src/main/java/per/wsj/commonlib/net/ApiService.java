@@ -36,6 +36,15 @@ public interface ApiService {
             @Path(value = "url", encoded = true) String url,
             @Body RequestBody request);
 
+    @PUT("{url}")
+    Observable<ResponseBody> executePut(
+            @Path(value = "url", encoded = true) String url);
+
+    @PUT("{url}")
+    Observable<ResponseBody> executePut(
+            @Path(value = "url", encoded = true) String url,
+            @HeaderMap Map<String, String> headers);
+
 //    @Multipart
 //    @POST("{url}")
 //    Observable<ResponseBody> upLoadFile(

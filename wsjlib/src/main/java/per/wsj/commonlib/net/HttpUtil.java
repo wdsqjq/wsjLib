@@ -4,11 +4,16 @@ import android.content.Context;
 
 import com.google.gson.Gson;
 
+import org.jetbrains.annotations.NotNull;
+
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
+import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.Interceptor;
 import okhttp3.MediaType;
@@ -71,8 +76,15 @@ public class HttpUtil {
         apiService = retrofit.create(ApiService.class);
     }
 
-    public <T> void get(String url,  final HttpCallback<T> callBack) {
-        get(url,null,callBack);
+    /**
+     * get请求
+     *
+     * @param url
+     * @param callBack
+     * @param <T>
+     */
+    public <T> void get(String url, final HttpCallback<T> callBack) {
+        get(url, null, callBack);
     }
 
     public <T> void get(String url, Map<String, Object> param, final HttpCallback<T> callBack) {
@@ -91,9 +103,15 @@ public class HttpUtil {
                 .subscribe(callBack);
     }
 
-
-    public <T> void post(String url,  final HttpCallback<T> callBack) {
-        post(url,null,callBack);
+    /**
+     * Post请求
+     *
+     * @param url
+     * @param callBack
+     * @param <T>
+     */
+    public <T> void post(String url, final HttpCallback<T> callBack) {
+        post(url, null, callBack);
     }
 
     public <T> void post(String url, Object param, final HttpCallback<T> callBack) {
@@ -105,6 +123,33 @@ public class HttpUtil {
         RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), new Gson().toJson(param));
         apiService.executePost(url, requestBody)
                 .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(callBack);
+    }
+
+    /**
+     * Put请求
+     *
+     * @param url
+     * @param callBack
+     * @param <T>
+     */
+    public void put(String url, final Observer<ResponseBody> callBack) {
+        put(url, null, callBack);
+    }
+
+    public void put(String url, Map<String, String> header, final Observer<ResponseBody> callBack) {
+        if (callBack == null) {
+            return;
+        }
+        Observable<ResponseBody> observable;
+        if (header == null) {
+            observable = apiService.executePut(url);
+        } else {
+            observable = apiService.executePut(url, header);
+        }
+        observable.subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(callBack);
