@@ -21,6 +21,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import per.wsj.commonlib.utils.ValueUtil;
+import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -135,15 +136,15 @@ public class HttpUtil {
      * @param callBack
      * @param <T>
      */
-    public void put(String url, final Observer<ResponseBody> callBack) {
+    public void put(String url, final Observer<Response<Void>> callBack) {
         put(url, null, callBack);
     }
 
-    public void put(String url, Map<String, String> header, final Observer<ResponseBody> callBack) {
+    public void put(String url, Map<String, String> header, final Observer<Response<Void>> callBack) {
         if (callBack == null) {
             return;
         }
-        Observable<ResponseBody> observable;
+        Observable<Response<Void>> observable;
         if (header == null) {
             observable = apiService.executePut(url);
         } else {

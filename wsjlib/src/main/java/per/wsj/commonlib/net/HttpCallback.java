@@ -15,7 +15,7 @@ import io.reactivex.disposables.Disposable;
 import okhttp3.ResponseBody;
 import retrofit2.HttpException;
 
-public abstract class HttpCallback<T> implements Observer<ResponseBody>,CallBack<T> {
+public abstract class HttpCallback<T> implements Observer<ResponseBody>, CallBack<T> {
 
     @Override
     public void onNext(ResponseBody value) {
@@ -23,18 +23,18 @@ public abstract class HttpCallback<T> implements Observer<ResponseBody>,CallBack
             String responseBody = value.string();
 
             Type type = getClass().getGenericSuperclass();
-            if(type instanceof ParameterizedType){
-                Type[] types = ((ParameterizedType)type).getActualTypeArguments();
+            if (type instanceof ParameterizedType) {
+                Type[] types = ((ParameterizedType) type).getActualTypeArguments();
                 Type ty = new ParameterizedTypeImpl(BaseResponseBody.class, new Type[]{types[0]});
                 BaseResponseBody<T> data = new Gson().fromJson(responseBody, ty);
 
-                if(data == null || data.code == null){
-                    onError(null,"请求失败");
-                }else{
-                    onSuccess(data.result,data.code,data.msg);
+                if (data == null || data.code == null) {
+                    onError(null, "请求失败");
+                } else {
+                    onSuccess(data.result, data.code, data.msg);
                 }
-            }else{
-                onError(null,"未知异常");
+            } else {
+                onError(null, "未知异常");
             }
         } catch (Exception e) {
             onError(e);

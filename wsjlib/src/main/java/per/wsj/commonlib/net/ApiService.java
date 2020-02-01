@@ -3,6 +3,7 @@ package per.wsj.commonlib.net;
 import io.reactivex.Observable;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
+import retrofit2.Response;
 import retrofit2.http.*;
 
 import java.util.Map;
@@ -37,11 +38,11 @@ public interface ApiService {
             @Body RequestBody request);
 
     @PUT("{url}")
-    Observable<ResponseBody> executePut(
+    Observable<Response<Void>> executePut(
             @Path(value = "url", encoded = true) String url);
 
     @PUT("{url}")
-    Observable<ResponseBody> executePut(
+    Observable<Response<Void>> executePut(
             @Path(value = "url", encoded = true) String url,
             @HeaderMap Map<String, String> headers);
 
