@@ -86,6 +86,14 @@ public abstract class CommonRecyclerAdapter<T> extends RecyclerView.Adapter<Recy
         setEmpty(-1);
     }
 
+    public void setError() {
+        setEmpty(R.layout.layout_list_error);
+    }
+
+    public void setError(int layoutId) {
+        setEmpty(layoutId);
+    }
+
     /**
      * 设置空数据页
      *
@@ -94,7 +102,7 @@ public abstract class CommonRecyclerAdapter<T> extends RecyclerView.Adapter<Recy
     public void setEmpty(int layoutId) {
         emptyView = null;
         if (layoutId == -1) {
-            emptyView = LayoutInflater.from(mContext).inflate(R.layout.layout_list_error, parent, false);
+            emptyView = LayoutInflater.from(mContext).inflate(R.layout.layout_list_empty, parent, false);
         } else {
             emptyView = LayoutInflater.from(mContext).inflate(layoutId, parent, false);
         }
