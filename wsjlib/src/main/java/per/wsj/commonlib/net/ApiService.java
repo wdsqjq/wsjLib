@@ -19,39 +19,35 @@ public interface ApiService {
 
     @GET("{url}")
     Observable<ResponseBody> executeGet(
-            @Path(value = "url", encoded = true) String url);
-
-    @GET("{url}")
-    Observable<ResponseBody> executeGet(
             @Path(value = "url", encoded = true) String url,
+            @HeaderMap Map<String, String> headers,
             @QueryMap(encoded = true) Map<String, Object> map);
 
-    @POST("{url}")
-    Observable<ResponseBody> executePost(
-            @HeaderMap Map<String, String> headers,
-            @Path(value = "url", encoded = true) String url,
-            @Body RequestBody request);
-
-    @POST("{url}")
-    Observable<ResponseBody> executePost(
-            @Path(value = "url", encoded = true) String url,
-            @Body RequestBody request);
-
-    @PUT("{url}")
-    Observable<Response<Void>> executePut(
+    /**
+     * 空返回体
+     * @param url
+     * @return
+     */
+    @GET("{url}")
+    Observable<Response<Void>> executeGet2(
             @Path(value = "url", encoded = true) String url);
+
+
+    @POST("{url}")
+    Observable<ResponseBody> executePost(
+            @Path(value = "url", encoded = true) String url,
+            @HeaderMap Map<String, String> headers,
+            @Body RequestBody request);
+
 
     @PUT("{url}")
     Observable<Response<Void>> executePut(
             @Path(value = "url", encoded = true) String url,
             @HeaderMap Map<String, String> headers);
 
-//    @Multipart
-//    @POST("{url}")
-//    Observable<ResponseBody> upLoadFile(
-//            @Path("url") String url,
-//            @Part("image\\\\"; filename=\\"image.jpg") RequestBody avatar);
-
+    @DELETE("{url}")
+    Observable<Response<Void>> executeDelete(
+            @Path(value = "url", encoded = true) String url);
 
     @POST("{url}")
     Observable<ResponseBody> uploadFiles(

@@ -89,15 +89,32 @@ public class HttpUtil {
     }
 
     public <T> void get(String url, Map<String, Object> param, final HttpCallback<T> callBack) {
+        get(url, null, param, callBack);
+    }
+
+    public <T> void get(String url, Map<String, String> headers, Map<String, Object> param, final HttpCallback<T> callBack) {
         if (callBack == null) {
             return;
         }
-        Observable<ResponseBody> observable;
-        if (param == null) {
-            observable = apiService.executeGet(url);
-        } else {
-            observable = apiService.executeGet(url, param);
+        if (headers == null) {
+            headers = new HashMap<>();
         }
+        if (param == null) {
+            param = new HashMap<>();
+        }
+        Observable<ResponseBody> observable = apiService.executeGet(url, headers, param);
+        observable.subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(callBack);
+    }
+
+    public void get(String url, final Observer<Response<Void>> callBack) {
+        if (callBack == null) {
+            return;
+        }
+        Observable<Response<Void>> observable = apiService.executeGet2(url);
+
         observable.subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -115,14 +132,20 @@ public class HttpUtil {
         post(url, null, callBack);
     }
 
+
     public <T> void post(String url, Object param, final HttpCallback<T> callBack) {
+        post(url, null, param, callBack);
+    }
+
+    public <T> void post(String url, Map<String, String> headers, Object param, final HttpCallback<T> callBack) {
         if (callBack == null) {
             return;
         }
-        // Map<String, String> headers = new HashMap<>();
-        // headers.put("token","123456");
+        if (headers == null) {
+            headers = new HashMap<>();
+        }
         RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), new Gson().toJson(param));
-        apiService.executePost(url, requestBody)
+        apiService.executePost(url, headers, requestBody)
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -134,7 +157,6 @@ public class HttpUtil {
      *
      * @param url
      * @param callBack
-     * @param <T>
      */
     public void put(String url, final Observer<Response<Void>> callBack) {
         put(url, null, callBack);
@@ -144,12 +166,23 @@ public class HttpUtil {
         if (callBack == null) {
             return;
         }
-        Observable<Response<Void>> observable;
         if (header == null) {
-            observable = apiService.executePut(url);
-        } else {
-            observable = apiService.executePut(url, header);
+            header = new HashMap<>();
         }
+
+        Observable<Response<Void>> observable = apiService.executePut(url, header);
+        observable.subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(callBack);
+    }
+
+    public void delete(String url, final Observer<Response<Void>> callBack) {
+        if (callBack == null) {
+            return;
+        }
+        Observable<Response<Void>> observable = apiService.executeDelete(url);
+
         observable.subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

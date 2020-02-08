@@ -193,4 +193,8 @@ public class BaseViewHolder {
         view.setChecked(checked);
         return this;
     }
+
+    public void setOnItemClickListener(View.OnClickListener listener){
+        view.setOnClickListener(listener);
+    }
 }

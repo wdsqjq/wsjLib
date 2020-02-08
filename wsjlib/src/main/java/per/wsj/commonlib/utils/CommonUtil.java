@@ -1,10 +1,14 @@
 package per.wsj.commonlib.utils;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+
+import androidx.annotation.NonNull;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -65,6 +69,7 @@ public class CommonUtil {
 
     /**
      * 判断是否安装某apk
+     *
      * @param context
      * @param PACK_NAME
      * @return
@@ -420,6 +425,7 @@ public class CommonUtil {
 
     /**
      * get the name of process
+     *
      * @return
      */
     public static String getProcessName() {
