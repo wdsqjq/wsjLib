@@ -21,7 +21,6 @@ public abstract class HttpCallback<T> implements Observer<ResponseBody>, CallBac
     public void onNext(ResponseBody value) {
         try {
             String responseBody = value.string();
-
             Type type = getClass().getGenericSuperclass();
             if (type instanceof ParameterizedType) {
                 Type[] types = ((ParameterizedType) type).getActualTypeArguments();
@@ -30,6 +29,8 @@ public abstract class HttpCallback<T> implements Observer<ResponseBody>, CallBac
 
                 if (data == null || data.code == null) {
                     onError(null, "请求失败");
+                } else if (data.code.equals("444")) {
+                    onReLogin();
                 } else {
                     onSuccess(data.result, data.code, data.msg);
                 }

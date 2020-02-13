@@ -11,6 +11,7 @@ import java.util.Map;
 /**
  * Description:
  * Created by wangsj on 17-12-19.
+ * 2020/2/11 note:由于请求路径设置了encoded=true, 路径中包含？的回出错
  */
 
 public interface ApiService {
@@ -25,6 +26,7 @@ public interface ApiService {
 
     /**
      * 空返回体
+     *
      * @param url
      * @return
      */

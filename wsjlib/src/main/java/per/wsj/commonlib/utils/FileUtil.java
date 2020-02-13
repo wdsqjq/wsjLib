@@ -28,20 +28,24 @@ public class FileUtil {
         long result;
         if (file.isFile()) {
             result = file.length();
-        }else{
+        } else {
             result = getFolderSize(file);
         }
+        return getSizeString(result);
+    }
+
+    public static String getSizeString(long size) {
         long gb = 2 << 29;
         long mb = 2 << 19;
         long kb = 2 << 9;
-        if (result < kb) {
-            return result + "B";
-        } else if (result >= kb && result < mb) {
-            return String.format(Locale.CHINESE, "%.2fKB", result / (double) kb);
-        } else if (result >= mb && result < gb) {
-            return String.format(Locale.CHINESE, "%.2fMB", result / (double) mb);
-        } else if (result >= gb) {
-            return String.format(Locale.CHINESE, "%.2fGB", result / (double) gb);
+        if (size < kb) {
+            return size + "B";
+        } else if (size >= kb && size < mb) {
+            return String.format(Locale.CHINESE, "%.2fKB", size / (double) kb);
+        } else if (size >= mb && size < gb) {
+            return String.format(Locale.CHINESE, "%.2fMB", size / (double) mb);
+        } else if (size >= gb) {
+            return String.format(Locale.CHINESE, "%.2fGB", size / (double) gb);
         }
         return null;
     }

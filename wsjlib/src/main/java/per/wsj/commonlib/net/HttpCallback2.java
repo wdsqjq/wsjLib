@@ -71,4 +71,9 @@ public abstract class HttpCallback2<T> implements Observer<T>, CallBack<T> {
     public void onSubscribe(Disposable d) {
         onStart(d);
     }
+
+    @Override
+    public void onReLogin() {
+
+    }
 }
