@@ -194,7 +194,13 @@ public class BaseViewHolder {
         return this;
     }
 
-    public void setOnItemClickListener(View.OnClickListener listener){
+    public BaseViewHolder setOnViewClickListener(int viewId, View.OnClickListener listener) {
+        View view = get(viewId);
+        view.setOnClickListener(listener);
+        return this;
+    }
+
+    public void setOnItemClickListener(View.OnClickListener listener) {
         view.setOnClickListener(listener);
     }
 }

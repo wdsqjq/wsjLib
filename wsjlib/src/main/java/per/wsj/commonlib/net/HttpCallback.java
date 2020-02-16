@@ -28,14 +28,16 @@ public abstract class HttpCallback<T> implements Observer<ResponseBody>, CallBac
                 BaseResponseBody<T> data = new Gson().fromJson(responseBody, ty);
 
                 if (data == null || data.code == null) {
-                    onError(null, "请求失败");
+                    onError(null, "请求失败,请重试");
                 } else if (data.code.equals("444")) {
                     onReLogin();
-                } else {
+                } else if (data.code.equals("200")){
                     onSuccess(data.result, data.code, data.msg);
+                }else {
+                    onError(null, "请求失败,请重试");
                 }
             } else {
-                onError(null, "未知异常");
+                onError(null, "未知异常,请重试");
             }
         } catch (Exception e) {
             onError(e);
@@ -49,9 +51,9 @@ public abstract class HttpCallback<T> implements Observer<ResponseBody>, CallBac
         } else if (e instanceof HttpException
                 || e instanceof ConnectException
                 || e instanceof UnknownHostException) {
-            onError(e, "网络错误，请确保网络通畅");
+            onError(e, "网络错误,请确保网络通畅");
         } else if (e instanceof SSLHandshakeException) {
-            onError(e, "网络异常，如使用网络代理，请关闭后重试");
+            onError(e, "网络异常,如使用网络代理,请关闭后重试");
         } else {
             onError(e, e.toString());
         }
