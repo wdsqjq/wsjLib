@@ -68,7 +68,7 @@ public class Font32 {
             int pos  = posCode-0xa0;//获得真实位码
 
             //InputStream in = getClass().getResourceAsStream(ZK32);
-            InputStream in = CommonUtil.getAssetsInputStream(context, ZK32);
+            InputStream in = FileUtil.getAssetsInputStream(context, ZK32);
             long offset = 128*((area-1)*94+pos-1);
             in.skip(offset);
             data = new byte[128];

@@ -1,6 +1,7 @@
 package per.wsj.commonlib.pulltorefreshlib.adapter;
 
 import android.annotation.SuppressLint;
+import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.Paint;
 import android.graphics.Typeface;
@@ -15,6 +16,8 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.TextView;
+
+import androidx.annotation.RequiresApi;
 
 /**
  * Created by shiju.wang on 2018/3/29.
@@ -191,6 +194,13 @@ public class BaseViewHolder {
     public BaseViewHolder setChecked(int viewId, boolean checked) {
         Checkable view = get(viewId);
         view.setChecked(checked);
+        return this;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    public BaseViewHolder setImageTintList(int viewId, ColorStateList tint) {
+        ImageView imageView = get(viewId);
+        imageView.setImageTintList(tint);
         return this;
     }
 

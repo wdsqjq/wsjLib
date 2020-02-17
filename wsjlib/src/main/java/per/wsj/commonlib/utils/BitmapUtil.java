@@ -17,12 +17,29 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * Created by shiju.wang on 2017/10/17.
  */
 
 public class BitmapUtil {
+
+    /**
+     * 以省内存的方式读取图片
+     * @param is
+     * @return
+     */
+    public Bitmap getBitmap(InputStream is) {
+        BitmapFactory.Options opt = new BitmapFactory.Options();
+        opt.inPreferredConfig = Bitmap.Config.RGB_565;
+        opt.inPurgeable = true;
+        opt.inInputShareable = true;
+        opt.inSampleSize = 4;
+        //获取资源图片
+        //InputStream is = mContext.getResources().openRawResource(resId);
+        return BitmapFactory.decodeStream(is, null, opt);
+    }
 
     /**
      * drawable转bitmap
