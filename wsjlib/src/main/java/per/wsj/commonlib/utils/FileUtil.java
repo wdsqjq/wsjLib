@@ -198,7 +198,7 @@ public class FileUtil {
      * @param path
      * @return
      */
-    public boolean IsExist(String path) {
+    public static boolean IsExist(String path) {
         File file = new File(path);
         return file.exists();
     }
@@ -209,7 +209,7 @@ public class FileUtil {
      * @param path
      * @return
      */
-    public File creatNewFile(String path) {
+    public static File creatNewFile(String path) {
         File file = new File(path);
         if (IsExist(path))
             file.delete();
@@ -223,7 +223,7 @@ public class FileUtil {
      * @param path
      * @return
      */
-    public boolean deleteFile(String path) {
+    public static boolean deleteFile(String path) {
         File file = new File(path);
         if (IsExist(path))
             file.delete();
@@ -231,7 +231,7 @@ public class FileUtil {
     }
 
     // 删除一个目录
-    public boolean deleteFileDir(String path) {
+    public static boolean deleteFileDir(String path) {
         boolean flag = false;
         File file = new File(path);
         if (!IsExist(path)) {
@@ -267,7 +267,7 @@ public class FileUtil {
     // 删除文件夹
     // param folderPath 文件夹完整绝对路径
 
-    public void delFolder(String folderPath) {
+    public static void delFolder(String folderPath) {
         try {
             delAllFile(folderPath); // 删除完里面所有内容
             String filePath = folderPath;
@@ -281,7 +281,7 @@ public class FileUtil {
 
     // 删除指定文件夹下所有文件
     // param path 文件夹完整绝对路径
-    public boolean delAllFile(String path) {
+    public static boolean delAllFile(String path) {
         boolean flag = false;
         File file = new File(path);
         if (!file.exists()) {
@@ -320,7 +320,7 @@ public class FileUtil {
         return Environment.MEDIA_MOUNTED.equals(state);
     }
 
-    public String[] getFlieName(String rootpath) {
+    public String[] getFileName(String rootpath) {
         File root = new File(rootpath);
         File[] filesOrDirs = root.listFiles();
         if (filesOrDirs != null) {
@@ -354,7 +354,7 @@ public class FileUtil {
      * @throws FileNotFoundException
      * @throws UnsupportedEncodingException
      */
-    public BufferedWriter getWriter(String path) throws FileNotFoundException,
+    public static BufferedWriter getWriter(String path) throws FileNotFoundException,
             UnsupportedEncodingException {
         FileOutputStream fileout = null;
         fileout = new FileOutputStream(new File(path));
@@ -363,7 +363,7 @@ public class FileUtil {
         return new BufferedWriter(writer);
     }
 
-    public InputStream getInputStream(String path) throws FileNotFoundException {
+    public static InputStream getInputStream(String path) throws FileNotFoundException {
         // if(Comments.DEBUG) System.out.println("path:"+path);
         FileInputStream filein = null;
         // if(Comments.DEBUG) System.out.println("2");
@@ -376,7 +376,7 @@ public class FileUtil {
         return in;
     }
 
-    public boolean StateXmlControl(String path) {
+    public static boolean StateXmlControl(String path) {
         File f = new File(path);
         if (!f.exists())
             return false;
@@ -448,7 +448,7 @@ public class FileUtil {
      * @param inputStream
      * @return
      */
-    public File writeFromInputToSD(String path, InputStream inputStream) {
+    public static File writeFromInputToSD(String path, InputStream inputStream) {
         File file = null;
         OutputStream output = null;
         try {
@@ -478,7 +478,7 @@ public class FileUtil {
      * @param path
      * @return
      */
-    public File writeFromInputToSD(String path, byte[] b) {
+    public static File writeFromInputToSD(String path, byte[] b) {
         File file = null;
         OutputStream output = null;
         try {
@@ -501,7 +501,7 @@ public class FileUtil {
     /**
      * 方法：把一段文本保存到给定的路径中.
      */
-    public void saveTxtFile(String filePath, String text) {
+    public static void saveTxtFile(String filePath, String text) {
         try {
             // 首先构建一个文件输出流,用于向文件中写入数据.
             new FileUtil().creatFileIfNotExist(filePath);
@@ -521,7 +521,7 @@ public class FileUtil {
 
     }
 
-    public void clearTxtFile(String filePath) {
+    public static void clearTxtFile(String filePath) {
         try {
             // 首先构建一个文件输出流,用于向文件中写入数据.
             String text = "";
@@ -539,7 +539,7 @@ public class FileUtil {
     }
 
     // 读取一个给定的文本文件内容,并把内容以一个字符串的形式返回
-    public String readTextLine(String textFile) {
+    public static String readTextLine(String textFile) {
         try {
             // 首先构建一个文件输入流,该流用于从文本文件中读取数据
             FileInputStream input = new FileInputStream(textFile);
@@ -578,7 +578,7 @@ public class FileUtil {
     }
 
     // 取前面的名字　"."
-    public String getNameByFlag(String source, String flag) {
+    public static String getNameByFlag(String source, String flag) {
         // String[] source_spli = source.split(flag);
         String s = source.toLowerCase().replace(flag, "");
         return s.trim();

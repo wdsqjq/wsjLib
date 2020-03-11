@@ -3,9 +3,11 @@ package per.wsj.commonlib.net;
 import android.content.Context;
 
 import com.google.gson.Gson;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+
 import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -15,7 +17,6 @@ import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
-import per.wsj.commonlib.utils.ValueUtil;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
@@ -55,7 +56,7 @@ public class HttpUtil {
             builder.addInterceptor(interceptor);
         }
         // 证书不为空则使用证书，否则忽略证书
-        if (ValueUtil.isStrNotEmpty(cer)) {
+        if (cer != null && !cer.isEmpty()) {
             builder.sslSocketFactory(SSLSocketClient.getSSLSocketFactory(mContext, cer), SSLSocketClient.getX509TrustManager(context, cer)); // https证书
         } else {
             builder.sslSocketFactory(SSLSocketClient.getSSLSocketFactoryIgnore(), SSLSocketClient.getX509TrustManager());
