@@ -15,7 +15,7 @@ public interface CallBack<T> {
      * @param throwable
      * @param string
      */
-    void onError(@Nullable Throwable throwable, String string);
+    void onError(@Nullable Throwable throwable, String string, String code);
 
     void onReLogin();
 

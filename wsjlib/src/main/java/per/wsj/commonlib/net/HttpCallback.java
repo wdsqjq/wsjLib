@@ -28,16 +28,16 @@ public abstract class HttpCallback<T> implements Observer<ResponseBody>, CallBac
                 BaseResponseBody<T> data = new Gson().fromJson(responseBody, ty);
 
                 if (data == null || data.code == null) {
-                    onError(null, "请求失败,请重试");
+                    onError(null, "请求失败,请重试", "0000");
                 } else if (data.code.equals("444")) {
                     onReLogin();
-                } else if (data.code.equals("200")){
+                } else if (data.code.equals("200")) {
                     onSuccess(data.result, data.code, data.msg);
-                }else {
-                    onError(null, "请求失败,请重试");
+                } else {
+                    onError(null, "请求失败,请重试", data.code);
                 }
             } else {
-                onError(null, "未知异常,请重试");
+                onError(null, "未知异常,请重试", "0000");
             }
         } catch (Exception e) {
             onError(e);
@@ -47,15 +47,15 @@ public abstract class HttpCallback<T> implements Observer<ResponseBody>, CallBac
     @Override
     public void onError(Throwable e) {
         if (e instanceof SocketTimeoutException) {
-            onError(e, "请求超时,请重试");
+            onError(e, "请求超时,请重试", "0000");
         } else if (e instanceof HttpException
                 || e instanceof ConnectException
                 || e instanceof UnknownHostException) {
-            onError(e, "网络错误,请确保网络通畅");
+            onError(e, "网络错误,请确保网络通畅", "0000");
         } else if (e instanceof SSLHandshakeException) {
-            onError(e, "网络异常,如使用网络代理,请关闭后重试");
+            onError(e, "网络异常,如使用网络代理,请关闭后重试", "0000");
         } else {
-            onError(e, e.toString());
+            onError(e, e.toString(), "0000");
         }
         onFinished();
     }

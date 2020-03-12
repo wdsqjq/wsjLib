@@ -37,9 +37,9 @@ public abstract class HttpCallback2<T> implements Observer<T>, CallBack<T> {
             if (code.equals("204")) {
                 onSuccess(null, code, "success");
             } else if (code.equals("401")) {
-                onError(null, "请重新登录");
+                onError(null, "请重新登录","401");
             } else {
-                onError(null, "请求失败");
+                onError(null, "请求失败","0000");
             }
         } catch (Exception e) {
             onError(e);
@@ -49,15 +49,15 @@ public abstract class HttpCallback2<T> implements Observer<T>, CallBack<T> {
     @Override
     public void onError(Throwable e) {
         if (e instanceof SocketTimeoutException) {
-            onError(e, "请求超时,请重试");
+            onError(e, "请求超时,请重试","0000");
         } else if (e instanceof HttpException
                 || e instanceof ConnectException
                 || e instanceof UnknownHostException) {
-            onError(e, "网络错误，请确保网络通畅");
+            onError(e, "网络错误，请确保网络通畅","0000");
         } else if (e instanceof SSLHandshakeException) {
-            onError(e, "网络异常，如使用网络代理，请关闭后重试");
+            onError(e, "网络异常，如使用网络代理，请关闭后重试","0000");
         } else {
-            onError(e, e.toString());
+            onError(e, e.toString(),"0000");
         }
         onFinished();
     }
