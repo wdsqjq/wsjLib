@@ -21,24 +21,36 @@ public abstract class HttpCallback<T> implements Observer<ResponseBody>, CallBac
     public void onNext(ResponseBody value) {
         try {
             String responseBody = value.string();
-            Type type = getClass().getGenericSuperclass();
-            if (type instanceof ParameterizedType) {
-                Type[] types = ((ParameterizedType) type).getActualTypeArguments();
-                Type ty = new ParameterizedTypeImpl(BaseResponseBody.class, new Type[]{types[0]});
-                BaseResponseBody<T> data = new Gson().fromJson(responseBody, ty);
-
-                if (data == null || data.code == null) {
-                    onError(null, "请求失败,请重试", "0000");
-                } else if (data.code.equals("444")) {
-                    onReLogin();
-                } else if (data.code.equals("200")) {
+            // 先获取code并判断
+            SimpleResponseBody simpleResponseBody = new Gson().fromJson(responseBody, SimpleResponseBody.class);
+            if (simpleResponseBody == null || simpleResponseBody.code == null) {
+                onError(null, "请求失败,请重试", "0000");
+            } else if (simpleResponseBody.code.equals("444")) {
+                onReLogin();
+                onError(null, "请重新登陆", "444");
+            } else if (simpleResponseBody.code.equals("200")) {
+                Type type = getClass().getGenericSuperclass();
+                if (type instanceof ParameterizedType) {
+                    Type[] types = ((ParameterizedType) type).getActualTypeArguments();
+                    Type ty = new ParameterizedTypeImpl(BaseResponseBody.class, new Type[]{types[0]});
+                    BaseResponseBody<T> data = new Gson().fromJson(responseBody, ty);
                     onSuccess(data.result, data.code, data.msg);
+//                    if (data == null || data.code == null) {
+//                        onError(null, "请求失败,请重试", "0000");
+//                    } else if (data.code.equals("444")) {
+//                        onReLogin();
+//                    } else if (data.code.equals("200")) {
+//                        onSuccess(data.result, data.code, data.msg);
+//                    } else {
+//                        onError(null, "请求失败,请重试", data.code);
+//                    }
                 } else {
-                    onError(null, "请求失败,请重试", data.code);
+                    onError(null, "未知异常,请重试", "0000");
                 }
             } else {
-                onError(null, "未知异常,请重试", "0000");
+                onError(null, "请求失败,请重试", simpleResponseBody.code);
             }
+
         } catch (Exception e) {
             onError(e);
         }
