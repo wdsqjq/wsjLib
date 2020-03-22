@@ -1,36 +1,17 @@
 package per.wsj.commonlib.utils;
 
-import android.content.ClipData;
-import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 
-import androidx.annotation.NonNull;
-
-import java.io.BufferedInputStream;
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.LineNumberReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.UnsupportedEncodingException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -39,32 +20,39 @@ import java.util.Locale;
  */
 public class CommonUtil {
 
-    public static String getVersionCode(Context context) {
-        try {
-            //applicationId 获取
-            String pkName = context.getPackageName();
-            //versionName获取
-            String versionName = context.getPackageManager().getPackageInfo(
-                    pkName, 0).versionName;
-            //versionCode获取
-            int versionCode = context.getPackageManager().getPackageInfo(pkName, 0).versionCode;
-            return String.valueOf(versionCode);
-        } catch (Exception e) {
-        }
-        return "";
+    public static String getVersionName(Context context) {
+        return getPackageInfo(context, 1);
     }
 
-    public static String getVersionName(Context context) {
+    public static int getVersionCode(Context context) {
+        return getPackageInfo(context, 2);
+    }
+
+    /**
+     * 获取PackageInfo信息
+     *
+     * @param context
+     * @param flag    1: versionName  2:versionCode
+     * @return
+     */
+    public static <T> T getPackageInfo(Context context, int flag) {
         try {
             //applicationId 获取
             String pkName = context.getPackageName();
-            //versionName获取
-            String versionName = context.getPackageManager().getPackageInfo(
-                    pkName, 0).versionName;
-            return String.valueOf(versionName);
+            PackageInfo packageInfo = context.getPackageManager().getPackageInfo(
+                    pkName, 0);
+            if (flag == 1) {
+                //versionName获取
+                return (T) packageInfo.versionName;
+            } else if (flag == 2) {
+                //versionCode获取
+                return (T) Integer.valueOf(packageInfo.versionCode);
+            } else {
+                return (T) packageInfo.versionName;
+            }
         } catch (Exception e) {
         }
-        return "";
+        return (T) "";
     }
 
     /**
