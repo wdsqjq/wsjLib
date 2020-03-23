@@ -577,6 +577,12 @@ public class FileUtil {
         }
     }
 
+    // 根据文件路径获取文件名
+    public static String getNameFromPath(String path) {
+        String[] pathParts = path.split(File.separator);
+        return pathParts[pathParts.length - 1];
+    }
+
     // 取前面的名字　"."
     public static String getNameByFlag(String source, String flag) {
         // String[] source_spli = source.split(flag);
