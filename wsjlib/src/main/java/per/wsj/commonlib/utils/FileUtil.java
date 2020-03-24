@@ -161,15 +161,14 @@ public class FileUtil {
      * @param path 传入路径字符串
      * @return File
      */
-    public static File creatFileIfNotExist(String path) {
-        System.out.println("cr");
+    public static File createFileIfNotExist(String path) {
+//        System.out.println("cr");
         File file = new File(path);
         if (!file.exists()) {
             try {
                 new File(path.substring(0, path.lastIndexOf(File.separator)))
                         .mkdirs();
                 file.createNewFile();
-
             } catch (IOException e) {
                 e.printStackTrace();
 
@@ -198,7 +197,7 @@ public class FileUtil {
      * @param path
      * @return
      */
-    public static boolean IsExist(String path) {
+    public static boolean IsFileExist(String path) {
         File file = new File(path);
         return file.exists();
     }
@@ -211,9 +210,10 @@ public class FileUtil {
      */
     public static File creatNewFile(String path) {
         File file = new File(path);
-        if (IsExist(path))
+        if (IsFileExist(path)) {
             file.delete();
-        creatFileIfNotExist(path);
+        }
+        createFileIfNotExist(path);
         return file;
     }
 
@@ -225,20 +225,19 @@ public class FileUtil {
      */
     public static boolean deleteFile(String path) {
         File file = new File(path);
-        if (IsExist(path))
+        if (IsFileExist(path)) {
             file.delete();
+        }
         return true;
     }
 
     // 删除一个目录
     public static boolean deleteFileDir(String path) {
-        boolean flag = false;
         File file = new File(path);
-        if (!IsExist(path)) {
-            return flag;
+        if (!IsFileExist(path)) {
+            return false;
         }
         if (!file.isDirectory()) {
-
             file.delete();
             return true;
         }
@@ -259,55 +258,7 @@ public class FileUtil {
             }
         }
         file.delete();
-
-        flag = true;
-        return flag;
-    }
-
-    // 删除文件夹
-    // param folderPath 文件夹完整绝对路径
-
-    public static void delFolder(String folderPath) {
-        try {
-            delAllFile(folderPath); // 删除完里面所有内容
-            String filePath = folderPath;
-            filePath = filePath.toString();
-            File myFilePath = new File(filePath);
-            myFilePath.delete(); // 删除空文件夹
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    // 删除指定文件夹下所有文件
-    // param path 文件夹完整绝对路径
-    public static boolean delAllFile(String path) {
-        boolean flag = false;
-        File file = new File(path);
-        if (!file.exists()) {
-            return flag;
-        }
-        if (!file.isDirectory()) {
-            return flag;
-        }
-        String[] tempList = file.list();
-        File temp = null;
-        for (int i = 0; i < tempList.length; i++) {
-            if (path.endsWith(File.separator)) {
-                temp = new File(path + tempList[i]);
-            } else {
-                temp = new File(path + File.separator + tempList[i]);
-            }
-            if (temp.isFile()) {
-                temp.delete();
-            }
-            if (temp.isDirectory()) {
-                delAllFile(path + "/" + tempList[i]);// 先删除文件夹里面的文件
-                delFolder(path + "/" + tempList[i]);// 再删除空文件夹
-                flag = true;
-            }
-        }
-        return flag;
+        return true;
     }
 
     /**
@@ -320,7 +271,7 @@ public class FileUtil {
         return Environment.MEDIA_MOUNTED.equals(state);
     }
 
-    public String[] getFileName(String rootpath) {
+    public String[] getFolderFileList(String rootpath) {
         File root = new File(rootpath);
         File[] filesOrDirs = root.listFiles();
         if (filesOrDirs != null) {
@@ -364,23 +315,13 @@ public class FileUtil {
     }
 
     public static InputStream getInputStream(String path) throws FileNotFoundException {
-        // if(Comments.DEBUG) System.out.println("path:"+path);
         FileInputStream filein = null;
-        // if(Comments.DEBUG) System.out.println("2");
-        // File file = creatFileIfNotExist(path);
         File file = new File(path);
         filein = new FileInputStream(file);
         BufferedInputStream in = null;
         if (filein != null)
             in = new BufferedInputStream(filein);
         return in;
-    }
-
-    public static boolean StateXmlControl(String path) {
-        File f = new File(path);
-        if (!f.exists())
-            return false;
-        return f.length() != 0;
     }
 
     /**
@@ -390,7 +331,7 @@ public class FileUtil {
      * @return byte[]
      * @throws IOException
      */
-    public static byte[] InputStreamTOByte(InputStream in) throws IOException {
+    public static byte[] InputStreamToByte(InputStream in) throws IOException {
         ByteArrayOutputStream outStream = new ByteArrayOutputStream();
         byte[] data = new byte[6 * 1024];
         int count = -1;
@@ -408,7 +349,7 @@ public class FileUtil {
      * @return byte[]
      * @throws IOException
      */
-    public static byte[] OutputStreamTOByte(OutputStream out)
+    public static byte[] OutputStreamToByte(OutputStream out)
             throws IOException {
 
         byte[] data = new byte[6 * 1024];
@@ -423,7 +364,7 @@ public class FileUtil {
      * @return
      * @throws Exception
      */
-    public static InputStream byteTOInputStream(byte[] in) {
+    public static InputStream byteToInputStream(byte[] in) {
         return new ByteArrayInputStream(in);
     }
 
@@ -435,7 +376,7 @@ public class FileUtil {
      * @throws IOException
      * @throws Exception
      */
-    public static OutputStream byteTOOutputStream(byte[] in) throws IOException {
+    public static OutputStream byteToOutputStream(byte[] in) throws IOException {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         out.write(in);
         return out;
@@ -452,7 +393,7 @@ public class FileUtil {
         File file = null;
         OutputStream output = null;
         try {
-            file = new FileUtil().creatFileIfNotExist(path);
+            file = new FileUtil().createFileIfNotExist(path);
             output = new FileOutputStream(file);
             byte[] buffer = new byte[4 * 1024];
             int temp;
@@ -482,7 +423,7 @@ public class FileUtil {
         File file = null;
         OutputStream output = null;
         try {
-            file = new FileUtil().creatFileIfNotExist(path);
+            file = new FileUtil().createFileIfNotExist(path);
             output = new FileOutputStream(file);
             output.write(b);
             output.flush();
@@ -501,11 +442,11 @@ public class FileUtil {
     /**
      * 方法：把一段文本保存到给定的路径中.
      */
-    public static void saveTxtFile(String filePath, String text) {
+    public static void writeStr2File(String filePath, String text) {
         try {
             // 首先构建一个文件输出流,用于向文件中写入数据.
-            new FileUtil().creatFileIfNotExist(filePath);
-            String txt = readTextLine(filePath);
+            createFileIfNotExist(filePath);
+            String txt = readStrFromFile(filePath);
             text = text + txt;
             FileOutputStream out = new FileOutputStream(filePath);
             // 构建一个写入器,用于向流中写入字符数据
@@ -518,35 +459,20 @@ public class FileUtil {
             String ext = e.getLocalizedMessage();
             // Toast.makeText(this, ext, Toast.LENGTH_LONG).show();
         }
-
     }
 
-    public static void clearTxtFile(String filePath) {
-        try {
-            // 首先构建一个文件输出流,用于向文件中写入数据.
-            String text = "";
-            FileOutputStream out = new FileOutputStream(filePath);
-            // 构建一个写入器,用于向流中写入字符数据
-            OutputStreamWriter writer = new OutputStreamWriter(out, "gb2312");
-            writer.write(text);
-            // 关闭Writer,关闭输出流
-            writer.close();
-            out.close();
-        } catch (Exception e) {
-            String ext = e.getLocalizedMessage();
-            // Toast.makeText(this, ext, Toast.LENGTH_LONG).show();
-        }
-    }
-
-    // 读取一个给定的文本文件内容,并把内容以一个字符串的形式返回
-    public static String readTextLine(String textFile) {
+    /**
+     * 读取一个给定的文本文件内容,并把内容以一个字符串的形式返回
+     * @param textFile
+     * @return
+     */
+    public static String readStrFromFile(String textFile) {
         try {
             // 首先构建一个文件输入流,该流用于从文本文件中读取数据
             FileInputStream input = new FileInputStream(textFile);
             // 为了能够从流中读取文本数据,我们首先要构建一个特定的Reader的实例,
             // 因为我们是从一个输入流中读取数据,所以这里适合使用InputStreamReader.
-            InputStreamReader streamReader = new InputStreamReader(input,
-                    "gb2312");
+            InputStreamReader streamReader = new InputStreamReader(input);
             // 为了能够实现一次读取一行文本的功能,我们使用了 LineNumberReader类,
             // 要构建LineNumberReader的实例,必须要传一个Reader实例做参数,
             // 我们传入前面已经构建好的Reder.
@@ -571,8 +497,6 @@ public class FileUtil {
             // 把读取的字符串返回
             return allLine.toString();
         } catch (Exception e) {
-            // Toast.makeText(this, e.getLocalizedMessage(),
-            // Toast.LENGTH_LONG).show();
             return "";
         }
     }
