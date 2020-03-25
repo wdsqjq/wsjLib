@@ -114,4 +114,15 @@ public class CommonUtil {
             return null;
         }
     }
+
+    /**
+     * 将字符串的首字母变为大写
+     *
+     * @param str
+     * @return
+     */
+    public static String upCaseFirstChar(String str) {
+        if (str.isEmpty()) return null;
+        return str.substring(0, 1).toUpperCase().concat(str.substring(1));
+    }
 }
