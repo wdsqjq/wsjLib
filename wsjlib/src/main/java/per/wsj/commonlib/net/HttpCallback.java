@@ -27,7 +27,7 @@ public abstract class HttpCallback<T> implements Observer<ResponseBody>, CallBac
                 onError(null, "请求失败,请重试", "0000");
             } else if (simpleResponseBody.code.equals("444")) {
                 onReLogin();
-                onError(null, "请重新登陆", "444");
+//                onError(null, "请重新登陆", "444");
             } else if (simpleResponseBody.code.equals("200")) {
                 Type type = getClass().getGenericSuperclass();
                 if (type instanceof ParameterizedType) {
@@ -35,15 +35,6 @@ public abstract class HttpCallback<T> implements Observer<ResponseBody>, CallBac
                     Type ty = new ParameterizedTypeImpl(BaseResponseBody.class, new Type[]{types[0]});
                     BaseResponseBody<T> data = new Gson().fromJson(responseBody, ty);
                     onSuccess(data.result, data.code, data.msg);
-//                    if (data == null || data.code == null) {
-//                        onError(null, "请求失败,请重试", "0000");
-//                    } else if (data.code.equals("444")) {
-//                        onReLogin();
-//                    } else if (data.code.equals("200")) {
-//                        onSuccess(data.result, data.code, data.msg);
-//                    } else {
-//                        onError(null, "请求失败,请重试", data.code);
-//                    }
                 } else {
                     onError(null, "未知异常,请重试", "0000");
                 }
