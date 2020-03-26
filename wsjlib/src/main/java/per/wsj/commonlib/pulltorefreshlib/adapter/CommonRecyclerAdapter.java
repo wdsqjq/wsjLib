@@ -1,8 +1,10 @@
 package per.wsj.commonlib.pulltorefreshlib.adapter;
 
 import android.content.Context;
+
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,7 +48,7 @@ public abstract class CommonRecyclerAdapter<T> extends RecyclerView.Adapter<Recy
     protected List<T> mList;
 
     protected ViewHolderClick<T> holderClick;
-    protected AdapterView.OnItemClickListener  onItemClickListener;
+    protected AdapterView.OnItemClickListener onItemClickListener;
     protected AdapterView.OnItemLongClickListener onItemLongClickListener;
 
     ReLoadListener mReLoadListener;
@@ -113,6 +115,12 @@ public abstract class CommonRecyclerAdapter<T> extends RecyclerView.Adapter<Recy
         layout.removeAllViews();
         layout.addView(emptyView);
         notifyDataSetChanged();
+    }
+
+    public void setOnEmptyClickListener(View.OnClickListener listener) {
+        if (emptyView != null) {
+            emptyView.setOnClickListener(listener);
+        }
     }
 
     @Override
