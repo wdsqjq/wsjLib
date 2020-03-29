@@ -37,7 +37,6 @@ public class SharedPrefUtil {
      * @param object
      */
     public static void setParam(Context context, String key, Object object) {
-
         String type = object.getClass().getSimpleName();
         SharedPreferences sp = context.getApplicationContext().getSharedPreferences(SHARED_NAME, SHARED_MODE);
         SharedPreferences.Editor editor = sp.edit();
@@ -53,8 +52,26 @@ public class SharedPrefUtil {
         } else if ("Long".equals(type)) {
             editor.putLong(key, (Long) object);
         }
-
         editor.apply();
+    }
+
+    public static boolean setParamSync(Context context, String key, Object object) {
+        String type = object.getClass().getSimpleName();
+        SharedPreferences sp = context.getApplicationContext().getSharedPreferences(SHARED_NAME, SHARED_MODE);
+        SharedPreferences.Editor editor = sp.edit();
+
+        if ("String".equals(type)) {
+            editor.putString(key, (String) object);
+        } else if ("Integer".equals(type)) {
+            editor.putInt(key, (Integer) object);
+        } else if ("Boolean".equals(type)) {
+            editor.putBoolean(key, (Boolean) object);
+        } else if ("Float".equals(type)) {
+            editor.putFloat(key, (Float) object);
+        } else if ("Long".equals(type)) {
+            editor.putLong(key, (Long) object);
+        }
+        return editor.commit();
     }
 
 
@@ -82,7 +99,6 @@ public class SharedPrefUtil {
         } else if ("Long".equals(type)) {
             return sp.getLong(key, (Long) defaultObject);
         }
-
         return null;
     }
 

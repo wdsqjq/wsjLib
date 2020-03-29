@@ -17,7 +17,7 @@ public interface CallBack<T> {
      */
     void onError(@Nullable Throwable throwable, String string, String code);
 
-    void onReLogin();
+    void onNotLogin();
 
     void onFinished();
 }

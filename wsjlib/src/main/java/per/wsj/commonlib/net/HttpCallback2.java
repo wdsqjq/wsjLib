@@ -73,7 +73,7 @@ public abstract class HttpCallback2<T> implements Observer<T>, CallBack<T> {
     }
 
     @Override
-    public void onReLogin() {
+    public void onNotLogin() {
 
     }
 }
