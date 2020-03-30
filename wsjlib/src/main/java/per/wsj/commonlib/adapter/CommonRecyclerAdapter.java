@@ -1,4 +1,4 @@
-package per.wsj.commonlib.pulltorefreshlib.adapter;
+package per.wsj.commonlib.adapter;
 
 import android.content.Context;
 
