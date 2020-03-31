@@ -16,7 +16,7 @@ import java.lang.reflect.Field;
  * Created by dell 王世举 on 2017/9/3 11:20.
  */
 
-public class ScreenUtil {
+public class DisplayUtil {
     /**
      * dp转px
      *
