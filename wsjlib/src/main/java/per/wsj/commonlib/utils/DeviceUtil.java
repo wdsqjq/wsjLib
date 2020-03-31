@@ -332,33 +332,4 @@ public class DeviceUtil {
         }
         return ip;
     }
-
-    /**
-     * 获取versionName
-     *
-     * @param context 上下文
-     * @return
-     */
-    private static String getVersionName(Context context) {
-        String versionName = "";
-        try {
-            versionName = context.getPackageManager().
-                    getPackageInfo(context.getPackageName(), 0).versionName;
-        } catch (PackageManager.NameNotFoundException ignored) {
-        }
-        return versionName;
-    }
-
-    private static synchronized String getAppName(Context context) {
-        try {
-            PackageManager packageManager = context.getPackageManager();
-            PackageInfo packageInfo = packageManager.getPackageInfo(
-                    context.getPackageName(), 0);
-            int labelRes = packageInfo.applicationInfo.labelRes;
-            return context.getResources().getString(labelRes);
-        } catch (Exception ignored) {
-        }
-        return null;
-    }
-
 }
