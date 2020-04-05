@@ -735,13 +735,11 @@ public class ACache {
 				String saveTimeStr = strs[0];
 				while (saveTimeStr.startsWith("0")) {
 					saveTimeStr = saveTimeStr
-							.substring(1, saveTimeStr.length());
+							.substring(1);
 				}
 				long saveTime = Long.valueOf(saveTimeStr);
 				long deleteAfter = Long.valueOf(strs[1]);
-				if (System.currentTimeMillis() > saveTime + deleteAfter * 1000) {
-					return true;
-				}
+                return System.currentTimeMillis() > saveTime + deleteAfter * 1000;
 			}
 			return false;
 		}
@@ -760,8 +758,8 @@ public class ACache {
 
 		private static String clearDateInfo(String strInfo) {
 			if (strInfo != null && hasDateInfo(strInfo.getBytes())) {
-				strInfo = strInfo.substring(strInfo.indexOf(mSeparator) + 1,
-						strInfo.length());
+				strInfo = strInfo.substring(strInfo.indexOf(mSeparator) + 1
+                );
 			}
 			return strInfo;
 		}

@@ -626,7 +626,7 @@ public class PullToRefreshLayout extends RelativeLayout {
         // 初始化下拉布局
         if (null == customRefreshView) {
             pullDownView = defaultRefreshView.findViewById(R.id.pull_icon);
-            refreshStateTextView = (TextView) defaultRefreshView
+            refreshStateTextView = defaultRefreshView
                     .findViewById(R.id.state_tv);
             refreshingView = defaultRefreshView
                     .findViewById(R.id.refreshing_icon);
@@ -636,7 +636,7 @@ public class PullToRefreshLayout extends RelativeLayout {
         // 初始化上拉布局
         if (null == customLoadmoreView) {
             pullUpView = defaultLoadmoreView.findViewById(R.id.pullup_icon);
-            loadStateTextView = (TextView) defaultLoadmoreView
+            loadStateTextView = defaultLoadmoreView
                     .findViewById(R.id.loadstate_tv);
             loadingView = defaultLoadmoreView.findViewById(R.id.loading_icon);
             loadStateImageView = defaultLoadmoreView
@@ -846,25 +846,25 @@ public class PullToRefreshLayout extends RelativeLayout {
      *
      * @author chenjing
      */
-    public static interface OnPullListener {
+    public interface OnPullListener {
         /**
          * 刷新操作
          */
-        public void onRefresh(PullToRefreshLayout pullToRefreshLayout);
+        void onRefresh(PullToRefreshLayout pullToRefreshLayout);
 
         /**
          * 加载操作
          */
-        public void onLoadMore(PullToRefreshLayout pullToRefreshLayout);
+        void onLoadMore(PullToRefreshLayout pullToRefreshLayout);
     }
 
-    public static interface OnPullingListener {
+    public interface OnPullingListener {
         /**
          * 下拉了
          */
-        public void onPulling();
+        void onPulling();
 
-        public void onPulled();
+        void onPulled();
     }
 
     public void setmOnPullingListener(OnPullingListener mOnPullingListener) {
@@ -876,10 +876,10 @@ public class PullToRefreshLayout extends RelativeLayout {
      *
      * @author LynnChurch
      */
-    public static interface OnPullProcessListener {
-        public static final int REFRESH = 1; // 刷新
+    public interface OnPullProcessListener {
+        int REFRESH = 1; // 刷新
 
-        public static final int LOADMORE = 2; // 加载更多
+        int LOADMORE = 2; // 加载更多
 
         /**
          * 准备 （提示下拉刷新或上拉加载更多）
@@ -887,7 +887,7 @@ public class PullToRefreshLayout extends RelativeLayout {
          * @param v
          * @param which 刷新或加载更多
          */
-        public void onPrepare(View v, int which);
+        void onPrepare(View v, int which);
 
         /**
          * 开始 （提示释放刷新或释放加载更多）
@@ -895,7 +895,7 @@ public class PullToRefreshLayout extends RelativeLayout {
          * @param v
          * @param which 刷新或加载更多
          */
-        public void onStart(View v, int which);
+        void onStart(View v, int which);
 
         /**
          * 处理中
@@ -903,7 +903,7 @@ public class PullToRefreshLayout extends RelativeLayout {
          * @param v
          * @param which 刷新或加载更多
          */
-        public void onHandling(View v, int which);
+        void onHandling(View v, int which);
 
         /**
          * 完成
@@ -911,7 +911,7 @@ public class PullToRefreshLayout extends RelativeLayout {
          * @param v
          * @param which 刷新或加载更多
          */
-        public void onFinish(View v, int which);
+        void onFinish(View v, int which);
 
         /**
          * 用于获取拉取的距离
@@ -920,7 +920,7 @@ public class PullToRefreshLayout extends RelativeLayout {
          * @param pullDistance
          * @param which        刷新或加载更多
          */
-        public void onPull(View v, float pullDistance, int which);
+        void onPull(View v, float pullDistance, int which);
     }
 
 

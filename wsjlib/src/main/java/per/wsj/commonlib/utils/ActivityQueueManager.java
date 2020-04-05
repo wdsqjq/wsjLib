@@ -113,9 +113,7 @@ public class ActivityQueueManager {
     }
 
     public void doPopActivity(Activity activity) {
-        if (ActivityQueueManager.mQueue.contains(activity)) {
-            ActivityQueueManager.mQueue.remove(activity);
-        }
+        ActivityQueueManager.mQueue.remove(activity);
     }
 
     public void doFinishAll() {

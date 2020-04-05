@@ -28,7 +28,7 @@ public class ServiceUtil {
             return false;
         }
         for (int i = 0; i < myList.size(); i++) {
-            String mName = myList.get(i).service.getClassName().toString();
+            String mName = myList.get(i).service.getClassName();
             if (mName.equals(serviceName)) {
                 isWork = true;
                 break;

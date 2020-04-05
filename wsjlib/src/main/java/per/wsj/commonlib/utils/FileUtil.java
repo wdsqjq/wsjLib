@@ -24,6 +24,7 @@ import java.io.LineNumberReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.util.Locale;
 
 /**
@@ -310,7 +311,7 @@ public class FileUtil {
         FileOutputStream fileout = null;
         fileout = new FileOutputStream(new File(path));
         OutputStreamWriter writer = null;
-        writer = new OutputStreamWriter(fileout, "UTF-8");
+        writer = new OutputStreamWriter(fileout, StandardCharsets.UTF_8);
         return new BufferedWriter(writer);
     }
 

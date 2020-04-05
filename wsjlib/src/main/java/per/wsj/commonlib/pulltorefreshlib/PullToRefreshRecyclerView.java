@@ -26,16 +26,12 @@ public class PullToRefreshRecyclerView extends RecyclerView implements Pullable 
 
     @Override
     public boolean canPullDown() {
+        // 滑到ListView的顶部了
         if (getChildCount() == 0) {
             // 没有item的时候也可以下拉刷新
             return true;
-        } else if (getManager().findFirstVisibleItemPosition() == 0
-                && getChildAt(0).getTop() >= 0) {
-            // 滑到ListView的顶部了
-            return true;
-        } else {
-            return false;
-        }
+        } else return getManager().findFirstVisibleItemPosition() == 0
+                && getChildAt(0).getTop() >= 0;
     }
 
 
@@ -47,12 +43,10 @@ public class PullToRefreshRecyclerView extends RecyclerView implements Pullable 
         } else if (getManager().findLastVisibleItemPosition() == (getManager().getItemCount() -
                 1)) {
             // 滑到底部了
-            if (getChildAt(getManager().findLastVisibleItemPosition() - getManager()
+            return getChildAt(getManager().findLastVisibleItemPosition() - getManager()
                     .findFirstVisibleItemPosition()) != null && getChildAt(getManager()
                     .findLastVisibleItemPosition() - getManager().findFirstVisibleItemPosition())
-                    .getBottom() <= getMeasuredHeight()) {
-                return true;
-            }
+                    .getBottom() <= getMeasuredHeight();
         }
         return false;
     }

@@ -53,7 +53,7 @@ public class DeviceUtil {
                         //查找到序列号所在行
                         if (str.contains("Serial")) {
                             //提取序列号
-                            strCPU = str.substring(str.indexOf(":") + 1, str.length());
+                            strCPU = str.substring(str.indexOf(":") + 1);
                             //去空格
                             cpuAddress = strCPU.trim();
                             break;

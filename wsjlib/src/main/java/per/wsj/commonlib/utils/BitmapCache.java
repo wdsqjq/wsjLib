@@ -59,8 +59,8 @@ public class BitmapCache {
 		Bitmap bmp = null;
 		// 缓存中是否有该Bitmap实例的软引用，如果有，从软引用中取得。
 		if (hashRefs.containsKey(String.valueOf(resId))) {
-			MySoftRef ref = (MySoftRef) hashRefs.get(String.valueOf(resId));
-			bmp = (Bitmap) ref.get();
+			MySoftRef ref = hashRefs.get(String.valueOf(resId));
+			bmp = ref.get();
 		}
 		// 如果没有软引用，或者从软引用中得到的实例是null，重新构建一个实例，
 		// 并保存对这个新建实例的软引用
@@ -81,8 +81,8 @@ public class BitmapCache {
 		Bitmap bmp = null;
 		// 缓存中是否有该Bitmap实例的软引用，如果有，从软引用中取得。
 		if (hashRefs.containsKey(String.valueOf(resId))) {
-			MySoftRef ref = (MySoftRef) hashRefs.get(String.valueOf(resId));
-			bmp = (Bitmap) ref.get();
+			MySoftRef ref = hashRefs.get(String.valueOf(resId));
+			bmp = ref.get();
 		}
 		// 如果没有软引用，或者从软引用中得到的实例是null，重新构建一个实例，
 		// 并保存对这个新建实例的软引用
