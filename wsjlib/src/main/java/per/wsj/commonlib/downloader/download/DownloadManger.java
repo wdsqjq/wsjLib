@@ -140,7 +140,6 @@ public class DownloadManger {
 
     /**
      * 判断当前url是否正在下载中
-     * @param url
      * @return
      */
     /*public boolean isDownloading(String url){
