@@ -3,6 +3,7 @@ package per.wsj.commonlib.utils;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Build;
 import android.util.TypedValue;
@@ -24,8 +25,7 @@ public class DisplayUtil {
      * @param dpVal
      * @return
      */
-    public static int dip2px(Context context, float dpVal)
-    {
+    public static int dip2px(Context context, float dpVal) {
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
                 dpVal, context.getApplicationContext().getResources().getDisplayMetrics());
     }
@@ -37,8 +37,7 @@ public class DisplayUtil {
      * @param spVal
      * @return
      */
-    public static int sp2px(Context context, float spVal)
-    {
+    public static int sp2px(Context context, float spVal) {
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP,
                 spVal, context.getApplicationContext().getResources().getDisplayMetrics());
     }
@@ -50,8 +49,7 @@ public class DisplayUtil {
      * @param pxVal
      * @return
      */
-    public static float px2dp(Context context, float pxVal)
-    {
+    public static float px2dp(Context context, float pxVal) {
         final float scale = context.getApplicationContext().getResources().getDisplayMetrics().density;
         return (pxVal / scale);
     }
@@ -63,13 +61,13 @@ public class DisplayUtil {
      * @param pxVal
      * @return
      */
-    public static float px2sp(Context context, float pxVal)
-    {
+    public static float px2sp(Context context, float pxVal) {
         return (pxVal / context.getApplicationContext().getResources().getDisplayMetrics().scaledDensity);
     }
 
     /**
      * 获取屏幕宽度
+     *
      * @return
      */
     public static int getScreenWidth() {
@@ -78,6 +76,7 @@ public class DisplayUtil {
 
     /**
      * 获取屏幕高度
+     *
      * @return
      */
     public static int getScreenHeight() {
@@ -87,7 +86,7 @@ public class DisplayUtil {
     /**
      * 状态栏透明
      */
-    protected void transparentStatusBar(Activity activity){
+    protected void transparentStatusBar(Activity activity) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = activity.getWindow();
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
@@ -103,7 +102,7 @@ public class DisplayUtil {
      * @return 返回状态栏高度的像素值。
      */
     public static int getStatusBarHeight(Context context) {
-        int statusBarHeight=0;
+        int statusBarHeight = 0;
         if (statusBarHeight == 0) {
             try {
                 Class<?> c = Class.forName("com.android.internal.R$dimen");
@@ -116,5 +115,36 @@ public class DisplayUtil {
             }
         }
         return statusBarHeight;
+    }
+
+    /**
+     * 获取当前屏幕截图，包含状态栏
+     */
+    public static Bitmap captureWithStatusBar(Activity activity) {
+        View view = activity.getWindow().getDecorView();
+        view.setDrawingCacheEnabled(true);
+        view.buildDrawingCache();
+        Bitmap bmp = view.getDrawingCache();
+        int width = getScreenWidth();
+        int height = getScreenHeight();
+        Bitmap bp = Bitmap.createBitmap(bmp, 0, 0, width, height);
+        view.destroyDrawingCache();
+        return bp;
+    }
+
+    /**
+     * 获取当前屏幕截图，不包含状态栏
+     */
+    public static Bitmap captureWithoutStatusBar(Activity activity) {
+        View view = activity.getWindow().getDecorView();
+        view.setDrawingCacheEnabled(true);
+        view.buildDrawingCache();
+        Bitmap bmp = view.getDrawingCache();
+        int statusBarHeight = getStatusBarHeight(activity);
+        int width = getScreenWidth();
+        int height = getScreenHeight();
+        Bitmap bp = Bitmap.createBitmap(bmp, 0, statusBarHeight, width, height - statusBarHeight);
+        view.destroyDrawingCache();
+        return bp;
     }
 }
