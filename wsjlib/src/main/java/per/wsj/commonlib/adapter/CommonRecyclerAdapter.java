@@ -51,7 +51,10 @@ public abstract class CommonRecyclerAdapter<T> extends RecyclerView.Adapter<Recy
     protected AdapterView.OnItemClickListener onItemClickListener;
     protected AdapterView.OnItemLongClickListener onItemLongClickListener;
 
-    ReLoadListener mReLoadListener;
+    /**
+     * TYPE_EMPTY时点击回调
+     */
+    private ReLoadListener mReLoadListener;
 
     public CommonRecyclerAdapter(Context context, List<T> data) {
         this.mContext = context;
