@@ -51,8 +51,13 @@ public abstract class HttpCallback<T> implements Observer<ResponseBody>, CallBac
     public void onError(Throwable e) {
         if (e instanceof SocketTimeoutException) {
             onError(e, "请求超时,请重试", "0000");
-        } else if (e instanceof HttpException
-                || e instanceof ConnectException
+        } else if (e instanceof HttpException) {
+            if (e.toString().contains("HTTP 401 Unauthorized")) {
+                onNotLogin();
+            } else {
+                onError(e, "网络错误,请确保网络通畅", "0000");
+            }
+        } else if (e instanceof ConnectException
                 || e instanceof UnknownHostException) {
             onError(e, "网络错误,请确保网络通畅", "0000");
         } else if (e instanceof SSLHandshakeException) {
