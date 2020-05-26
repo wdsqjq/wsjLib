@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.Point;
 import android.os.Build;
 import android.util.TypedValue;
 import android.view.View;
@@ -63,6 +64,22 @@ public class DisplayUtil {
      */
     public static float px2sp(Context context, float pxVal) {
         return (pxVal / context.getApplicationContext().getResources().getDisplayMetrics().scaledDensity);
+    }
+
+    /**
+     * 获取屏幕宽度
+     *
+     * @return
+     */
+    public static Point getScreenRealSize(Activity activity) {
+        Point outSize = new Point();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            activity.getWindowManager().getDefaultDisplay().getRealSize(outSize);
+        } else {
+            outSize.x = getScreenWidth();
+            outSize.y = getScreenHeight();
+        }
+        return outSize;
     }
 
     /**
