@@ -18,12 +18,6 @@ public class SharedPrefUtil {
 
     public static final String IS_FIRST = "is_first";
 
-    public static final String IS_SHARED = "is_shared";
-
-    public static final String ROUTE_LINE_INT = "route_line";
-    // 自动启动
-    public static final String IS_AUTO_CONNECT = "is_auto_connect";
-
     public SharedPrefUtil(Context context) {
         this.context = context.getApplicationContext();
     }
@@ -108,10 +102,21 @@ public class SharedPrefUtil {
      * @param context
      */
     public static void clear(Context context) {
-        SharedPreferences sp = context.getSharedPreferences(SHARED_NAME,
-                Context.MODE_PRIVATE);
+        SharedPreferences sp = context.getSharedPreferences(SHARED_NAME, SHARED_MODE);
         SharedPreferences.Editor editor = sp.edit();
         editor.clear();
         editor.apply();
+    }
+
+    /**
+     * 清除所有数据
+     *
+     * @param context
+     */
+    public static void clearSync(Context context) {
+        SharedPreferences sp = context.getSharedPreferences(SHARED_NAME, SHARED_MODE);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.clear();
+        editor.commit();
     }
 }
