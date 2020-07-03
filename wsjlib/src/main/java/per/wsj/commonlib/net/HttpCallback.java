@@ -38,6 +38,8 @@ public abstract class HttpCallback<T> implements Observer<ResponseBody>, CallBac
                 } else {
                     onError(null, "未知异常,请重试", "0000");
                 }
+            } else if (simpleResponseBody.code.equals("201")) {
+                onError(null, simpleResponseBody.msg, simpleResponseBody.code);
             } else {
                 onError(null, "请求失败,请重试", simpleResponseBody.code);
             }
