@@ -1,4 +1,4 @@
-package per.wsj.commonlib.view;
+package per.wsj.commonlib.widget;
 
 import android.content.Context;
 import android.graphics.Matrix;
