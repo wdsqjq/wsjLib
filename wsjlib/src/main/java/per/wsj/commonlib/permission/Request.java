@@ -71,13 +71,14 @@ public class Request implements IRequest, PermissionListener {
      */
     private void callbackSucceed() {
         if (mGranted != null) {
-            try {
-                mGranted.onAction(mPermissions);
-            } catch (Exception e) {
-                if (mDenied != null) {
-                    mDenied.onAction(mPermissions);
-                }
-            }
+            mGranted.onAction(mPermissions);
+//            try {
+//                mGranted.onAction(mPermissions);
+//            } catch (Exception e) {
+//                if (mDenied != null) {
+//                    mDenied.onAction(mPermissions);
+//                }
+//            }
         }
     }
 
