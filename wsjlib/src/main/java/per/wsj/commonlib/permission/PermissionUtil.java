@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import androidx.annotation.NonNull;
 import androidx.core.content.PermissionChecker;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 
 /**
  * Created by shiju.wang on 2018/3/1.
@@ -61,7 +63,11 @@ public class PermissionUtil {
         new PermissionSetting(context).execute();
     }
 
-    public static IRequest with(@NonNull Context context) {
-        return new Request(context);
+    public static IRequest with(@NonNull final FragmentActivity activity) {
+        return new Request(activity);
+    }
+
+    public static IRequest with(@NonNull final Fragment fragment) {
+        return new Request(fragment);
     }
 }
