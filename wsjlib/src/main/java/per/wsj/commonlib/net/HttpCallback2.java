@@ -1,9 +1,6 @@
 package per.wsj.commonlib.net;
 
-import com.google.gson.Gson;
 
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
 import java.net.ConnectException;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
@@ -36,6 +33,9 @@ public abstract class HttpCallback2<T> implements Observer<T>, CallBack<T> {
             }
             if (code.equals("204")) {
                 onSuccess(null, code, "success");
+            } else if (code.equals("307")) {
+                // Response{protocol=http/1.1, code=307, message=Temporary Redirect, url=https://api.github.com/user/starred/FlowCI/flow-platform-x}
+                onError(null, "该仓库有点小异常，请在web端操作该仓库","307");
             } else if (code.equals("401")) {
                 onError(null, "请重新登录","401");
             } else {

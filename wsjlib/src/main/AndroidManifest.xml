@@ -7,11 +7,7 @@
     <application
         android:allowBackup="true"
         android:supportsRtl="true">
-        <activity
-            android:name=".permission.PermissionActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:theme="@style/TransparentActivity"
-            android:windowSoftInputMode="stateHidden|stateAlwaysHidden"/>
+
     </application>
 
 </manifest>

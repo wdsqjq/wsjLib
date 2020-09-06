@@ -3,6 +3,9 @@ package per.wsj.commonlib.permission;
 import android.content.Context;
 import android.os.Build;
 import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -10,15 +13,41 @@ import java.util.List;
 
 public class Request implements IRequest, PermissionListener {
 
-    private Context context;
+    static final String TAG = Request.class.getSimpleName();
+
+    private Context mContext;
 
     private String[] mPermissions;
 
     private Action mGranted;
     private Action mDenied;
 
-    Request(Context context) {
-        this.context = context;
+    private Lazy<PermissionFragment> mPermissionFragment;
+
+    public Request(@NonNull final FragmentActivity activity) {
+        mContext = activity;
+        mPermissionFragment = getLazySingleton(activity.getSupportFragmentManager());
+    }
+
+    public Request(@NonNull final Fragment fragment) {
+        mContext = fragment.getContext();
+        mPermissionFragment = getLazySingleton(fragment.getChildFragmentManager());
+    }
+
+    @NonNull
+    private Lazy<PermissionFragment> getLazySingleton(@NonNull final FragmentManager fragmentManager) {
+        return new Lazy<PermissionFragment>() {
+
+            private PermissionFragment rxPermissionsFragment;
+
+            @Override
+            public synchronized PermissionFragment get() {
+                if (rxPermissionsFragment == null) {
+                    rxPermissionsFragment = getPermissionFragment(fragmentManager);
+                }
+                return rxPermissionsFragment;
+            }
+        };
     }
 
     @NonNull
@@ -55,15 +84,32 @@ public class Request implements IRequest, PermissionListener {
 
     @Override
     public void start() {
-        if (PermissionUtil.hasPermission(context, mPermissions)) {
+        if (PermissionUtil.hasPermission(mContext, mPermissions)) {
             callbackSucceed();
         } else {
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
                 callbackFailed(mPermissions);
             } else {
-                PermissionActivity.requestPermission(context, mPermissions, this);
+                mPermissionFragment.get().request(mPermissions,this);
             }
         }
+    }
+
+    private PermissionFragment getPermissionFragment(@NonNull final FragmentManager fragmentManager) {
+        PermissionFragment rxPermissionsFragment = findPermissionFragment(fragmentManager);
+        boolean isNewInstance = rxPermissionsFragment == null;
+        if (isNewInstance) {
+            rxPermissionsFragment = new PermissionFragment();
+            fragmentManager
+                    .beginTransaction()
+                    .add(rxPermissionsFragment, TAG)
+                    .commitNow();
+        }
+        return rxPermissionsFragment;
+    }
+
+    private PermissionFragment findPermissionFragment(@NonNull final FragmentManager fragmentManager) {
+        return (PermissionFragment) fragmentManager.findFragmentByTag(TAG);
     }
 
     /**
@@ -71,13 +117,7 @@ public class Request implements IRequest, PermissionListener {
      */
     private void callbackSucceed() {
         if (mGranted != null) {
-            try {
-                mGranted.onAction(mPermissions);
-            } catch (Exception e) {
-                if (mDenied != null) {
-                    mDenied.onAction(mPermissions);
-                }
-            }
+            mGranted.onAction(mPermissions);
         }
     }
 
@@ -98,5 +138,10 @@ public class Request implements IRequest, PermissionListener {
     @Override
     public void permissionDenied(@NonNull String[] permission) {
         callbackFailed(permission);
+    }
+
+    @FunctionalInterface
+    public interface Lazy<V> {
+        V get();
     }
 }
