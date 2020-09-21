@@ -50,6 +50,7 @@ public class HttpUtil {
 //                                .cookieJar(new NovateCookieManger(context))
                 .connectTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS)
                 .retryOnConnectionFailure(true)
+//                .proxy(Proxy.NO_PROXY)
                 .hostnameVerifier(SSLSocketClient.getHostnameVerifier());
 
         if (interceptor != null) {
