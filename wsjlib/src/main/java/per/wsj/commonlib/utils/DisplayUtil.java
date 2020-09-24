@@ -23,24 +23,12 @@ public class DisplayUtil {
      * dp转px
      *
      * @param context
-     * @param dpVal
+     * @param dp
      * @return
      */
-    public static int dip2px(Context context, float dpVal) {
-        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
-                dpVal, context.getApplicationContext().getResources().getDisplayMetrics());
-    }
-
-    /**
-     * sp转px
-     *
-     * @param context
-     * @param spVal
-     * @return
-     */
-    public static int sp2px(Context context, float spVal) {
-        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP,
-                spVal, context.getApplicationContext().getResources().getDisplayMetrics());
+    public static int dip2px(Context context, float dp) {
+        final float scale = context.getResources().getDisplayMetrics().density;
+        return (int) (dp * scale + 0.5f);
     }
 
     /**
@@ -51,8 +39,20 @@ public class DisplayUtil {
      * @return
      */
     public static float px2dp(Context context, float pxVal) {
-        final float scale = context.getApplicationContext().getResources().getDisplayMetrics().density;
-        return (pxVal / scale);
+        final float scale = context.getResources().getDisplayMetrics().density;
+        return (int) (pxVal / scale + 0.5f);
+    }
+
+    /**
+     * sp转px
+     *
+     * @param context
+     * @param sp
+     * @return
+     */
+    public static int sp2px(Context context, float sp) {
+        final float scale = context.getResources().getDisplayMetrics().scaledDensity;
+        return (int) (sp * scale + 0.5f);
     }
 
     /**
