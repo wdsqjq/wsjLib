@@ -41,6 +41,11 @@ public interface ApiService {
             @HeaderMap Map<String, String> headers,
             @Body RequestBody request);
 
+    @POST("{url}")
+    Observable<Response<Void>> executePost2(
+            @Path(value = "url", encoded = true) String url,
+            @HeaderMap Map<String, String> headers,
+            @Body RequestBody request);
 
     @PUT("{url}")
     Observable<Response<Void>> executePut(

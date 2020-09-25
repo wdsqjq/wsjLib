@@ -31,13 +31,15 @@ public abstract class HttpCallback2<T> implements Observer<T>, CallBack<T> {
             if (m.find()) {
                 code = m.group().replace("code=", "");
             }
-            if (code.equals("204")) {
+            if (code.equals("204") || code.equals("202")) {
                 onSuccess(null, code, "success");
             } else if (code.equals("307")) {
                 // Response{protocol=http/1.1, code=307, message=Temporary Redirect, url=https://api.github.com/user/starred/FlowCI/flow-platform-x}
                 onError(null, "该仓库有点小异常，请在web端操作该仓库","307");
             } else if (code.equals("401")) {
                 onError(null, "请重新登录","401");
+            } else if (code.equals("404")) {
+                onError(null, "没有记录","404");
             } else {
                 onError(null, "请求失败","0000");
             }

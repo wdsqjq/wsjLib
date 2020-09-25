@@ -149,6 +149,21 @@ public class HttpUtil {
                 .subscribe(callBack);
     }
 
+    public void post(String url, final Observer<Response<Void>> callBack) {
+        if (callBack == null) {
+            return;
+        }
+        Object param = new Object();
+        Map<String, String> headers = new HashMap<>();
+
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), new Gson().toJson(param));
+        apiService.executePost2(url, headers, requestBody)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(callBack);
+    }
+
     /**
      * Put请求
      *
