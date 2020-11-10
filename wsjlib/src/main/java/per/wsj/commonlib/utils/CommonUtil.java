@@ -1,8 +1,10 @@
 package per.wsj.commonlib.utils;
 
+import android.app.Application;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.os.Build;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
@@ -103,15 +105,19 @@ public class CommonUtil {
      * @return
      */
     public static String getProcessName() {
-        try {
-            File file = new File("/proc/" + android.os.Process.myPid() + "/" + "cmdline");
-            BufferedReader mBufferedReader = new BufferedReader(new FileReader(file));
-            String processName = mBufferedReader.readLine().trim();
-            mBufferedReader.close();
-            return processName;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            return Application.getProcessName();
+        } else {
+            try {
+                File file = new File("/proc/" + android.os.Process.myPid() + "/" + "cmdline");
+                BufferedReader mBufferedReader = new BufferedReader(new FileReader(file));
+                String processName = mBufferedReader.readLine().trim();
+                mBufferedReader.close();
+                return processName;
+            } catch (Exception e) {
+                e.printStackTrace();
+                return null;
+            }
         }
     }
 
