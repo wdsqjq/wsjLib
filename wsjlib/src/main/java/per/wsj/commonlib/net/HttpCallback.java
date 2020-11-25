@@ -27,7 +27,6 @@ public abstract class HttpCallback<T> implements Observer<ResponseBody>, CallBac
                 onError(null, "请求失败,请重试", "0000");
             } else if (simpleResponseBody.code.equals("444")) {
                 onNotLogin();
-//                onError(null, "请重新登陆", "444");
             } else if (simpleResponseBody.code.equals("200")) {
                 Type type = getClass().getGenericSuperclass();
                 if (type instanceof ParameterizedType) {
