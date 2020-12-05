@@ -1,7 +1,9 @@
 package per.wsj.commonlib.net.interceptor;
 
+import java.io.ByteArrayOutputStream;
 import java.io.EOFException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.nio.charset.UnsupportedCharsetException;
 import java.text.ParseException;
@@ -9,6 +11,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
+import java.util.zip.GZIPInputStream;
 
 import okhttp3.Headers;
 import okhttp3.Interceptor;
@@ -95,16 +98,17 @@ public class LogInterceptor implements Interceptor {
             BufferedSource source = responseBody.source();
             source.request(Long.MAX_VALUE); // Buffer the entire body.
             Buffer buffer = source.buffer();
-            Charset charset = UTF8;
-            MediaType contentType = responseBody.contentType();
-            if (contentType != null) {
-                charset = contentType.charset(UTF8);
-            }
             if ("gzip".equalsIgnoreCase(response.headers().get("Content-Encoding"))) {
-//                GzipSource gzipSource = new GzipSource(buffer.clone());
-//                stringBuffer.append("\nresponse=" + gzipSource.toString());
+                String content = streamToString(buffer.clone().inputStream());
+                stringBuffer.append("\nresponse=" + content);
+//                stringBuffer.append("\nresponse=" + decodeUnicode(content));
             } else {
                 if (isPlaintext(buffer) && contentLength != 0) {
+                    Charset charset = UTF8;
+                    MediaType contentType = responseBody.contentType();
+                    if (contentType != null) {
+                        charset = contentType.charset(UTF8);
+                    }
                     stringBuffer.append("\nresponse=" + buffer.clone().readString(charset));
                 }
             }
@@ -112,6 +116,44 @@ public class LogInterceptor implements Interceptor {
 
         LogUtil.LOGD(stringBuffer.toString() + "\n ");
         return response;
+    }
+
+    public static String streamToString(InputStream in) throws IOException {
+        //定义一个内存输出流
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        //将流转换成字符串
+        GZIPInputStream gis = new GZIPInputStream(in);
+        int len1 = -1;
+        byte[] b1 = new byte[1024];
+        while ((len1 = gis.read(b1)) != -1) {
+            byteArrayOutputStream.write(b1, 0, len1);
+        }
+        byteArrayOutputStream.close();
+        gis.close();
+        in.close();
+        return byteArrayOutputStream.toString();
+    }
+
+    /*
+     * unicode编码转中文
+     */
+    public static String decodeUnicode(String dataStr) {
+        int start = 0;
+        int end;
+        final StringBuffer buffer = new StringBuffer();
+        while (start > -1) {
+            end = dataStr.indexOf("\\u", start + 2);
+            String charStr = "";
+            if (end == -1) {
+                charStr = dataStr.substring(start + 2);
+            } else {
+                charStr = dataStr.substring(start + 2, end);
+            }
+            char letter = (char) Integer.parseInt(charStr, 16); // 16进制parse整形字符串。
+            buffer.append(new Character(letter).toString());
+            start = end;
+        }
+        return buffer.toString();
     }
 
     static boolean isPlaintext(Buffer buffer) {
