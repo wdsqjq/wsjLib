@@ -1,6 +1,9 @@
 package per.wsj.commonlib.net;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+
+import org.json.JSONObject;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -22,12 +25,12 @@ public abstract class HttpCallback<T> implements Observer<ResponseBody>, CallBac
         try {
             String responseBody = value.string();
             // 先获取code并判断
-            SimpleResponseBody simpleResponseBody = new Gson().fromJson(responseBody, SimpleResponseBody.class);
-            if (simpleResponseBody == null || simpleResponseBody.code == null) {
+            JSONObject jsonObject = new JSONObject(responseBody);
+            if (jsonObject == null || jsonObject.getString("code") == null) {
                 onError(null, "请求失败,请重试", "0000");
-            } else if (simpleResponseBody.code.equals("444")) {
+            } else if (jsonObject.getString("code").equals("444")) {
                 onNotLogin();
-            } else if (simpleResponseBody.code.equals("200")) {
+            } else if (jsonObject.getString("code").equals("200")) {
                 Type type = getClass().getGenericSuperclass();
                 if (type instanceof ParameterizedType) {
                     Type[] types = ((ParameterizedType) type).getActualTypeArguments();
@@ -37,10 +40,10 @@ public abstract class HttpCallback<T> implements Observer<ResponseBody>, CallBac
                 } else {
                     onError(null, "未知异常,请重试", "0000");
                 }
-            } else if (simpleResponseBody.code.equals("201")) {
-                onError(null, simpleResponseBody.msg, simpleResponseBody.code);
+            } else if (jsonObject.get("code").equals("201")) {
+                onError(null, jsonObject.getString("msg"), jsonObject.getString("code"));
             } else {
-                onError(null, "请求失败,请重试", simpleResponseBody.code);
+                onError(null, "请求失败,请重试", jsonObject.getString("code"));
             }
 
         } catch (Exception e) {

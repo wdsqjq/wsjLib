@@ -17,6 +17,7 @@ import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
+import per.wsj.commonlib.net.interceptor.LogInterceptor;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
@@ -45,9 +46,8 @@ public class HttpUtil {
         mBaseUrl = baseUrl;
 
         builder = new OkHttpClient.Builder()
-//                                .addNetworkInterceptor(
-//                                        new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.HEADERS))
-//                                .cookieJar(new NovateCookieManger(context))
+                .addNetworkInterceptor(new LogInterceptor())
+//                .addNetworkInterceptor(new HttpLogInterceptor().setLevel(HttpLogInterceptor.Level.BODY))
                 .connectTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS)
                 .retryOnConnectionFailure(true)
 //                .proxy(Proxy.NO_PROXY)

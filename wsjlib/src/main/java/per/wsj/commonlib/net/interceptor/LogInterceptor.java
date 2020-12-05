@@ -1,9 +1,13 @@
-package per.wsj.commonlib.net;
+package per.wsj.commonlib.net.interceptor;
 
 import java.io.EOFException;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.UnsupportedCharsetException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Headers;
@@ -16,6 +20,7 @@ import okhttp3.ResponseBody;
 import okhttp3.internal.http.HttpHeaders;
 import okio.Buffer;
 import okio.BufferedSource;
+import okio.GzipSource;
 import per.wsj.commonlib.utils.LogUtil;
 
 public class LogInterceptor implements Interceptor {
@@ -38,7 +43,7 @@ public class LogInterceptor implements Interceptor {
             String name = requestHeaders.name(i);
             // Skip headers from the request body as they are explicitly logged above.
             if (!"Content-Type".equalsIgnoreCase(name) && !"Content-Length".equalsIgnoreCase(name)) {
-                stringBuffer.append(" --" + name + ": " + requestHeaders.value(i));
+//                stringBuffer.append(" --" + name + ": " + requestHeaders.value(i));
             }
         }
 
@@ -68,10 +73,12 @@ public class LogInterceptor implements Interceptor {
         ResponseBody responseBody = response.body();
         long contentLength = responseBody.contentLength();
 
-        stringBuffer.append("\ncode:" + response.code());
-        stringBuffer.append("  message:" + response.message());
-        stringBuffer.append("  time:" + tookMs + "ms");
+        stringBuffer.append("\ncode:" + response.code())
+                .append("  message:" + response.message())
+                .append("  time:" + tookMs + "ms")
+                .append("  contentLength:" + contentLength);
 
+        // 响应头
         Headers responseHeaders = response.headers();
         for (int i = 0, count = responseHeaders.size(); i < count; i++) {
             String name = responseHeaders.name(i);
@@ -80,30 +87,30 @@ public class LogInterceptor implements Interceptor {
             }
         }
 
-        if (HttpHeaders.hasBody(response) && !bodyEncoded(response.headers())) {
+        // 响应体
+        String contentEncoding = response.headers().get("Content-Encoding");
+        stringBuffer.append("\n contentEncoding:" + contentEncoding);
+        responseBody.source();
+        if (HttpHeaders.hasBody(response)) {
             BufferedSource source = responseBody.source();
             source.request(Long.MAX_VALUE); // Buffer the entire body.
             Buffer buffer = source.buffer();
-
             Charset charset = UTF8;
             MediaType contentType = responseBody.contentType();
             if (contentType != null) {
-                try {
-                    charset = contentType.charset(UTF8);
-                } catch (UnsupportedCharsetException e) {
-                    LogUtil.LOGE("NetLogInterceptor;Couldn't decode the response body; charset is likely malformed." + e.toString());
-                    LogUtil.LOGD("NetLogInterceptor" + stringBuffer.toString());
-                    return response;
-                }
+                charset = contentType.charset(UTF8);
             }
-
-            if (isPlaintext(buffer) && contentLength != 0) {
-                stringBuffer.append("\nresponse=" + buffer.clone().readString(charset));
+            if ("gzip".equalsIgnoreCase(response.headers().get("Content-Encoding"))) {
+//                GzipSource gzipSource = new GzipSource(buffer.clone());
+//                stringBuffer.append("\nresponse=" + gzipSource.toString());
+            } else {
+                if (isPlaintext(buffer) && contentLength != 0) {
+                    stringBuffer.append("\nresponse=" + buffer.clone().readString(charset));
+                }
             }
         }
 
-        LogUtil.LOGD("NetLogInterceptor" + stringBuffer.toString());
-
+        LogUtil.LOGD(stringBuffer.toString() + "\n ");
         return response;
     }
 
