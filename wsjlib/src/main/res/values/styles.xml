@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="TransparentActivity" parent="@android:style/Theme.Translucent.NoTitleBar">>
+    <style name="TransparentActivity" parent="@style/Theme.AppCompat.Light.NoActionBar">>
         <!--不设置activity进入和退出动画样式-->
         <item name="android:windowAnimationStyle">@null</item>
+        <item name="background">@android:color/transparent</item>
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowIsTranslucent">true</item>

@@ -46,7 +46,7 @@ public class LogInterceptor implements Interceptor {
             String name = requestHeaders.name(i);
             // Skip headers from the request body as they are explicitly logged above.
             if (!"Content-Type".equalsIgnoreCase(name) && !"Content-Length".equalsIgnoreCase(name)) {
-//                stringBuffer.append(" --" + name + ": " + requestHeaders.value(i));
+                stringBuffer.append(" " + name + ": " + requestHeaders.value(i));
             }
         }
 
