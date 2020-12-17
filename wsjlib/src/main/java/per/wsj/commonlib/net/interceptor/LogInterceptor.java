@@ -45,7 +45,8 @@ public class LogInterceptor implements Interceptor {
         for (int i = 0, count = requestHeaders.size(); i < count; i++) {
             String name = requestHeaders.name(i);
             // Skip headers from the request body as they are explicitly logged above.
-            if (!"Content-Type".equalsIgnoreCase(name) && !"Content-Length".equalsIgnoreCase(name)) {
+            if (!"Content-Type".equalsIgnoreCase(name) && !"Content-Length".equalsIgnoreCase(name)
+                    && !"User-Agent".equalsIgnoreCase(name)) {
                 stringBuffer.append(" " + name + ": " + requestHeaders.value(i));
             }
         }
@@ -60,7 +61,7 @@ public class LogInterceptor implements Interceptor {
                 charset = contentType.charset(UTF8);
             }
             if (isPlaintext(buffer)) {
-                stringBuffer.append("  " + buffer.readString(charset));
+                stringBuffer.append("\n" + buffer.readString(charset));
             }
         }
 
@@ -91,8 +92,6 @@ public class LogInterceptor implements Interceptor {
         }
 
         // 响应体
-        String contentEncoding = response.headers().get("Content-Encoding");
-        stringBuffer.append("\n contentEncoding:" + contentEncoding);
         responseBody.source();
         if (HttpHeaders.hasBody(response)) {
             BufferedSource source = responseBody.source();

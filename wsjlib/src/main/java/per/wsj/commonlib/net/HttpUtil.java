@@ -46,8 +46,7 @@ public class HttpUtil {
         mBaseUrl = baseUrl;
 
         builder = new OkHttpClient.Builder()
-                .addNetworkInterceptor(new LogInterceptor())
-//                .addNetworkInterceptor(new HttpLogInterceptor().setLevel(HttpLogInterceptor.Level.BODY))
+//                .addNetworkInterceptor(new LogInterceptor())
                 .connectTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS)
                 .retryOnConnectionFailure(true)
 //                .proxy(Proxy.NO_PROXY)
