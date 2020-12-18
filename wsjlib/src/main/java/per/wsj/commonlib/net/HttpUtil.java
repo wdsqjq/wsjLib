@@ -1,6 +1,7 @@
 package per.wsj.commonlib.net;
 
 import android.content.Context;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 
@@ -17,6 +18,7 @@ import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
+import per.wsj.commonlib.BuildConfig;
 import per.wsj.commonlib.net.interceptor.LogInterceptor;
 import retrofit2.Response;
 import retrofit2.Retrofit;
@@ -46,12 +48,14 @@ public class HttpUtil {
         mBaseUrl = baseUrl;
 
         builder = new OkHttpClient.Builder()
-//                .addNetworkInterceptor(new LogInterceptor())
                 .connectTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS)
                 .retryOnConnectionFailure(true)
 //                .proxy(Proxy.NO_PROXY)
                 .hostnameVerifier(SSLSocketClient.getHostnameVerifier());
 
+        if (BuildConfig.DEBUG) {
+            builder.addNetworkInterceptor(new LogInterceptor());
+        }
         if (interceptor != null) {
             builder.addInterceptor(interceptor);
         }
