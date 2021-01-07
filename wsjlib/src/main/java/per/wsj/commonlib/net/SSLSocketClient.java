@@ -31,7 +31,7 @@ public class SSLSocketClient {
      * 获取这个SSLSocketFactory 忽略证书
      * @return
      */
-    static SSLSocketFactory getSSLSocketFactoryIgnore() {
+    public static SSLSocketFactory getSSLSocketFactoryIgnore() {
         try {
             SSLContext sslContext = SSLContext.getInstance("SSL");
             sslContext.init(null, getTrustManager(), new SecureRandom());
@@ -45,7 +45,7 @@ public class SSLSocketClient {
      * 根据证书生成SSLSocketFactory
      * @return
      */
-    static SSLSocketFactory getSSLSocketFactory(Context context, String assetName) {
+    public static SSLSocketFactory getSSLSocketFactory(Context context, String assetName) {
         SSLSocketFactory sslSocketFactory;
         try {
 //            TrustManager[] trustManager = getTrustManager(context, assetName);
@@ -68,7 +68,7 @@ public class SSLSocketClient {
      * 信任所有证书的X509TrustManager
      * @return
      */
-    static X509TrustManager getX509TrustManager() {
+    public static X509TrustManager getX509TrustManager() {
         X509TrustManager x509TrustManager = (X509TrustManager) getTrustManager()[0];
         return x509TrustManager;
     }
@@ -79,7 +79,7 @@ public class SSLSocketClient {
      * @param assetName
      * @return
      */
-    static X509TrustManager getX509TrustManager(Context context, String assetName) {
+    public static X509TrustManager getX509TrustManager(Context context, String assetName) {
         X509TrustManager x509TrustManager;
         try {
             TrustManager[] trustManager = getTrustManager(context, assetName);

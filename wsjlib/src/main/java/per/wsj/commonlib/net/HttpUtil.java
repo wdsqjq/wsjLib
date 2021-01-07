@@ -1,14 +1,10 @@
 package per.wsj.commonlib.net;
 
 import android.content.Context;
-import android.widget.Toast;
-
 import com.google.gson.Gson;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
-
 import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -35,8 +31,6 @@ public class HttpUtil {
 
     protected ApiService apiService;
 
-    protected String mBaseUrl;
-
     protected OkHttpClient okHttpClient;
 
     protected Context mContext;
@@ -45,7 +39,6 @@ public class HttpUtil {
 
     protected HttpUtil(Context context, String baseUrl, String cer, Interceptor interceptor) {
         mContext = context;
-        mBaseUrl = baseUrl;
 
         builder = new OkHttpClient.Builder()
                 .connectTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS)
