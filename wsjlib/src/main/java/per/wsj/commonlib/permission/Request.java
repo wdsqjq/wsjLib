@@ -88,7 +88,8 @@ public class Request implements IRequest, PermissionListener {
             callbackSucceed();
         } else {
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-                callbackFailed(mPermissions);
+//                callbackFailed(mPermissions);
+                callbackSucceed();
             } else {
                 mPermissionFragment.get().request(mPermissions,this);
             }
