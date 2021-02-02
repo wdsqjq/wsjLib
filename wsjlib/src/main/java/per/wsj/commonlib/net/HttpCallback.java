@@ -1,8 +1,6 @@
 package per.wsj.commonlib.net;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-
 import org.json.JSONObject;
 
 import java.lang.reflect.ParameterizedType;
