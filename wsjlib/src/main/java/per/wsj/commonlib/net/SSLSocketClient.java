@@ -29,6 +29,7 @@ public class SSLSocketClient {
 
     /**
      * 获取这个SSLSocketFactory 忽略证书
+     *
      * @return
      */
     public static SSLSocketFactory getSSLSocketFactoryIgnore() {
@@ -43,6 +44,7 @@ public class SSLSocketClient {
 
     /**
      * 根据证书生成SSLSocketFactory
+     *
      * @return
      */
     public static SSLSocketFactory getSSLSocketFactory(Context context, String assetName) {
@@ -66,6 +68,7 @@ public class SSLSocketClient {
 
     /**
      * 信任所有证书的X509TrustManager
+     *
      * @return
      */
     public static X509TrustManager getX509TrustManager() {
@@ -75,6 +78,7 @@ public class SSLSocketClient {
 
     /**
      * 根据证书生成的X509TrustManager
+     *
      * @param context
      * @param assetName
      * @return
@@ -93,6 +97,7 @@ public class SSLSocketClient {
 
     /**
      * 获取TrustManager 信任所有证书
+     *
      * @return
      */
     private static TrustManager[] getTrustManager() {
@@ -118,6 +123,7 @@ public class SSLSocketClient {
 
     /**
      * 获取TrustManager 根据证书生成
+     *
      * @param assetName
      * @return
      */
