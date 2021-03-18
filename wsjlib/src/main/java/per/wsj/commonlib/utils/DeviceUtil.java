@@ -53,7 +53,7 @@ public class DeviceUtil {
      * @return 系统版本号
      */
     public static String getSystemVersion() {
-        return android.os.Build.VERSION.RELEASE;
+        return Build.VERSION.RELEASE;
     }
 
     /**
@@ -62,7 +62,7 @@ public class DeviceUtil {
      * @return 手机型号
      */
     public static String getSystemModel() {
-        return android.os.Build.MODEL;
+        return Build.MODEL;
     }
 
     /**
@@ -71,7 +71,7 @@ public class DeviceUtil {
      * @return 手机厂商
      */
     public static String getDeviceBrand() {
-        return android.os.Build.BRAND;
+        return Build.BRAND;
     }
 
     /**
