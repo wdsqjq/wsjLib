@@ -1,4 +1,4 @@
-package per.wsj.commonlib.net;
+package per.wsj.commonlib.net.deprecate;
 
 import com.google.gson.Gson;
 import org.json.JSONObject;

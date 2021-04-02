@@ -1,4 +1,4 @@
-package per.wsj.commonlib.net;
+package per.wsj.commonlib.net.deprecate;
 
 import io.reactivex.Observable;
 import okhttp3.RequestBody;

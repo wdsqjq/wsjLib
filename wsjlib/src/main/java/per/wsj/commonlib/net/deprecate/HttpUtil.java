@@ -1,4 +1,4 @@
-package per.wsj.commonlib.net;
+package per.wsj.commonlib.net.deprecate;
 
 import android.content.Context;
 import com.google.gson.Gson;

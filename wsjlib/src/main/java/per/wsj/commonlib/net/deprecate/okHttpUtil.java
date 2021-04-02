@@ -1,4 +1,4 @@
-package per.wsj.commonlib.net;
+package per.wsj.commonlib.net.deprecate;
 
 import java.io.IOException;
 import java.io.InputStream;

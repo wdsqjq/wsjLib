@@ -1,4 +1,4 @@
-package per.wsj.commonlib.net;
+package per.wsj.commonlib.net.deprecate;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;

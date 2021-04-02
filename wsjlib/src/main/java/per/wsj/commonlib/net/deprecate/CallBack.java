@@ -1,4 +1,4 @@
-package per.wsj.commonlib.net;
+package per.wsj.commonlib.net.deprecate;
 
 import io.reactivex.annotations.Nullable;
 import io.reactivex.disposables.Disposable;
