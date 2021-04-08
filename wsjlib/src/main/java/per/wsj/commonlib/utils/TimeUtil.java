@@ -19,6 +19,16 @@ public class TimeUtil {
     }
 
     /**
+     * 返回当前时间的格式为 yy-MM-dd
+     *
+     * @return
+     */
+    public static String ts2DateStr(long time) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINESE);
+        return sdf.format(time);
+    }
+
+    /**
      * 返回当前时间的格式为 HH:mm:ss
      *
      * @return
