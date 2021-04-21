@@ -14,6 +14,7 @@ import javax.net.ssl.SSLHandshakeException;
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 import okhttp3.ResponseBody;
+import per.wsj.commonlib.net.ParameterizedTypeImpl;
 import retrofit2.HttpException;
 
 public abstract class HttpCallback<T> implements Observer<ResponseBody>, CallBack<T> {
