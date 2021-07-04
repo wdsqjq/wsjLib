@@ -8,37 +8,37 @@ public class LogUtil {
     private static boolean DEBUG = true;
     public static final String TAG = "wsjLib";
 
-    public static void LOGI(String tag, String msg) {
+    public static void i(String tag, String msg) {
         if (DEBUG) {
             Log.i(tag, buildMessage(msg));
         }
     }
 
-    public static void LOGD(String tag, String msg) {
+    public static void d(String tag, String msg) {
         if (DEBUG) {
             Log.d(tag, buildMessage(msg));
         }
     }
 
-    public static void LOGE(String tag, String msg) {
+    public static void e(String tag, String msg) {
         if (DEBUG) {
             Log.e(tag, buildMessage(msg));
         }
     }
 
-    public static void LOGI(String msg) {
+    public static void i(String msg) {
         if (DEBUG) {
             Log.i(TAG, buildMessage(msg));
         }
     }
 
-    public static void LOGD(String msg) {
+    public static void d(String msg) {
         if (DEBUG) {
             Log.d(TAG, buildMessage(msg));
         }
     }
 
-    public static void LOGE(String msg) {
+    public static void e(String msg) {
         if (DEBUG) {
             Log.e(TAG, buildMessage(msg));
         }
