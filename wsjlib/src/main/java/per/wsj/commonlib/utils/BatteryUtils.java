@@ -33,7 +33,7 @@ public class BatteryUtils {
 //        // 判断是否支持 CPU 唤醒
 //        boolean isWakeLockLevelSupported = powerManager.
 //                isWakeLockLevelSupported(PowerManager.PARTIAL_WAKE_LOCK);
-//        LogUtil.LOGE("是否支持wakelock: " + isWakeLockLevelSupported);
+//        LogUtil.e("是否支持wakelock: " + isWakeLockLevelSupported);
 //        // 支持 CPU 唤醒 , 才保持唤醒
 //        if (isWakeLockLevelSupported) {
 //            // 创建只唤醒 CPU 的唤醒锁

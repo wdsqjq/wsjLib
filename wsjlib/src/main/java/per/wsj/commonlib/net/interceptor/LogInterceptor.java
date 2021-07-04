@@ -113,7 +113,7 @@ public class LogInterceptor implements Interceptor {
             }
         }
 
-        LogUtil.LOGD(stringBuffer.toString() + "\n ");
+        LogUtil.d(stringBuffer.toString() + "\n ");
         return response;
     }
 
