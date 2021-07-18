@@ -26,6 +26,7 @@ public class DisplayUtil {
      * @param dp
      * @return
      */
+    @Deprecated
     public static int dip2px(Context context, float dp) {
         final float scale = context.getResources().getDisplayMetrics().density;
         return (int) (dp * scale + 0.5f);
@@ -38,9 +39,53 @@ public class DisplayUtil {
      * @param pxVal
      * @return
      */
-    public static float px2dp(Context context, float pxVal) {
+    @Deprecated
+    public static float px2dip(Context context, float pxVal) {
         final float scale = context.getResources().getDisplayMetrics().density;
         return (int) (pxVal / scale + 0.5f);
+    }
+
+    /**
+     * dp转px
+     *
+     * @param dp
+     * @return
+     */
+    public static int dp2px(float dp) {
+        final float scale = Resources.getSystem().getDisplayMetrics().density;
+        return (int) (dp * scale + 0.5f);
+    }
+
+    /**
+     * px转dp
+     *
+     * @param pxVal
+     * @return
+     */
+    public static float px2dp(float pxVal) {
+        final float scale = Resources.getSystem().getDisplayMetrics().density;
+        return (int) (pxVal / scale + 0.5f);
+    }
+
+    /**
+     * sp转px
+     *
+     * @param sp
+     * @return
+     */
+    public static int sp2px(float sp) {
+        final float scale = Resources.getSystem().getDisplayMetrics().density;
+        return (int) (sp * scale + 0.5f);
+    }
+
+    /**
+     * px转sp
+     *
+     * @param pxVal
+     * @return
+     */
+    public static float px2sp(float pxVal) {
+        return (pxVal / Resources.getSystem().getDisplayMetrics().density);
     }
 
     /**
@@ -50,6 +95,7 @@ public class DisplayUtil {
      * @param sp
      * @return
      */
+    @Deprecated
     public static int sp2px(Context context, float sp) {
         final float scale = context.getResources().getDisplayMetrics().scaledDensity;
         return (int) (sp * scale + 0.5f);
@@ -62,6 +108,7 @@ public class DisplayUtil {
      * @param pxVal
      * @return
      */
+    @Deprecated
     public static float px2sp(Context context, float pxVal) {
         return (pxVal / context.getApplicationContext().getResources().getDisplayMetrics().scaledDensity);
     }
