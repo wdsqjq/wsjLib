@@ -10,6 +10,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.VectorDrawable;
 import android.os.Build;
+
 import androidx.annotation.RequiresApi;
 import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat;
 
@@ -27,6 +28,7 @@ public class BitmapUtil {
 
     /**
      * 以省内存的方式读取图片
+     *
      * @param is
      * @return
      */
@@ -61,6 +63,7 @@ public class BitmapUtil {
 
     /**
      * drawable.getIntrinsicWidth() 获取宽度的单位是dp
+     *
      * @param drawable
      * @return
      */
@@ -179,6 +182,20 @@ public class BitmapUtil {
         return bitmap;
     }
 
+    /**
+     * 将图片压缩到指定大小
+     *
+     * @param w
+     * @param h
+     * @return
+     */
+    public static Bitmap compressBySize(Context context, int resourceId, int w, int h) {
+        BitmapDrawable bd = (BitmapDrawable) context.getResources().getDrawable(resourceId);
+        Matrix matrix = new Matrix();
+        Bitmap src = bd.getBitmap();
+        matrix.postScale(w / src.getWidth(), h / src.getHeight());
+        return Bitmap.createBitmap(src, 0, 0, src.getWidth(), src.getHeight(), matrix, true);
+    }
 
     /**
      * 根据给定的宽和高进行拉伸
