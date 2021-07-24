@@ -189,7 +189,7 @@ public class BitmapUtil {
      * @param h
      * @return
      */
-    public static Bitmap compressBySize(Context context, int resourceId, int w, int h) {
+    public static Bitmap compressBySize(Context context, int resourceId, float w, float h) {
         BitmapDrawable bd = (BitmapDrawable) context.getResources().getDrawable(resourceId);
         Matrix matrix = new Matrix();
         Bitmap src = bd.getBitmap();
