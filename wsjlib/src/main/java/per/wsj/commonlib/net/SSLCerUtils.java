@@ -85,7 +85,7 @@ public class SSLCerUtils {
         }
     }*/
 
-    //只信任指定证书（传入asset中的文件名）
+    // 只信任指定证书（传入asset中的文件名）
     public static void setCertificate(Context context, OkHttpClient.Builder okHttpClientBuilder, String assetName) {
         try {
             CertificateFactory certificateFactory = CertificateFactory.getInstance("X.509");
@@ -104,12 +104,12 @@ public class SSLCerUtils {
             SSLContext sslContext = SSLContext.getInstance("TLS");
             sslContext.init(null, tmf.getTrustManagers(), new SecureRandom());
             okHttpClientBuilder.sslSocketFactory(sslContext.getSocketFactory(), (X509TrustManager) tmf.getTrustManagers()[0]);
-            okHttpClientBuilder.hostnameVerifier(new HostnameVerifier() {
-                @Override
-                public boolean verify(String hostname, SSLSession session) {
-                    return true;
-                }
-            });
+//            okHttpClientBuilder.hostnameVerifier(new HostnameVerifier() {
+//                @Override
+//                public boolean verify(String hostname, SSLSession session) {
+//                    return true;
+//                }
+//            });
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -133,6 +133,7 @@ public class SSLCerUtils {
             SSLContext sslContext = SSLContext.getInstance("TLS");
             sslContext.init(null, tmf.getTrustManagers(), new SecureRandom());
             okHttpClientBuilder.sslSocketFactory(sslContext.getSocketFactory(), (X509TrustManager) tmf.getTrustManagers()[0]);
+            // 可以注掉
             okHttpClientBuilder.hostnameVerifier(new HostnameVerifier() {
                 @Override
                 public boolean verify(String hostname, SSLSession session) {
