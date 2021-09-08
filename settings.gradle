@@ -1,2 +1,3 @@
 include ':wsjlib'
 rootProject.name = "wsjLib"
+include ':app'
